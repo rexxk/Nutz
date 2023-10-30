@@ -1,15 +1,26 @@
 #pragma once
 
+#include "Core/Base.h"
+#include "Core/Application.h"
 
-#include <iostream>
 
-
+extern Ref<Nutz::Application> CreateApp();
 
 
 int main()
 {
+	Ref<Nutz::Application> app = CreateApp();
 
-	std::cout << "Hello from NutzLib!\n";
+	if (app)
+	{
+		app->Run();
+
+		app->Shutdown();
+	}
+	else
+	{
+		return -1;
+	}
 
 
 	return 0;

@@ -20,6 +20,11 @@ project "NutzLib"
 		"%{prj.location}/src/**.h", "%{prj.location}/src/**.cpp"
 	}
 
+	includedirs
+	{
+		"%{prj.location}/src"
+	}
+
 	pchheader "nutz_pch.h"
 	pchsource "%{prj.location}/src/nutz_pch.cpp"
 	
