@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{DD376B17-49ED-E30C-D2E1-DDE33E96DA10}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sandbox", "Sandbox\Sandbox.vcxproj", "{F4C124E3-60A1-A37E-69B9-2E55D5170AE0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{15A0C35D-0158-05AB-6A5F-DE065636A09B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NutzLib", "NutzLib\NutzLib.vcxproj", "{AD036191-19E3-DF2C-22FB-6A038E59468E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F4C124E3-60A1-A37E-69B9-2E55D5170AE0}.Debug|x64.ActiveCfg = Debug|x64
+		{F4C124E3-60A1-A37E-69B9-2E55D5170AE0}.Debug|x64.Build.0 = Debug|x64
+		{F4C124E3-60A1-A37E-69B9-2E55D5170AE0}.Release|x64.ActiveCfg = Release|x64
+		{F4C124E3-60A1-A37E-69B9-2E55D5170AE0}.Release|x64.Build.0 = Release|x64
+		{AD036191-19E3-DF2C-22FB-6A038E59468E}.Debug|x64.ActiveCfg = Debug|x64
+		{AD036191-19E3-DF2C-22FB-6A038E59468E}.Debug|x64.Build.0 = Debug|x64
+		{AD036191-19E3-DF2C-22FB-6A038E59468E}.Release|x64.ActiveCfg = Release|x64
+		{AD036191-19E3-DF2C-22FB-6A038E59468E}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F4C124E3-60A1-A37E-69B9-2E55D5170AE0} = {DD376B17-49ED-E30C-D2E1-DDE33E96DA10}
+		{AD036191-19E3-DF2C-22FB-6A038E59468E} = {15A0C35D-0158-05AB-6A5F-DE065636A09B}
+	EndGlobalSection
+EndGlobal
