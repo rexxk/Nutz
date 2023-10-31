@@ -12,6 +12,14 @@ namespace Nutz
 	
 		m_LayerStack = CreateScope<LayerStack>();
 
+		WindowProperties windowProps;
+		windowProps.Width = 1280;
+		windowProps.Height = 720;
+		windowProps.Title = "Nutz Engine";
+		windowProps.Mode = WindowMode::Windowed;
+		windowProps.VSync = false;
+
+		m_MainWindow = CreateScope<Window>(windowProps);
 
 
 
@@ -20,6 +28,15 @@ namespace Nutz
 
 	void Application::Run()
 	{
+
+
+		while (true)
+		{
+			m_MainWindow->HandleEvents();
+
+
+		}
+
 
 	}
 
