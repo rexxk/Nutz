@@ -9,7 +9,12 @@ namespace Nutz
 
 	Application::Application()
 	{
-		
+	
+		m_LayerStack = CreateScope<LayerStack>();
+
+
+
+
 	}
 
 
@@ -24,6 +29,16 @@ namespace Nutz
 
 	}
 
+
+	void Application::AttachLayer(Ref<Layer>& layer)
+	{
+		m_LayerStack->AttachLayer(layer);
+	}
+
+	void Application::DetachLayer(Ref<Layer>& layer)
+	{
+		m_LayerStack->DetachLayer(layer);
+	}
 
 }
 

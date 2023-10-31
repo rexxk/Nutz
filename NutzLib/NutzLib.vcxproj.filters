@@ -16,11 +16,16 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="src\nutz_pch.h" />
+    <ClInclude Include="src\Core\Layer.h" />
+    <ClInclude Include="src\Core\LayerStack.h" />
+    <ClInclude Include="src\Nutz.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="src\nutz_pch.cpp" />
+    <ClCompile Include="src\Core\Layer.cpp" />
+    <ClCompile Include="src\Core\LayerStack.cpp" />
   </ItemGroup>
 </Project>

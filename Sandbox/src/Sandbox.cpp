@@ -1,8 +1,33 @@
+#include "Nutz.h"
+
 #include "Core/Entrypoint.h"
 
-#include "Core/Application.h"
 
 #include <iostream>
+
+
+class SandboxLayer : public Nutz::Layer
+{
+public:
+	SandboxLayer(const std::string& layerName)
+		: Layer(layerName)
+	{
+
+	}
+
+	virtual void OnAttach() override
+	{
+		std::cout << "Attached layer: " << GetName() << "\n";
+	}
+
+	virtual void OnDetach() override
+	{
+		std::cout << "Detached layer: " << GetName() << "\n";
+	}
+
+};
+
+
 
 
 class SandboxApp : public Nutz::Application
@@ -10,7 +35,9 @@ class SandboxApp : public Nutz::Application
 public:
 	SandboxApp()
 	{
-		std::cout << "Running SandboxApp\n";
+		Ref<Nutz::Layer> layer = CreateRef<SandboxLayer>("Sandbox layer");
+		AttachLayer(layer);
+
 	}
 };
 
