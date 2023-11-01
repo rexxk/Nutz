@@ -2,6 +2,11 @@
 #include "Core/Application.h"
 
 
+#include "Message/Message.h"
+#include "Message/MessageQueue.h"
+
+#include <iostream>
+
 
 namespace Nutz
 {
@@ -23,17 +28,32 @@ namespace Nutz
 
 
 
+		MessageQueue::Subscribe(MessageType::WindowClosed, [&](Ref<Message> msg)
+			{
+				m_Running = false;
+				return false;
+			});
+
+		MessageQueue::Subscribe(MessageType::WindowResized, [&](Ref<Message> msg)
+			{
+				Ref<WindowResizedMessage> message = std::dynamic_pointer_cast<WindowResizedMessage>(msg);
+				std::cout << "Window resized: " << message->Width() << ", " << message->Height() << "\n";
+
+				return false;
+			});
+
 	}
 
 
 	void Application::Run()
 	{
 
+		m_Running = true;
 
-		while (true)
+		while (m_Running)
 		{
 			m_MainWindow->HandleEvents();
-
+			MessageQueue::Process();
 
 		}
 

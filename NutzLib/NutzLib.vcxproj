@@ -95,6 +95,8 @@
     <ClInclude Include="src\Core\Entrypoint.h" />
     <ClInclude Include="src\Core\Layer.h" />
     <ClInclude Include="src\Core\LayerStack.h" />
+    <ClInclude Include="src\Core\Message\Message.h" />
+    <ClInclude Include="src\Core\Message\MessageQueue.h" />
     <ClInclude Include="src\Core\Window.h" />
     <ClInclude Include="src\Nutz.h" />
     <ClInclude Include="src\nutz_pch.h" />
@@ -103,6 +105,7 @@
     <ClCompile Include="src\Core\Application.cpp" />
     <ClCompile Include="src\Core\Layer.cpp" />
     <ClCompile Include="src\Core\LayerStack.cpp" />
+    <ClCompile Include="src\Core\Message\MessageQueue.cpp" />
     <ClCompile Include="src\Core\Window.cpp" />
     <ClCompile Include="src\nutz_pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

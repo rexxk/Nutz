@@ -24,8 +24,10 @@ namespace Nutz
 
 	private:
 		Scope<LayerStack> m_LayerStack = nullptr;
-
 		Scope<Window> m_MainWindow = nullptr;
+
+
+		bool m_Running = false;
 
 	};
 

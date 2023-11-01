@@ -20,6 +20,8 @@
     <ClInclude Include="src\Core\LayerStack.h" />
     <ClInclude Include="src\Nutz.h" />
     <ClInclude Include="src\Core\Window.h" />
+    <ClInclude Include="src\Core\Message\MessageQueue.h" />
+    <ClInclude Include="src\Core\Message\Message.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
@@ -29,5 +31,6 @@
     <ClCompile Include="src\Core\Layer.cpp" />
     <ClCompile Include="src\Core\LayerStack.cpp" />
     <ClCompile Include="src\Core\Window.cpp" />
+    <ClCompile Include="src\Core\Message\MessageQueue.cpp" />
   </ItemGroup>
 </Project>

@@ -8,6 +8,9 @@
 
 #include <iostream>
 
+#include "Message/Message.h"
+#include "Message/MessageQueue.h"
+
 
 namespace Nutz
 {
@@ -69,8 +72,19 @@ namespace Nutz
 		{
 			case WM_DESTROY:
 			{
+				Ref<Message> message = CreateRef<WindowClosedMessage>((void*)wnd);
+				MessageQueue::Add(message);
+
 				PostQuitMessage(0);
 				return 0;
+			}
+
+			case WM_SIZE:
+			{
+				Ref<Message> message = CreateRef<WindowResizedMessage>((void*)wnd, LOWORD(lParam), HIWORD(lParam));
+				MessageQueue::Add(message);
+
+				break;
 			}
 		}
 
