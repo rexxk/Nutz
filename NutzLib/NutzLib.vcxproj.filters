@@ -4,6 +4,12 @@
     <Filter Include="Core">
       <UniqueIdentifier>{2EB4837C-1AEB-840D-C3D7-6A10AFED000F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\Message">
+      <UniqueIdentifier>{E220A938-CE83-38DD-7709-7193634B0460}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{F68B420E-62A0-6ABF-2B22-0E1F97F566F0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\Application.h">
@@ -15,24 +21,52 @@
     <ClInclude Include="src\Core\Entrypoint.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\nutz_pch.h" />
-    <ClInclude Include="src\Core\Layer.h" />
-    <ClInclude Include="src\Core\LayerStack.h" />
+    <ClInclude Include="src\Core\Layer.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\LayerStack.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Message\Message.h">
+      <Filter>Core\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Message\MessageQueue.h">
+      <Filter>Core\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Message\Messages.h">
+      <Filter>Core\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Message\WindowMessages.h">
+      <Filter>Core\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Window.h">
+      <Filter>Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Nutz.h" />
-    <ClInclude Include="src\Core\Window.h" />
-    <ClInclude Include="src\Core\Message\MessageQueue.h" />
-    <ClInclude Include="src\Core\Message\Message.h" />
-    <ClInclude Include="src\Core\Message\Messages.h" />
-    <ClInclude Include="src\Core\Message\WindowMessages.h" />
+    <ClInclude Include="src\Utils\Log.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\nutz_pch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\Layer.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\LayerStack.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Message\MessageQueue.cpp">
+      <Filter>Core\Message</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Window.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utils\Log.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
     <ClCompile Include="src\nutz_pch.cpp" />
-    <ClCompile Include="src\Core\Layer.cpp" />
-    <ClCompile Include="src\Core\LayerStack.cpp" />
-    <ClCompile Include="src\Core\Window.cpp" />
-    <ClCompile Include="src\Core\Message\MessageQueue.cpp" />
   </ItemGroup>
 </Project>

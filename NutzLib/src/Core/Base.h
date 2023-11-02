@@ -23,3 +23,6 @@ Scope<T> CreateScope(Args ... args)
 {
 	return std::make_unique<T>(std::forward<Args>(args)...);
 }
+
+
+#define NUTZ_ASSERT(condition, msg, ...) if (condition != true) { LOG_CORE_ERROR(msg, __VA_ARGS__); __debugbreak(); }

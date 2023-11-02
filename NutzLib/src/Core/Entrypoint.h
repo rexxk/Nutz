@@ -2,6 +2,7 @@
 
 #include "Core/Base.h"
 #include "Core/Application.h"
+#include "Utils/Log.h"
 
 
 extern Ref<Nutz::Application> CreateApp();
@@ -9,6 +10,8 @@ extern Ref<Nutz::Application> CreateApp();
 
 int main()
 {
+	Nutz::Log::Initialize();
+
 	Ref<Nutz::Application> app = CreateApp();
 
 	if (app)

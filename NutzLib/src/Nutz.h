@@ -7,4 +7,5 @@
 #include "Core/Application.h"
 #include "Core/Layer.h"
 
+#include "Utils/Log.h"
 

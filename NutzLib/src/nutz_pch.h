@@ -2,7 +2,7 @@
 
 
 #include "Core/Base.h"
-
+#include "Utils/Log.h"
 
 #include <functional>
 #include <memory>

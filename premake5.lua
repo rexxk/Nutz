@@ -22,7 +22,8 @@ project "NutzLib"
 
 	includedirs
 	{
-		"%{prj.location}/src"
+		"%{prj.location}/src",
+		"%{prj.location}/vendor/spdlog/include",
 	}
 
 	pchheader "nutz_pch.h"
@@ -61,7 +62,8 @@ project "Sandbox"
 
 	includedirs
 	{
-		"%{wks.location}/NutzLib/src"
+		"%{wks.location}/NutzLib/src",
+		"%{wks.location}/NutzLib/vendor/spdlog/include"
 	}
 	
 	libdirs

@@ -1,10 +1,7 @@
 #include "nutz_pch.h"
 #include "Core/Application.h"
 
-
 #include "Message/Messages.h"
-
-#include <iostream>
 
 
 namespace Nutz
@@ -36,7 +33,7 @@ namespace Nutz
 		MessageQueue::Subscribe(MessageType::WindowResized, [&](Ref<Message> msg)
 			{
 				Ref<WindowResizedMessage> message = std::dynamic_pointer_cast<WindowResizedMessage>(msg);
-				std::cout << "Window resized: " << message->Width() << ", " << message->Height() << "\n";
+				LOG_CORE_TRACE("Window resized : {},{}", message->Width(), message->Height());
 
 				return false;
 			});

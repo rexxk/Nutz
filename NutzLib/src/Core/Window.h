@@ -1,5 +1,7 @@
 #pragma once
 
+// Seems Windows.h is included by spdlog?
+#undef CreateWindow
 
 
 namespace Nutz

@@ -3,9 +3,6 @@
 #include "Core/Entrypoint.h"
 
 
-#include <iostream>
-
-
 class SandboxLayer : public Nutz::Layer
 {
 public:
@@ -17,12 +14,12 @@ public:
 
 	virtual void OnAttach() override
 	{
-		std::cout << "Attached layer: " << GetName() << "\n";
+		LOG_TRACE("Attached layer: {}", GetName());
 	}
 
 	virtual void OnDetach() override
 	{
-		std::cout << "Detached layer: " << GetName() << "\n";
+		LOG_TRACE("Detached layer: {}", GetName());
 	}
 
 };

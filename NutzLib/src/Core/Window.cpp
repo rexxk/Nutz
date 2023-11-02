@@ -6,8 +6,6 @@
 
 #undef CreateWindow
 
-#include <iostream>
-
 #include "Message/Messages.h"
 
 
@@ -53,7 +51,7 @@ namespace Nutz
 
 		if (!RegisterClassEx(&wcex))
 		{
-			std::cout << "Failed to register window class.\n";
+			LOG_CORE_ERROR("Failed to register window class.");
 			return;
 		}
 
