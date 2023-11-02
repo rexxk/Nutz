@@ -2,8 +2,7 @@
 #include "Core/Application.h"
 
 
-#include "Message/Message.h"
-#include "Message/MessageQueue.h"
+#include "Message/Messages.h"
 
 #include <iostream>
 

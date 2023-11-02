@@ -22,6 +22,8 @@
     <ClInclude Include="src\Core\Window.h" />
     <ClInclude Include="src\Core\Message\MessageQueue.h" />
     <ClInclude Include="src\Core\Message\Message.h" />
+    <ClInclude Include="src\Core\Message\Messages.h" />
+    <ClInclude Include="src\Core\Message\WindowMessages.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">

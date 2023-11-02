@@ -97,6 +97,8 @@
     <ClInclude Include="src\Core\LayerStack.h" />
     <ClInclude Include="src\Core\Message\Message.h" />
     <ClInclude Include="src\Core\Message\MessageQueue.h" />
+    <ClInclude Include="src\Core\Message\Messages.h" />
+    <ClInclude Include="src\Core\Message\WindowMessages.h" />
     <ClInclude Include="src\Core\Window.h" />
     <ClInclude Include="src\Nutz.h" />
     <ClInclude Include="src\nutz_pch.h" />

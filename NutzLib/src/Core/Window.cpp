@@ -8,8 +8,7 @@
 
 #include <iostream>
 
-#include "Message/Message.h"
-#include "Message/MessageQueue.h"
+#include "Message/Messages.h"
 
 
 namespace Nutz

@@ -2,17 +2,12 @@
 #include "MessageQueue.h"
 
 
-#include <iostream>
-
-
 namespace Nutz
 {
 
 
 	void MessageQueue::Add(Ref<Message>& message)
 	{
-		std::cout << "added message to queue\n";
-
 		s_Messages.push_front(message);
 	}
 
