@@ -13,7 +13,7 @@ public:
 	}
 
 	virtual void OnAttach() override
-	{
+	{ 
 		LOG_TRACE("Attached layer: {}", GetName());
 	}
 

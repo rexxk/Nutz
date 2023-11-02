@@ -2,6 +2,8 @@
 
 #include "spdlog/spdlog.h"
 
+#undef CreateWindow
+
 
 namespace Nutz
 {
