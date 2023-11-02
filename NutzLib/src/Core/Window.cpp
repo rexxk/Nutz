@@ -24,6 +24,15 @@ namespace Nutz
 		: m_Properties(props)
 	{
 		CreateWindow();
+	
+		MessageQueue::Subscribe(MessageType::WindowResized, [&](Ref<Message> msg)
+			{
+				Ref<WindowResizedMessage> message = std::dynamic_pointer_cast<WindowResizedMessage>(msg);
+				m_Properties.Width = message->Width();
+				m_Properties.Height = message->Height();
+
+				return false;
+			});
 	}
 
 	Window::~Window()
@@ -51,7 +60,24 @@ namespace Nutz
 
 		m_Handle = CreateWindowW(L"NutzEngine", L"Window", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, m_Properties.Width, m_Properties.Height, NULL, NULL, GetModuleHandle(NULL), NULL);
 
-		ShowWindow((HWND)m_Handle, SW_SHOW);
+		int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+		int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+
+		RECT rc;
+		GetWindowRect((HWND)m_Handle, &rc);
+		AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
+
+		SetWindowPos((HWND)m_Handle, NULL, (screenWidth - m_Properties.Width) / 2, (screenHeight - m_Properties.Height) / 2, rc.right - rc.left, rc.bottom - rc.top, SWP_SHOWWINDOW);
+
+		if (m_Properties.Mode == WindowMode::Windowed)
+		{
+			ShowWindow((HWND)m_Handle, SW_SHOW);
+		}
+		else if (m_Properties.Mode == WindowMode::Maximized)
+		{
+			ShowWindow((HWND)m_Handle, SW_SHOWMAXIMIZED);
+		}
+
 	}
 
 	void Window::HandleEvents()

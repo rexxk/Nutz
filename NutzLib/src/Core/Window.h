@@ -9,7 +9,7 @@ namespace Nutz
 	enum class WindowMode
 	{
 		Windowed,
-		FullWindowed,
+		Maximized,
 		Fullscreen,
 	};
 

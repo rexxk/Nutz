@@ -25,6 +25,11 @@ namespace Nutz
 
 			for (auto& fn : s_MessageReceiverMap[message->Type])
 			{
+				if (message->State == MessageState::UsedUp)
+				{
+					break;
+				}
+
 				if (fn(message))
 				{
 					message->State = MessageState::UsedUp;
