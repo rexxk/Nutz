@@ -1,7 +1,10 @@
 #include "nutz_pch.h"
 #include "Core/Application.h"
+#include "Core/Timer.h"
+#include "Core/Timestep.h"
 
 #include "Message/Messages.h"
+
 
 
 namespace Nutz
@@ -46,11 +49,31 @@ namespace Nutz
 
 		m_Running = true;
 
+		Timer fpsTimer;
+		Timestep frameTime;
+
+		uint32_t fps = 0;
+
 		while (m_Running)
 		{
 			m_MainWindow->HandleEvents();
 			MessageQueue::Process();
 
+			for (auto& layer : *m_LayerStack)
+			{
+				layer->OnUpdate(frameTime);
+			}
+
+			fps++;
+
+			frameTime.Reset();
+
+			if (fpsTimer.ElapsedTime() > 1.0)
+			{
+				LOG_CORE_TRACE("FPS: {}", fps);
+				fpsTimer.Reset();
+				fps = 0;
+			}
 		}
 
 

@@ -47,6 +47,8 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\nutz_pch.h" />
+    <ClInclude Include="src\Core\Timer.h" />
+    <ClInclude Include="src\Core\Timestep.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Core/Timestep.h"
 
 
 namespace Nutz
@@ -15,7 +16,7 @@ namespace Nutz
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
 
-		virtual void OnUpdate() {}
+		virtual void OnUpdate(Timestep ts) {}
 
 
 		const std::string& GetName() const { return m_LayerName; }

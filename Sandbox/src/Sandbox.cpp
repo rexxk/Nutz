@@ -22,6 +22,11 @@ public:
 		LOG_TRACE("Detached layer: {}", GetName());
 	}
 
+	virtual void OnUpdate(Nutz::Timestep ts) override
+	{
+		LOG_TRACE("OnUpdate called - timestep: {}", (double)ts);
+	}
+
 };
 
 

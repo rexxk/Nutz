@@ -99,6 +99,8 @@
     <ClInclude Include="src\Core\Message\MessageQueue.h" />
     <ClInclude Include="src\Core\Message\Messages.h" />
     <ClInclude Include="src\Core\Message\WindowMessages.h" />
+    <ClInclude Include="src\Core\Timer.h" />
+    <ClInclude Include="src\Core\Timestep.h" />
     <ClInclude Include="src\Core\Window.h" />
     <ClInclude Include="src\Nutz.h" />
     <ClInclude Include="src\Utils\Log.h" />
