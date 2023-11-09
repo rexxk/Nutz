@@ -105,6 +105,7 @@
     <ClInclude Include="src\Nutz.h" />
     <ClInclude Include="src\Utils\Log.h" />
     <ClInclude Include="src\nutz_pch.h" />
+    <ClInclude Include="src\Utils\Statistics.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp" />

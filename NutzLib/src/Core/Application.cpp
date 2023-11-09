@@ -5,6 +5,8 @@
 
 #include "Message/Messages.h"
 
+#include "Utils/Statistics.h"
+
 
 
 namespace Nutz
@@ -52,7 +54,7 @@ namespace Nutz
 		Timer fpsTimer;
 		Timestep frameTime;
 
-		uint32_t fps = 0;
+		Statistics& stats = Statistics::Get();
 
 		while (m_Running)
 		{
@@ -64,15 +66,15 @@ namespace Nutz
 				layer->OnUpdate(frameTime);
 			}
 
-			fps++;
+			stats.FPS++;
 
 			frameTime.Reset();
 
 			if (fpsTimer.ElapsedTime() > 1.0)
 			{
-				LOG_CORE_TRACE("FPS: {}", fps);
+				LOG_CORE_TRACE("FPS: {}", stats.FPS);
 				fpsTimer.Reset();
-				fps = 0;
+				stats.FPS = 0;
 			}
 		}
 
