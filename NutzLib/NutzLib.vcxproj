@@ -90,6 +90,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Asset\Asset.h" />
     <ClInclude Include="src\Core\Application.h" />
     <ClInclude Include="src\Core\Base.h" />
     <ClInclude Include="src\Core\Entrypoint.h" />
@@ -103,6 +104,7 @@
     <ClInclude Include="src\Core\Timestep.h" />
     <ClInclude Include="src\Core\Window.h" />
     <ClInclude Include="src\Nutz.h" />
+    <ClInclude Include="src\Scene\Scene.h" />
     <ClInclude Include="src\Utils\Log.h" />
     <ClInclude Include="src\nutz_pch.h" />
     <ClInclude Include="src\Utils\Statistics.h" />
@@ -113,6 +115,7 @@
     <ClCompile Include="src\Core\LayerStack.cpp" />
     <ClCompile Include="src\Core\Message\MessageQueue.cpp" />
     <ClCompile Include="src\Core\Window.cpp" />
+    <ClCompile Include="src\Scene\Scene.cpp" />
     <ClCompile Include="src\Utils\Log.cpp" />
     <ClCompile Include="src\nutz_pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

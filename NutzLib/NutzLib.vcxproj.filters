@@ -50,6 +50,8 @@
     <ClInclude Include="src\Core\Timer.h" />
     <ClInclude Include="src\Core\Timestep.h" />
     <ClInclude Include="src\Utils\Statistics.h" />
+    <ClInclude Include="src\Scene\Scene.h" />
+    <ClInclude Include="src\Asset\Asset.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
@@ -71,5 +73,6 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="src\nutz_pch.cpp" />
+    <ClCompile Include="src\Scene\Scene.cpp" />
   </ItemGroup>
 </Project>
