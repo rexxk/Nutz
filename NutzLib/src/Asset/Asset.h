@@ -15,4 +15,11 @@ namespace Nutz
 	};
 
 
+	struct AssetMetadata
+	{
+		AssetType Type;
+		uint64_t AssetID;
+		std::string Path;
+	};
+
 }

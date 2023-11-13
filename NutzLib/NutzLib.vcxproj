@@ -110,6 +110,7 @@
     <ClInclude Include="src\Utils\Statistics.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Asset\Asset.cpp" />
     <ClCompile Include="src\Core\Application.cpp" />
     <ClCompile Include="src\Core\Layer.cpp" />
     <ClCompile Include="src\Core\LayerStack.cpp" />
