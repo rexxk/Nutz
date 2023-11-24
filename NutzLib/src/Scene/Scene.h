@@ -2,6 +2,7 @@
 
 
 
+
 namespace Nutz
 {
 
@@ -10,6 +11,10 @@ namespace Nutz
 	{
 	public:
 		Scene();
+
+
+	private:
+
 
 	};
 

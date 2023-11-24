@@ -1,17 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="Asset">
+      <UniqueIdentifier>{253FD80C-9153-00BE-5AD5-A31DC6A8FCEE}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Core">
       <UniqueIdentifier>{2EB4837C-1AEB-840D-C3D7-6A10AFED000F}</UniqueIdentifier>
     </Filter>
     <Filter Include="Core\Message">
       <UniqueIdentifier>{E220A938-CE83-38DD-7709-7193634B0460}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{B3F7140E-1F0C-3DBF-E88D-E01E546139F0}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Utils">
       <UniqueIdentifier>{F68B420E-62A0-6ABF-2B22-0E1F97F566F0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Asset\Asset.h">
+      <Filter>Asset</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\Application.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -39,21 +48,32 @@
     <ClInclude Include="src\Core\Message\WindowMessages.h">
       <Filter>Core\Message</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Timer.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Timestep.h">
+      <Filter>Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\Window.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Nutz.h" />
+    <ClInclude Include="src\Scene\Scene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
     <ClInclude Include="src\Utils\Log.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="src\Utils\Statistics.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
     <ClInclude Include="src\nutz_pch.h" />
-    <ClInclude Include="src\Core\Timer.h" />
-    <ClInclude Include="src\Core\Timestep.h" />
-    <ClInclude Include="src\Utils\Statistics.h" />
-    <ClInclude Include="src\Scene\Scene.h" />
-    <ClInclude Include="src\Asset\Asset.h" />
+    <ClInclude Include="src\Asset\AssetManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Asset\Asset.cpp">
+      <Filter>Asset</Filter>
+    </ClCompile>
     <ClCompile Include="src\Core\Application.cpp">
       <Filter>Core</Filter>
     </ClCompile>
@@ -69,11 +89,13 @@
     <ClCompile Include="src\Core\Window.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scene\Scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
     <ClCompile Include="src\Utils\Log.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="src\nutz_pch.cpp" />
-    <ClCompile Include="src\Scene\Scene.cpp" />
-    <ClCompile Include="src\Asset\Asset.cpp" />
+    <ClCompile Include="src\Asset\AssetManager.cpp" />
   </ItemGroup>
 </Project>

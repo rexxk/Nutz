@@ -22,4 +22,16 @@ namespace Nutz
 		std::string Path;
 	};
 
+
+
+	class Asset
+	{
+	public:
+		Asset() = default;
+
+	};
+
+
+
+
 }

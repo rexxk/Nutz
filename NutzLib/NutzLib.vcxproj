@@ -91,6 +91,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Asset\Asset.h" />
+    <ClInclude Include="src\Asset\AssetManager.h" />
     <ClInclude Include="src\Core\Application.h" />
     <ClInclude Include="src\Core\Base.h" />
     <ClInclude Include="src\Core\Entrypoint.h" />
@@ -106,11 +107,12 @@
     <ClInclude Include="src\Nutz.h" />
     <ClInclude Include="src\Scene\Scene.h" />
     <ClInclude Include="src\Utils\Log.h" />
-    <ClInclude Include="src\nutz_pch.h" />
     <ClInclude Include="src\Utils\Statistics.h" />
+    <ClInclude Include="src\nutz_pch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Asset\Asset.cpp" />
+    <ClCompile Include="src\Asset\AssetManager.cpp" />
     <ClCompile Include="src\Core\Application.cpp" />
     <ClCompile Include="src\Core\Layer.cpp" />
     <ClCompile Include="src\Core\LayerStack.cpp" />
