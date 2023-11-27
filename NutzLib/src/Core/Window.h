@@ -30,16 +30,16 @@ namespace Nutz
 	{
 	public:
 		Window(const WindowProperties& props);
-		~Window();
+		virtual ~Window() {}
 
 		std::pair<uint32_t, uint32_t> Size() { return std::make_pair(m_Properties.Width, m_Properties.Height); }
 
 		void* GetHandle() { return m_Handle; }
 
-		void HandleEvents();
+		virtual void HandleEvents() {}
 
 	private:
-		void CreateWindow();
+		virtual void CreateWindow() {}
 
 	private:
 		void* m_Handle;

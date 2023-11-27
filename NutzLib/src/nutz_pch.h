@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __NUTZ_PCH_H
+#define __NUTZ_PCH_H
 
 
 #include "Core/Base.h"
@@ -14,3 +15,4 @@
 #include <unordered_map>
 #include <vector>
 
+#endif

@@ -3,7 +3,6 @@ workspace "Nutz"
 	configurations { "Debug", "Release" }
 	startproject "Sandbox"
 
-
 group "Core"
 
 project "NutzLib"
@@ -39,7 +38,6 @@ project "NutzLib"
 	filter { "configurations:Release" }
 		defines "NDEBUG"
 		optimize "On"
-
 
 
 
