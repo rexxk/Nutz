@@ -15,6 +15,10 @@ public:
 	virtual void OnAttach() override
 	{ 
 		LOG_TRACE("Attached layer: {}", GetName());
+
+		Nutz::AssetManager::LoadAsset("assets/objects/cube.obj");
+
+
 	}
 
 	virtual void OnDetach() override

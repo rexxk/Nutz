@@ -13,14 +13,20 @@ namespace Nutz
 	public:
 		AssetManager() = default;
 
+		static void Clear();
+
 
 		static void LoadAsset(const std::filesystem::path& path);
 
 
 
 	private:
+		static void ImportObjectAsset(const std::filesystem::path& path);
 
-		std::vector<Ref<Asset>> m_AssetList;
+
+	private:
+
+		inline static std::vector<Ref<Asset>> s_AssetList;
 
 	};
 
