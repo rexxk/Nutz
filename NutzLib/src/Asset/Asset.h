@@ -9,7 +9,7 @@ namespace Nutz
 	enum class AssetType
 	{
 		Texture,
-		Object,
+		Model,
 		Sound,
 
 	};

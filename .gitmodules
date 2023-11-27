@@ -1,0 +1,4 @@
+[submodule "NutzLib/vendor/imgui"]
+	path = NutzLib/vendor/imgui
+	url = http://github.com/ocornut/imgui
+	branch = docking

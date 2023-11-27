@@ -8,6 +8,11 @@ namespace Nutz
 {
 
 
+	void AssetManager::LoadAsset(const std::filesystem::path& path)
+	{
+		
+	}
+
 
 
 }

@@ -14,7 +14,7 @@ namespace Nutz
 		AssetManager() = default;
 
 
-		static void LoadAsset(const std::string& path);
+		static void LoadAsset(const std::filesystem::path& path);
 
 
 
