@@ -38,7 +38,7 @@ namespace Nutz
 	#define LOG_WARN(msg, ...)			Nutz::Log::GetClientLogger()->warn(msg, __VA_ARGS__);
 	#define LOG_ERROR(msg, ...)			Nutz::Log::GetClientLogger()->error(msg, __VA_ARGS__);
 	#define LOG_CRITICAL(msg, ...)		Nutz::Log::GetClientLogger()->critical(msg, __VA_ARGS__);
-#elif __linux
+#elif __linux__
 	#define LOG_CORE_TRACE(msg, ...)	Nutz::Log::GetCoreLogger()->trace(msg, ##__VA_ARGS__);
 	#define LOG_CORE_WARN(msg, ...)		Nutz::Log::GetCoreLogger()->warn(msg, ##__VA_ARGS__);
 	#define LOG_CORE_ERROR(msg, ...)	Nutz::Log::GetCoreLogger()->error(msg, ##__VA_ARGS__);

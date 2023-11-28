@@ -3,7 +3,7 @@
 #include "Core/Window.h"
 
 
-#ifdef __linux
+#ifdef __linux__
 
 namespace Nutz
 {
@@ -18,9 +18,8 @@ namespace Nutz
 
 	private:
 		virtual void CreateWindow() override;
-    private:
 
-    }
+    };
 
 #endif
 

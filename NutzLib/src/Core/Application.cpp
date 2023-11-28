@@ -25,7 +25,7 @@ namespace Nutz
 		windowProps.Mode = WindowMode::Windowed;
 		windowProps.VSync = false;
 
-		m_MainWindow = CreateScope<Window>(windowProps);
+		m_MainWindow = Window::Create(windowProps);
 
 
 

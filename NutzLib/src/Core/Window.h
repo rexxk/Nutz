@@ -29,6 +29,8 @@ namespace Nutz
 	class Window
 	{
 	public:
+		static Ref<Window> Create(const WindowProperties& props);
+
 		Window(const WindowProperties& props);
 		virtual ~Window() {}
 
