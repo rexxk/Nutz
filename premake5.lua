@@ -23,6 +23,7 @@ project "NutzLib"
 	{
 		"%{prj.location}/src",
 		"%{prj.location}/vendor/spdlog/include",
+		"%{prj.location}/vendor/glfw/include",
 	}
 
 	pchheader "nutz_pch.h"
@@ -30,7 +31,6 @@ project "NutzLib"
 	
 	defines "_CRT_SECURE_NO_WARNINGS"
 	
-
 	filter { "configurations:Debug" }
 		defines "DEBUG"
 		symbols "On"
@@ -39,7 +39,10 @@ project "NutzLib"
 		defines "NDEBUG"
 		optimize "On"
 
+	filter { "system:Windows" }
 
+	filter { "system:Linux" }
+	
 
 
 group "Tools"
@@ -81,3 +84,13 @@ project "Sandbox"
 	filter { "configurations:Release" }
 		defines { "NDEBUG" }
 		optimize "On"
+
+	filter { "system:Windows" }
+
+	filter { "system:Linux" }
+		
+		links
+		{
+			"glfw"
+		}
+	

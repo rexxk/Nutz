@@ -5,3 +5,6 @@
 [submodule "NutzLib/vendor/assimp"]
 	path = NutzLib/vendor/assimp
 	url = http://github.com/assimp/assimp
+[submodule "NutzLib/vendor/glfw"]
+	path = NutzLib/vendor/glfw
+	url = http://github.com/glfw/glfw

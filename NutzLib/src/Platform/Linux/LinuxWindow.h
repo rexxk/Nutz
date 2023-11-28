@@ -5,6 +5,9 @@
 
 #ifdef __linux__
 
+#include "GLFW/glfw3.h"
+
+
 namespace Nutz
 {
 
