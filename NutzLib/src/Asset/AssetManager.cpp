@@ -23,7 +23,7 @@ namespace Nutz
 			}
 			if (extension == ".jpg" || extension == ".png")
 			{
-				LOG_TRACE("Importing texture file ({})", extension);
+				ImportTextureAsset(path);
 
 				return;
 			}
@@ -51,7 +51,23 @@ namespace Nutz
 	{
 		LOG_TRACE("Importing object file ({})", path.string());
 
+		s_AssetList.emplace_back(Asset::Create(AssetType::Model, path.string()));
 	}
 
+	void AssetManager::ImportTextureAsset(const std::filesystem::path& path)
+	{
+		LOG_TRACE("Importing texture file ({})", path.string());
+
+		s_AssetList.emplace_back(Asset::Create(AssetType::Texture, path.string()));
+	}
+
+	void AssetManager::DebugPrint()
+	{
+		for (auto& asset : s_AssetList)
+		{
+			auto& metadata = asset->GetMetadata();
+			LOG_TRACE("Asset UUID: {}   - Type: {}  - Path: {}", (uint64_t)metadata.AssetID, (uint8_t)metadata.Type, metadata.Path);
+		}
+	}
 
 }

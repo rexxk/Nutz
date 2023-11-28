@@ -18,7 +18,7 @@ namespace Nutz
 	struct AssetMetadata
 	{
 		AssetType Type;
-		uint64_t AssetID;
+		UUID AssetID;
 		std::string Path;
 	};
 
@@ -27,7 +27,16 @@ namespace Nutz
 	class Asset
 	{
 	public:
+
+		static Ref<Asset> Create(AssetType type, const std::string& path);
+
 		Asset() = default;
+		Asset(AssetType type, const std::string& path);
+
+		AssetMetadata& GetMetadata() { return m_Metadata; }
+
+	private:
+		AssetMetadata m_Metadata;
 
 	};
 
