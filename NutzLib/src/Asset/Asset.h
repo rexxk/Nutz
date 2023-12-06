@@ -1,6 +1,8 @@
 #pragma once
 
 
+#include "Core/DataBuffer.h"
+
 
 namespace Nutz
 {
@@ -37,6 +39,8 @@ namespace Nutz
 
 	private:
 		AssetMetadata m_Metadata;
+
+		DataBuffer m_DataBuffer;
 
 	};
 

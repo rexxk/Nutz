@@ -20,6 +20,9 @@ public:
 		Nutz::AssetManager::LoadAsset("assets/textures/checkerboard.png");
 
 		Nutz::AssetManager::DebugPrint();
+
+		m_Scene = Nutz::Scene::Create();
+
 	}
 
 	virtual void OnDetach() override
@@ -31,6 +34,9 @@ public:
 	{
 
 	}
+
+private:
+	Ref<Nutz::Scene> m_Scene;
 
 };
 

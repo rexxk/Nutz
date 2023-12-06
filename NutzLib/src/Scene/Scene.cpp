@@ -6,6 +6,12 @@
 namespace Nutz
 {
 
+	Ref<Scene> Scene::Create()
+	{
+		return CreateRef<Scene>();
+	}
+
+
 	Scene::Scene()
 	{
 
