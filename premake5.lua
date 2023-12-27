@@ -30,7 +30,7 @@ project "NutzLib"
 	pchsource "%{prj.location}/src/nutz_pch.cpp"
 	
 	defines "_CRT_SECURE_NO_WARNINGS"
-	
+
 	filter { "configurations:Debug" }
 		defines "DEBUG"
 		symbols "On"
@@ -42,8 +42,11 @@ project "NutzLib"
 	filter { "system:Windows" }
 
 	filter { "system:Linux" }
-	
 
+
+group "Dependencies"
+
+	include "NutzLib/vendor/glfw"
 
 group "Tools"
 
@@ -69,7 +72,8 @@ project "Sandbox"
 	
 	libdirs
 	{
-		"%{wks.location}/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/NutzLib"
+		"%{wks.location}/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/NutzLib",
+		"%{wks.location}/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/glfw"
 	}
 	
 	links
@@ -88,9 +92,9 @@ project "Sandbox"
 	filter { "system:Windows" }
 
 	filter { "system:Linux" }
-		
 		links
 		{
 			"glfw"
 		}
+	
 	

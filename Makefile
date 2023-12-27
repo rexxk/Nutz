@@ -10,23 +10,27 @@ endif
 
 ifeq ($(config),debug)
   NutzLib_config = debug
+  glfw_config = debug
   Sandbox_config = debug
 
 else ifeq ($(config),release)
   NutzLib_config = release
+  glfw_config = release
   Sandbox_config = release
 
 else
   $(error "invalid configuration $(config)")
 endif
 
-PROJECTS := NutzLib Sandbox
+PROJECTS := NutzLib glfw Sandbox
 
-.PHONY: all clean help $(PROJECTS) Core Tools
+.PHONY: all clean help $(PROJECTS) Core Dependencies Tools
 
 all: $(PROJECTS)
 
 Core: NutzLib
+
+Dependencies: glfw
 
 Tools: Sandbox
 
@@ -36,7 +40,13 @@ ifneq (,$(NutzLib_config))
 	@${MAKE} --no-print-directory -C NutzLib -f Makefile config=$(NutzLib_config)
 endif
 
-Sandbox: NutzLib
+glfw:
+ifneq (,$(glfw_config))
+	@echo "==== Building glfw ($(glfw_config)) ===="
+	@${MAKE} --no-print-directory -C NutzLib/vendor/glfw -f Makefile config=$(glfw_config)
+endif
+
+Sandbox: NutzLib glfw
 ifneq (,$(Sandbox_config))
 	@echo "==== Building Sandbox ($(Sandbox_config)) ===="
 	@${MAKE} --no-print-directory -C Sandbox -f Makefile config=$(Sandbox_config)
@@ -44,6 +54,7 @@ endif
 
 clean:
 	@${MAKE} --no-print-directory -C NutzLib -f Makefile clean
+	@${MAKE} --no-print-directory -C NutzLib/vendor/glfw -f Makefile clean
 	@${MAKE} --no-print-directory -C Sandbox -f Makefile clean
 
 help:
@@ -57,6 +68,7 @@ help:
 	@echo "   all (default)"
 	@echo "   clean"
 	@echo "   NutzLib"
+	@echo "   glfw"
 	@echo "   Sandbox"
 	@echo ""
 	@echo "For more information, see https://github.com/premake/premake-core/wiki"

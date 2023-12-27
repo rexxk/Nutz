@@ -38,9 +38,9 @@ OBJDIR = ../bin-int/Debug-linux-x86_64/Sandbox
 DEFINES += -DDEBUG
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -g -std=c++20
-LIBS += ../bin/Debug-linux-x86_64/NutzLib/libNutzLib.a -lglfw
-LDDEPS += ../bin/Debug-linux-x86_64/NutzLib/libNutzLib.a
-ALL_LDFLAGS += $(LDFLAGS) -L../bin/Debug-linux-x86_64/NutzLib -L/usr/lib64 -m64
+LIBS += ../bin/Debug-linux-x86_64/NutzLib/libNutzLib.a ../bin/Debug-linux-x86_64/glfw/libglfw.a
+LDDEPS += ../bin/Debug-linux-x86_64/NutzLib/libNutzLib.a ../bin/Debug-linux-x86_64/glfw/libglfw.a
+ALL_LDFLAGS += $(LDFLAGS) -L../bin/Debug-linux-x86_64/NutzLib -L../bin/Debug-linux-x86_64/glfw -L/usr/lib64 -m64
 
 else ifeq ($(config),release)
 TARGETDIR = ../bin/Release-linux-x86_64/Sandbox
@@ -49,9 +49,9 @@ OBJDIR = ../bin-int/Release-linux-x86_64/Sandbox
 DEFINES += -DNDEBUG
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -std=c++20
-LIBS += ../bin/Release-linux-x86_64/NutzLib/libNutzLib.a -lglfw
-LDDEPS += ../bin/Release-linux-x86_64/NutzLib/libNutzLib.a
-ALL_LDFLAGS += $(LDFLAGS) -L../bin/Release-linux-x86_64/NutzLib -L/usr/lib64 -m64 -s
+LIBS += ../bin/Release-linux-x86_64/NutzLib/libNutzLib.a ../bin/Release-linux-x86_64/glfw/libglfw.a
+LDDEPS += ../bin/Release-linux-x86_64/NutzLib/libNutzLib.a ../bin/Release-linux-x86_64/glfw/libglfw.a
+ALL_LDFLAGS += $(LDFLAGS) -L../bin/Release-linux-x86_64/NutzLib -L../bin/Release-linux-x86_64/glfw -L/usr/lib64 -m64 -s
 
 endif
 
