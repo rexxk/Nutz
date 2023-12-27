@@ -1,6 +1,8 @@
 #include "nutz_pch.h"
 #include "LinuxWindow.h"
 
+#include "Core/Message/Messages.h"
+
 
 namespace Nutz
 {
@@ -13,6 +15,20 @@ namespace Nutz
         LOG_CORE_TRACE("Creating Linux window");
 
         CreateWindow();
+
+        
+        glfwSetWindowCloseCallback((GLFWwindow*)m_Handle, [](GLFWwindow* window)
+        {
+            Ref<Message> message = CreateRef<WindowClosedMessage>((void*)window);
+            MessageQueue::Add(message);
+        });
+
+        glfwSetWindowSizeCallback((GLFWwindow*)m_Handle, [](GLFWwindow* window, int width, int height)
+        {
+            Ref<Message> message = CreateRef<WindowResizedMessage>((void*)window, (uint32_t)width, (uint32_t)height);
+            MessageQueue::Add(message);
+        });
+
     }
 
     LinuxWindow::~LinuxWindow()
@@ -22,7 +38,7 @@ namespace Nutz
 
 	void LinuxWindow::HandleEvents()
     {
-
+        glfwPollEvents();
 
     }
 
@@ -30,7 +46,7 @@ namespace Nutz
     {
         glfwInit();
 
-        glfwCreateWindow(1280, 720, "Test title", nullptr, nullptr);
+        m_Handle = glfwCreateWindow(1280, 720, "Test title", nullptr, nullptr);
 
 
 

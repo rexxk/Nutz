@@ -43,7 +43,7 @@ namespace Nutz
 	private:
 		virtual void CreateWindow() {}
 
-	private:
+	protected:
 		void* m_Handle;
 
 		WindowProperties m_Properties;
