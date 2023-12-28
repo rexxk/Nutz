@@ -94,6 +94,7 @@
     <ClInclude Include="src\Asset\AssetManager.h" />
     <ClInclude Include="src\Core\Application.h" />
     <ClInclude Include="src\Core\Base.h" />
+    <ClInclude Include="src\Core\DataBuffer.h" />
     <ClInclude Include="src\Core\Entrypoint.h" />
     <ClInclude Include="src\Core\Layer.h" />
     <ClInclude Include="src\Core\LayerStack.h" />
@@ -103,6 +104,7 @@
     <ClInclude Include="src\Core\Message\WindowMessages.h" />
     <ClInclude Include="src\Core\Timer.h" />
     <ClInclude Include="src\Core\Timestep.h" />
+    <ClInclude Include="src\Core\UUID.h" />
     <ClInclude Include="src\Core\Window.h" />
     <ClInclude Include="src\Nutz.h" />
     <ClInclude Include="src\Scene\Scene.h" />
@@ -114,9 +116,11 @@
     <ClCompile Include="src\Asset\Asset.cpp" />
     <ClCompile Include="src\Asset\AssetManager.cpp" />
     <ClCompile Include="src\Core\Application.cpp" />
+    <ClCompile Include="src\Core\DataBuffer.cpp" />
     <ClCompile Include="src\Core\Layer.cpp" />
     <ClCompile Include="src\Core\LayerStack.cpp" />
     <ClCompile Include="src\Core\Message\MessageQueue.cpp" />
+    <ClCompile Include="src\Core\UUID.cpp" />
     <ClCompile Include="src\Core\Window.cpp" />
     <ClCompile Include="src\Scene\Scene.cpp" />
     <ClCompile Include="src\Utils\Log.cpp" />

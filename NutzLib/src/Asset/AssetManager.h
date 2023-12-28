@@ -19,9 +19,11 @@ namespace Nutz
 		static void LoadAsset(const std::filesystem::path& path);
 
 
+		static void DebugPrint();
 
 	private:
 		static void ImportObjectAsset(const std::filesystem::path& path);
+		static void ImportTextureAsset(const std::filesystem::path& path);
 
 
 	private:

@@ -17,7 +17,11 @@ public:
 		LOG_TRACE("Attached layer: {}", GetName());
 
 		Nutz::AssetManager::LoadAsset("assets/objects/cube.obj");
+		Nutz::AssetManager::LoadAsset("assets/textures/checkerboard.png");
 
+		Nutz::AssetManager::DebugPrint();
+
+		m_Scene = Nutz::Scene::Create();
 
 	}
 
@@ -30,6 +34,9 @@ public:
 	{
 
 	}
+
+private:
+	Ref<Nutz::Scene> m_Scene;
 
 };
 

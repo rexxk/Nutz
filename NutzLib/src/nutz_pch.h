@@ -3,6 +3,7 @@
 
 
 #include "Core/Base.h"
+#include "Core/UUID.h"
 #include "Utils/Log.h"
 
 #include <functional>
