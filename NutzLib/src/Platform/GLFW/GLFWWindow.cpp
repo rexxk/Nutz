@@ -42,6 +42,20 @@ namespace Nutz
             
         });
 
+        glfwSetMouseButtonCallback((GLFWwindow*)m_Handle, [](GLFWwindow* window, int button, int action, int mods)
+        {
+            if (action == GLFW_PRESS)
+            {
+                Ref<Message> message = CreateRef<MouseButtonPressedMessage>(button);
+                MessageQueue::Add(message);
+            }
+            if (action == GLFW_RELEASE)
+            {
+                Ref<Message> message = CreateRef<MouseButtonReleasedMessage>(button);
+                MessageQueue::Add(message);
+            }
+        });
+
     }
 
     GLFWWindow::~GLFWWindow()

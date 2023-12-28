@@ -28,7 +28,8 @@ namespace Nutz
 		m_MainWindow = Window::Create(windowProps);
 
 		m_Keyboard = Keyboard::Create();
-
+		m_Mouse = Mouse::Create();
+		
 
 		MessageQueue::Subscribe(MessageType::WindowClosed, [&](Ref<Message> msg)
 			{

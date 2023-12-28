@@ -18,6 +18,7 @@ namespace Nutz
 	{
 		Undefined, WindowClosed, WindowResized,
 		KeyPressed, KeyReleased,
+		MouseButtonPressed, MouseButtonReleased, MouseMoved,
 	};
 
 

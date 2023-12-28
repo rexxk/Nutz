@@ -24,6 +24,7 @@ project "NutzLib"
 		"%{prj.location}/src",
 		"%{prj.location}/vendor/spdlog/include",
 		"%{prj.location}/vendor/glfw/include",
+		"%{prj.location}/vendor/stb",
 	}
 
 	pchheader "nutz_pch.h"

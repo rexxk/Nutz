@@ -22,7 +22,7 @@ RESCOMP = windres
 PCH = src/nutz_pch.h
 PCH_PLACEHOLDER = $(OBJDIR)/$(notdir $(PCH))
 GCH = $(PCH_PLACEHOLDER).gch
-INCLUDES += -Isrc -Ivendor/spdlog/include -Ivendor/glfw/include
+INCLUDES += -Isrc -Ivendor/spdlog/include -Ivendor/glfw/include -Ivendor/stb
 FORCE_INCLUDE +=
 ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
 ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
@@ -76,7 +76,9 @@ GENERATED += $(OBJDIR)/Layer.o
 GENERATED += $(OBJDIR)/LayerStack.o
 GENERATED += $(OBJDIR)/Log.o
 GENERATED += $(OBJDIR)/MessageQueue.o
+GENERATED += $(OBJDIR)/Mouse.o
 GENERATED += $(OBJDIR)/Scene.o
+GENERATED += $(OBJDIR)/StbImage.o
 GENERATED += $(OBJDIR)/UUID.o
 GENERATED += $(OBJDIR)/Window.o
 GENERATED += $(OBJDIR)/nutz_pch.o
@@ -90,7 +92,9 @@ OBJECTS += $(OBJDIR)/Layer.o
 OBJECTS += $(OBJDIR)/LayerStack.o
 OBJECTS += $(OBJDIR)/Log.o
 OBJECTS += $(OBJDIR)/MessageQueue.o
+OBJECTS += $(OBJDIR)/Mouse.o
 OBJECTS += $(OBJDIR)/Scene.o
+OBJECTS += $(OBJDIR)/StbImage.o
 OBJECTS += $(OBJDIR)/UUID.o
 OBJECTS += $(OBJDIR)/Window.o
 OBJECTS += $(OBJDIR)/nutz_pch.o
@@ -172,6 +176,9 @@ $(OBJDIR)/DataBuffer.o: src/Core/DataBuffer.cpp
 $(OBJDIR)/Keyboard.o: src/Core/Input/Keyboard.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/Mouse.o: src/Core/Input/Mouse.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Layer.o: src/Core/Layer.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
@@ -188,6 +195,9 @@ $(OBJDIR)/Window.o: src/Core/Window.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/GLFWWindow.o: src/Platform/GLFW/GLFWWindow.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/StbImage.o: src/Platform/stbimage/StbImage.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Scene.o: src/Scene/Scene.cpp

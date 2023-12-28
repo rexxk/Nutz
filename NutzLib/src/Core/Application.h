@@ -5,6 +5,7 @@
 #include "Window.h"
 
 #include "Input/Keyboard.h"
+#include "Input/Mouse.h"
 
 namespace Nutz
 {
@@ -28,6 +29,7 @@ namespace Nutz
 		Ref<Window> m_MainWindow = nullptr;
 
 		Ref<Keyboard> m_Keyboard = nullptr;
+		Ref<Mouse> m_Mouse = nullptr;
 
 		bool m_Running = false;
 
