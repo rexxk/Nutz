@@ -9,3 +9,6 @@
 [submodule "NutzLib/vendor/glfw"]
 	path = NutzLib/vendor/glfw
 	url = http://github.com/rexxk/glfw
+[submodule "NutzLib/vendor/stb"]
+	path = NutzLib/vendor/stb
+	url = http://github.com/nothings/stb
