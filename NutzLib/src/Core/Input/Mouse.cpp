@@ -27,9 +27,12 @@ namespace Nutz
             return;
         }
 
-        m_ButtonState.resize(10);
+        m_ButtonState.resize(10);        
 
-//        std::memset(s_Instance->m_ButtonState.data(), false, m_ButtonState.size());
+        for (auto it = m_ButtonState.begin(); it != m_ButtonState.end(); it++)
+        {
+            *it = false;
+        }
 
         MessageQueue::Subscribe(MessageType::MouseButtonPressed, [&](Ref<Message> msg)
         {

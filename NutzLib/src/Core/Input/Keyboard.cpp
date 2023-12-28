@@ -27,6 +27,11 @@ namespace Nutz
 
         m_KeyState.resize(256);
 
+        for (auto it = m_KeyState.begin(); it != m_KeyState.end(); it++)
+        {
+            *it = false;
+        }
+
         MessageQueue::Subscribe(MessageType::KeyPressed, [&](Ref<Message> msg)
         {
             LOG_CORE_TRACE("Key pressed");
