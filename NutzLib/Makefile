@@ -69,6 +69,7 @@ OBJECTS :=
 GENERATED += $(OBJDIR)/Application.o
 GENERATED += $(OBJDIR)/Asset.o
 GENERATED += $(OBJDIR)/AssetManager.o
+GENERATED += $(OBJDIR)/DataBuffer.o
 GENERATED += $(OBJDIR)/GLFWWindow.o
 GENERATED += $(OBJDIR)/Keyboard.o
 GENERATED += $(OBJDIR)/Layer.o
@@ -76,11 +77,13 @@ GENERATED += $(OBJDIR)/LayerStack.o
 GENERATED += $(OBJDIR)/Log.o
 GENERATED += $(OBJDIR)/MessageQueue.o
 GENERATED += $(OBJDIR)/Scene.o
+GENERATED += $(OBJDIR)/UUID.o
 GENERATED += $(OBJDIR)/Window.o
 GENERATED += $(OBJDIR)/nutz_pch.o
 OBJECTS += $(OBJDIR)/Application.o
 OBJECTS += $(OBJDIR)/Asset.o
 OBJECTS += $(OBJDIR)/AssetManager.o
+OBJECTS += $(OBJDIR)/DataBuffer.o
 OBJECTS += $(OBJDIR)/GLFWWindow.o
 OBJECTS += $(OBJDIR)/Keyboard.o
 OBJECTS += $(OBJDIR)/Layer.o
@@ -88,6 +91,7 @@ OBJECTS += $(OBJDIR)/LayerStack.o
 OBJECTS += $(OBJDIR)/Log.o
 OBJECTS += $(OBJDIR)/MessageQueue.o
 OBJECTS += $(OBJDIR)/Scene.o
+OBJECTS += $(OBJDIR)/UUID.o
 OBJECTS += $(OBJDIR)/Window.o
 OBJECTS += $(OBJDIR)/nutz_pch.o
 
@@ -162,6 +166,9 @@ $(OBJDIR)/AssetManager.o: src/Asset/AssetManager.cpp
 $(OBJDIR)/Application.o: src/Core/Application.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/DataBuffer.o: src/Core/DataBuffer.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Keyboard.o: src/Core/Input/Keyboard.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
@@ -172,6 +179,9 @@ $(OBJDIR)/LayerStack.o: src/Core/LayerStack.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/MessageQueue.o: src/Core/Message/MessageQueue.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/UUID.o: src/Core/UUID.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Window.o: src/Core/Window.cpp
