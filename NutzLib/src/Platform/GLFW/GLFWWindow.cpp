@@ -1,5 +1,5 @@
 #include "nutz_pch.h"
-#include "LinuxWindow.h"
+#include "GLFWWindow.h"
 
 #include "Core/Message/Messages.h"
 
@@ -7,12 +7,10 @@
 namespace Nutz
 {
 
-#ifdef __linux__
-
-    LinuxWindow::LinuxWindow(const WindowProperties& props)
+    GLFWWindow::GLFWWindow(const WindowProperties& props)
         : Window(props)
     {
-        LOG_CORE_TRACE("Creating Linux window");
+        LOG_CORE_TRACE("Creating GLFW window");
 
         CreateWindow();
 
@@ -46,18 +44,18 @@ namespace Nutz
 
     }
 
-    LinuxWindow::~LinuxWindow()
+    GLFWWindow::~GLFWWindow()
     {
 
     }
 
-	void LinuxWindow::HandleEvents()
+	void GLFWWindow::HandleEvents()
     {
         glfwPollEvents();
 
     }
 
-	void LinuxWindow::CreateWindow()
+	void GLFWWindow::CreateWindow()
     {
         glfwInit();
 
@@ -66,7 +64,5 @@ namespace Nutz
 
 
     }
-
-#endif
 
 }

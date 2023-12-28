@@ -69,28 +69,26 @@ OBJECTS :=
 GENERATED += $(OBJDIR)/Application.o
 GENERATED += $(OBJDIR)/Asset.o
 GENERATED += $(OBJDIR)/AssetManager.o
+GENERATED += $(OBJDIR)/GLFWWindow.o
 GENERATED += $(OBJDIR)/Keyboard.o
 GENERATED += $(OBJDIR)/Layer.o
 GENERATED += $(OBJDIR)/LayerStack.o
-GENERATED += $(OBJDIR)/LinuxWindow.o
 GENERATED += $(OBJDIR)/Log.o
 GENERATED += $(OBJDIR)/MessageQueue.o
 GENERATED += $(OBJDIR)/Scene.o
 GENERATED += $(OBJDIR)/Window.o
-GENERATED += $(OBJDIR)/WindowsWindow.o
 GENERATED += $(OBJDIR)/nutz_pch.o
 OBJECTS += $(OBJDIR)/Application.o
 OBJECTS += $(OBJDIR)/Asset.o
 OBJECTS += $(OBJDIR)/AssetManager.o
+OBJECTS += $(OBJDIR)/GLFWWindow.o
 OBJECTS += $(OBJDIR)/Keyboard.o
 OBJECTS += $(OBJDIR)/Layer.o
 OBJECTS += $(OBJDIR)/LayerStack.o
-OBJECTS += $(OBJDIR)/LinuxWindow.o
 OBJECTS += $(OBJDIR)/Log.o
 OBJECTS += $(OBJDIR)/MessageQueue.o
 OBJECTS += $(OBJDIR)/Scene.o
 OBJECTS += $(OBJDIR)/Window.o
-OBJECTS += $(OBJDIR)/WindowsWindow.o
 OBJECTS += $(OBJDIR)/nutz_pch.o
 
 # Rules
@@ -179,10 +177,7 @@ $(OBJDIR)/MessageQueue.o: src/Core/Message/MessageQueue.cpp
 $(OBJDIR)/Window.o: src/Core/Window.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/LinuxWindow.o: src/Platform/Linux/LinuxWindow.cpp
-	@echo "$(notdir $<)"
-	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/WindowsWindow.o: src/Platform/Windows/WindowsWindow.cpp
+$(OBJDIR)/GLFWWindow.o: src/Platform/GLFW/GLFWWindow.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Scene.o: src/Scene/Scene.cpp

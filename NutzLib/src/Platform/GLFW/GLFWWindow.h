@@ -2,20 +2,17 @@
 
 #include "Core/Window.h"
 
-
-#ifdef __linux__
-
 #include "GLFW/glfw3.h"
 
 
 namespace Nutz
 {
 
-    class LinuxWindow : public Window
+    class GLFWWindow : public Window
     {
     public:
-        LinuxWindow(const WindowProperties& props);
-		virtual ~LinuxWindow();
+        GLFWWindow(const WindowProperties& props);
+		virtual ~GLFWWindow();
 
 		virtual void HandleEvents() override;
 
@@ -24,6 +21,5 @@ namespace Nutz
 
     };
 
-#endif
 
 }
