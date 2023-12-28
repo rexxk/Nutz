@@ -17,6 +17,7 @@ namespace Nutz
 	enum class MessageType
 	{
 		Undefined, WindowClosed, WindowResized,
+		KeyPressed, KeyReleased,
 	};
 
 

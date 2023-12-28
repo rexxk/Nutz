@@ -4,6 +4,7 @@
 
 #include "Window.h"
 
+#include "Input/Keyboard.h"
 
 namespace Nutz
 {
@@ -26,6 +27,7 @@ namespace Nutz
 		Scope<LayerStack> m_LayerStack = nullptr;
 		Ref<Window> m_MainWindow = nullptr;
 
+		Ref<Keyboard> m_Keyboard = nullptr;
 
 		bool m_Running = false;
 

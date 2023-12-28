@@ -69,6 +69,7 @@ OBJECTS :=
 GENERATED += $(OBJDIR)/Application.o
 GENERATED += $(OBJDIR)/Asset.o
 GENERATED += $(OBJDIR)/AssetManager.o
+GENERATED += $(OBJDIR)/Keyboard.o
 GENERATED += $(OBJDIR)/Layer.o
 GENERATED += $(OBJDIR)/LayerStack.o
 GENERATED += $(OBJDIR)/LinuxWindow.o
@@ -81,6 +82,7 @@ GENERATED += $(OBJDIR)/nutz_pch.o
 OBJECTS += $(OBJDIR)/Application.o
 OBJECTS += $(OBJDIR)/Asset.o
 OBJECTS += $(OBJDIR)/AssetManager.o
+OBJECTS += $(OBJDIR)/Keyboard.o
 OBJECTS += $(OBJDIR)/Layer.o
 OBJECTS += $(OBJDIR)/LayerStack.o
 OBJECTS += $(OBJDIR)/LinuxWindow.o
@@ -160,6 +162,9 @@ $(OBJDIR)/AssetManager.o: src/Asset/AssetManager.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Application.o: src/Core/Application.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/Keyboard.o: src/Core/Input/Keyboard.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Layer.o: src/Core/Layer.cpp

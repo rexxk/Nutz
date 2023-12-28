@@ -29,6 +29,21 @@ namespace Nutz
             MessageQueue::Add(message);
         });
 
+        glfwSetKeyCallback((GLFWwindow*)m_Handle, [](GLFWwindow* window, int key, int scancode, int action, int mods)
+        {
+            if (action == GLFW_PRESS)
+            {
+                Ref<Message> message = CreateRef<KeyPressedMessage>(scancode);
+                MessageQueue::Add(message);
+            }
+            if (action == GLFW_RELEASE)
+            {
+                Ref<Message> message = CreateRef<KeyReleasedMessage>(scancode);
+                MessageQueue::Add(message);
+            }
+            
+        });
+
     }
 
     LinuxWindow::~LinuxWindow()

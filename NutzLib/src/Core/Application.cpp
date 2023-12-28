@@ -27,6 +27,7 @@ namespace Nutz
 
 		m_MainWindow = Window::Create(windowProps);
 
+		m_Keyboard = Keyboard::Create();
 
 
 		MessageQueue::Subscribe(MessageType::WindowClosed, [&](Ref<Message> msg)
@@ -76,6 +77,9 @@ namespace Nutz
 				fpsTimer.Reset();
 				stats.FPS = 0;
 			}
+
+			if (Keyboard::IsKeyPressed(0x09))
+				m_Running = false;
 		}
 
 
