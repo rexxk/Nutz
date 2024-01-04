@@ -19,6 +19,7 @@ namespace Nutz
     }
 
     Renderer::Renderer(void* windowHandle)
+        : m_Handle(windowHandle)
     {
 
     }

@@ -11,6 +11,7 @@ namespace Nutz
         : Renderer(windowHandle)
     {
         LOG_CORE_TRACE("Creating Vulkan renderer");
+
     }
 
 
