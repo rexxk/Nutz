@@ -17,7 +17,7 @@ public:
 		LOG_TRACE("Attached layer: {}", GetName());
 
 		Nutz::AssetManager::LoadAsset("assets/objects/cube.obj");
-		Nutz::AssetManager::LoadAsset("assets/textures/checkerboard.png");
+//		Nutz::AssetManager::LoadAsset("assets/textures/checkerboard.png");
 
 		Nutz::AssetManager::DebugPrint();
 
