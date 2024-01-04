@@ -73,9 +73,12 @@ namespace Nutz
     {
         glfwInit();
 
-        m_Handle = glfwCreateWindow(1280, 720, "Test title", nullptr, nullptr);
+        m_Handle = glfwCreateWindow(m_Properties.Width, m_Properties.Height, m_Properties.Title.c_str(), nullptr, nullptr);
 
-
+        if (m_Properties.Mode == WindowMode::Maximized)
+        {
+            glfwMaximizeWindow((GLFWwindow*)m_Handle);
+        }
 
     }
 

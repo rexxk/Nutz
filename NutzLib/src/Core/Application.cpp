@@ -18,14 +18,14 @@ namespace Nutz
 	
 		m_LayerStack = CreateScope<LayerStack>();
 
-		WindowProperties windowProps;
-		windowProps.Width = 1280;
-		windowProps.Height = 720;
-		windowProps.Title = "Nutz Engine";
-		windowProps.Mode = WindowMode::Windowed;
-		windowProps.VSync = false;
-
-		m_MainWindow = Window::Create(windowProps);
+//		WindowProperties windowProps;
+//		windowProps.Width = 1280;
+//		windowProps.Height = 720;
+//		windowProps.Title = "Nutz Engine";
+//		windowProps.Mode = WindowMode::Windowed;
+//		windowProps.VSync = false;
+//
+//		m_MainWindow = Window::Create(windowProps);
 
 		m_Keyboard = Keyboard::Create();
 		m_Mouse = Mouse::Create();
@@ -60,7 +60,7 @@ namespace Nutz
 
 		while (m_Running)
 		{
-			m_MainWindow->HandleEvents();
+//			m_MainWindow->HandleEvents();
 			MessageQueue::Process();
 
 			for (auto& layer : *m_LayerStack)

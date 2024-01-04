@@ -26,7 +26,7 @@ namespace Nutz
 
 	private:
 		Scope<LayerStack> m_LayerStack = nullptr;
-		Ref<Window> m_MainWindow = nullptr;
+//		Ref<Window> m_MainWindow = nullptr;
 
 		Ref<Keyboard> m_Keyboard = nullptr;
 		Ref<Mouse> m_Mouse = nullptr;
