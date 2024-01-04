@@ -12,4 +12,6 @@
 
 #include "Asset/AssetManager.h"
 
+#include "Renderer/Renderer.h"
+
 #include "Scene/Scene.h"

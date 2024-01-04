@@ -16,13 +16,13 @@ namespace Nutz
 
 	struct WindowProperties
 	{
-		uint32_t Width;
-		uint32_t Height;
-		std::string Title;
+		uint32_t Width = 1280;
+		uint32_t Height = 720;
+		std::string Title = "Default Title";
 
-		bool VSync;
+		bool VSync = false;
 
-		WindowMode Mode;
+		WindowMode Mode = WindowMode::Windowed;
 	};
 
 

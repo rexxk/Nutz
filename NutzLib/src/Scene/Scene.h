@@ -2,7 +2,6 @@
 
 
 
-
 namespace Nutz
 {
 
@@ -16,7 +15,6 @@ namespace Nutz
 
 
 	private:
-
 
 	};
 
