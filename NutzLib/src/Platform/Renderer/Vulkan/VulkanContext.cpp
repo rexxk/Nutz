@@ -58,7 +58,7 @@ namespace Nutz
 
 		instanceExtensions.emplace_back("VK_KHR_surface");
 
-#ifdef _DEBUG
+#ifdef DEBUG
 		instanceLayers.emplace_back("VK_LAYER_KHRONOS_validation");
 #endif
 #ifdef _WIN32
