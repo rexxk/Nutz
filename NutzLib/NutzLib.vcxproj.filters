@@ -7,8 +7,29 @@
     <Filter Include="Core">
       <UniqueIdentifier>{2EB4837C-1AEB-840D-C3D7-6A10AFED000F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\Input">
+      <UniqueIdentifier>{AD4E7BCD-9906-BD1A-020E-9676EEE4570B}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Core\Message">
       <UniqueIdentifier>{E220A938-CE83-38DD-7709-7193634B0460}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\GLFW">
+      <UniqueIdentifier>{A98C9061-154D-0C98-DE87-55154A075174}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Renderer">
+      <UniqueIdentifier>{10BA9FA4-7CD0-9D3A-C547-295C319D6EC2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Renderer\Vulkan">
+      <UniqueIdentifier>{90D596E7-7CFA-E567-A545-CBF791C9E485}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\stbimage">
+      <UniqueIdentifier>{45682680-B17E-2416-FAF5-AF37664BF59D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer">
+      <UniqueIdentifier>{7CCE658F-689B-C09A-91B4-AE427DE0F528}</UniqueIdentifier>
     </Filter>
     <Filter Include="Scene">
       <UniqueIdentifier>{B3F7140E-1F0C-3DBF-E88D-E01E546139F0}</UniqueIdentifier>
@@ -21,20 +42,35 @@
     <ClInclude Include="src\Asset\Asset.h">
       <Filter>Asset</Filter>
     </ClInclude>
+    <ClInclude Include="src\Asset\AssetManager.h">
+      <Filter>Asset</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\Application.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Base.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\DataBuffer.h">
+      <Filter>Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\Entrypoint.h">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Input\Keyboard.h">
+      <Filter>Core\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Input\Mouse.h">
+      <Filter>Core\Input</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Layer.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\LayerStack.h">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Message\KeyboardMessages.h">
+      <Filter>Core\Message</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Message\Message.h">
       <Filter>Core\Message</Filter>
@@ -43,6 +79,9 @@
       <Filter>Core\Message</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Message\Messages.h">
+      <Filter>Core\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Message\MouseMessages.h">
       <Filter>Core\Message</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Message\WindowMessages.h">
@@ -54,10 +93,25 @@
     <ClInclude Include="src\Core\Timestep.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\UUID.h">
+      <Filter>Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\Window.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Nutz.h" />
+    <ClInclude Include="src\Platform\GLFW\GLFWWindow.h">
+      <Filter>Platform\GLFW</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\Renderer\Vulkan\VulkanRenderer.h">
+      <Filter>Platform\Renderer\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\Renderer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\RendererAPI.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Scene\Scene.h">
       <Filter>Scene</Filter>
     </ClInclude>
@@ -68,16 +122,25 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\nutz_pch.h" />
-    <ClInclude Include="src\Asset\AssetManager.h" />
-    <ClInclude Include="src\Core\UUID.h" />
-    <ClInclude Include="src\Core\DataBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Asset\Asset.cpp">
       <Filter>Asset</Filter>
     </ClCompile>
+    <ClCompile Include="src\Asset\AssetManager.cpp">
+      <Filter>Asset</Filter>
+    </ClCompile>
     <ClCompile Include="src\Core\Application.cpp">
       <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\DataBuffer.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Input\Keyboard.cpp">
+      <Filter>Core\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Input\Mouse.cpp">
+      <Filter>Core\Input</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Layer.cpp">
       <Filter>Core</Filter>
@@ -88,8 +151,23 @@
     <ClCompile Include="src\Core\Message\MessageQueue.cpp">
       <Filter>Core\Message</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\UUID.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
     <ClCompile Include="src\Core\Window.cpp">
       <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\GLFW\GLFWWindow.cpp">
+      <Filter>Platform\GLFW</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\Renderer\Vulkan\VulkanRenderer.cpp">
+      <Filter>Platform\Renderer\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\stbimage\StbImage.cpp">
+      <Filter>Platform\stbimage</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\Renderer.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Scene\Scene.cpp">
       <Filter>Scene</Filter>
@@ -98,8 +176,5 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="src\nutz_pch.cpp" />
-    <ClCompile Include="src\Asset\AssetManager.cpp" />
-    <ClCompile Include="src\Core\UUID.cpp" />
-    <ClCompile Include="src\Core\DataBuffer.cpp" />
   </ItemGroup>
 </Project>

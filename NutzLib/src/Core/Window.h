@@ -1,5 +1,8 @@
 #pragma once
 
+#ifdef _WIN32
+#undef CreateWindow
+#endif
 
 
 namespace Nutz
