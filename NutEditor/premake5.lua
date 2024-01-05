@@ -38,3 +38,15 @@ project "NutEditor"
 		optimize "On"
 
 	filter { "system:Windows" }
+
+		links
+		{
+			"$(VULKAN_SDK)/Lib/vulkan-1.lib",
+		}
+
+	filter { "system:Linux" }
+
+		links
+		{
+			"vulkan",
+		}

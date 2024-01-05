@@ -38,7 +38,7 @@ OBJDIR = ../bin-int/Debug-linux-x86_64/NutEditor
 DEFINES += -DDEBUG
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -g -std=c++20
-LIBS += ../bin/Debug-linux-x86_64/NutzLib/libNutzLib.a ../bin/Debug-linux-x86_64/glfw/libglfw.a
+LIBS += ../bin/Debug-linux-x86_64/NutzLib/libNutzLib.a ../bin/Debug-linux-x86_64/glfw/libglfw.a -lvulkan
 LDDEPS += ../bin/Debug-linux-x86_64/NutzLib/libNutzLib.a ../bin/Debug-linux-x86_64/glfw/libglfw.a
 ALL_LDFLAGS += $(LDFLAGS) -L../bin/Debug-linux-x86_64/NutzLib -L../bin/Debug-linux-x86_64/glfw -L/usr/lib64 -m64
 
@@ -49,7 +49,7 @@ OBJDIR = ../bin-int/Release-linux-x86_64/NutEditor
 DEFINES += -DNDEBUG
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -std=c++20
-LIBS += ../bin/Release-linux-x86_64/NutzLib/libNutzLib.a ../bin/Release-linux-x86_64/glfw/libglfw.a
+LIBS += ../bin/Release-linux-x86_64/NutzLib/libNutzLib.a ../bin/Release-linux-x86_64/glfw/libglfw.a -lvulkan
 LDDEPS += ../bin/Release-linux-x86_64/NutzLib/libNutzLib.a ../bin/Release-linux-x86_64/glfw/libglfw.a
 ALL_LDFLAGS += $(LDFLAGS) -L../bin/Release-linux-x86_64/NutzLib -L../bin/Release-linux-x86_64/glfw -L/usr/lib64 -m64 -s
 

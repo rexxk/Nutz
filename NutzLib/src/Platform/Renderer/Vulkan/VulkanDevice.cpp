@@ -82,7 +82,6 @@ namespace Nutz
 		if (gpuCount == 0)
 		{
 			LOG_CORE_ERROR("No discrete GPU supporting Vulkan is available");
-			return;
 		}
 
 		LOG_CORE_TRACE("{} discrete GPU(s) supporting Vulkan was found", gpuCount);
@@ -96,8 +95,25 @@ namespace Nutz
 			if (m_Properties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
 			{
 				selectedDevice = physicalDevice;
+				LOG_CORE_TRACE("Discrete GPU selected: {}", m_Properties.deviceName);
 				break;
 			}
+		}
+
+		if (!selectedDevice)
+		{
+			for (auto& physicalDevice : physicalDevices)
+			{
+				vkGetPhysicalDeviceProperties(physicalDevice, &m_Properties);
+
+				if (m_Properties.deviceType == VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU)
+				{
+					selectedDevice = physicalDevice;
+					LOG_CORE_TRACE("Integrated GPU selected: {}", m_Properties.deviceName);
+					break;
+				}
+			}
+
 		}
 
 		if (!selectedDevice)

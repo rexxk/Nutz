@@ -22,11 +22,11 @@ RESCOMP = windres
 PCH = src/nutz_pch.h
 PCH_PLACEHOLDER = $(OBJDIR)/$(notdir $(PCH))
 GCH = $(PCH_PLACEHOLDER).gch
-INCLUDES += -Isrc -Ivendor/spdlog/include -Ivendor/glfw/include -Ivendor/stb
+INCLUDES += -Isrc -Ivendor/spdlog/include -Ivendor/glfw/include -Ivendor/stb -I"$(VULKAN_SDK)/Include"
 FORCE_INCLUDE +=
 ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
 ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-LIBS +=
+LIBS += -lvulkan
 LDDEPS +=
 LINKCMD = $(AR) -rcs "$@" $(OBJECTS)
 define PREBUILDCMDS
@@ -81,6 +81,8 @@ GENERATED += $(OBJDIR)/Renderer.o
 GENERATED += $(OBJDIR)/Scene.o
 GENERATED += $(OBJDIR)/StbImage.o
 GENERATED += $(OBJDIR)/UUID.o
+GENERATED += $(OBJDIR)/VulkanContext.o
+GENERATED += $(OBJDIR)/VulkanDevice.o
 GENERATED += $(OBJDIR)/VulkanRenderer.o
 GENERATED += $(OBJDIR)/Window.o
 GENERATED += $(OBJDIR)/nutz_pch.o
@@ -99,6 +101,8 @@ OBJECTS += $(OBJDIR)/Renderer.o
 OBJECTS += $(OBJDIR)/Scene.o
 OBJECTS += $(OBJDIR)/StbImage.o
 OBJECTS += $(OBJDIR)/UUID.o
+OBJECTS += $(OBJDIR)/VulkanContext.o
+OBJECTS += $(OBJDIR)/VulkanDevice.o
 OBJECTS += $(OBJDIR)/VulkanRenderer.o
 OBJECTS += $(OBJDIR)/Window.o
 OBJECTS += $(OBJDIR)/nutz_pch.o
@@ -199,6 +203,12 @@ $(OBJDIR)/Window.o: src/Core/Window.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/GLFWWindow.o: src/Platform/GLFW/GLFWWindow.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/VulkanContext.o: src/Platform/Renderer/Vulkan/VulkanContext.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/VulkanDevice.o: src/Platform/Renderer/Vulkan/VulkanDevice.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/VulkanRenderer.o: src/Platform/Renderer/Vulkan/VulkanRenderer.cpp
