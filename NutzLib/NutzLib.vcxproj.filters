@@ -60,6 +60,9 @@
     <ClInclude Include="src\Core\Input\Keyboard.h">
       <Filter>Core\Input</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Input\Keydefs.h">
+      <Filter>Core\Input</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\Input\Mouse.h">
       <Filter>Core\Input</Filter>
     </ClInclude>
@@ -122,7 +125,8 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\nutz_pch.h" />
-    <ClInclude Include="src\Core\Input\Keydefs.h" />
+    <ClInclude Include="src\Platform\Renderer\Vulkan\VulkanContext.h" />
+    <ClInclude Include="src\Platform\Renderer\Vulkan\VulkanDevice.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Asset\Asset.cpp">
@@ -177,5 +181,7 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="src\nutz_pch.cpp" />
+    <ClCompile Include="src\Platform\Renderer\Vulkan\VulkanContext.cpp" />
+    <ClCompile Include="src\Platform\Renderer\Vulkan\VulkanDevice.cpp" />
   </ItemGroup>
 </Project>

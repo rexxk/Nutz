@@ -17,6 +17,12 @@ project "NutzLib"
 		"%{prj.location}/vendor/spdlog/include",
 		"%{prj.location}/vendor/glfw/include",
 		"%{prj.location}/vendor/stb",
+		"$(VULKAN_SDK)/Include"
+	}
+
+	links
+	{
+		"$(VULKAN_SDK)/Lib/vulkan-1.lib",
 	}
 
 	pchheader "nutz_pch.h"

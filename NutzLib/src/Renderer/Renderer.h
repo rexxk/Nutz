@@ -22,6 +22,9 @@ namespace Nutz
         inline static RendererAPI s_API = RendererAPI::None;
         inline static Ref<Renderer> s_Renderer = nullptr;
 
+        virtual void Initialize();
+
+
     protected:
         void* m_Handle = nullptr;
 

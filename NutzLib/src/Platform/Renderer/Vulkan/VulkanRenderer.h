@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Renderer/Renderer.h"
+#include "VulkanContext.h"
 
 
 namespace Nutz
@@ -11,6 +12,14 @@ namespace Nutz
     {
     public:
         VulkanRenderer(void* windowHandle);
+
+
+    private:
+        virtual void Initialize() override;
+
+
+    private:
+        Ref<VulkanContext> m_Context = nullptr;
 
     };
 

@@ -15,6 +15,13 @@ namespace Nutz
         switch (s_API)
         {
             case RendererAPI::Vulkan: s_Renderer = CreateRef<VulkanRenderer>(windowHandle); break;
+            case RendererAPI::OpenGL: s_Renderer = nullptr; break;
+        }
+
+
+        if (s_Renderer != nullptr)
+        {
+            s_Renderer->Initialize();
         }
     }
 
@@ -24,5 +31,10 @@ namespace Nutz
 
     }
 
+
+    void Renderer::Initialize()
+    {
+
+    }
 
 }
