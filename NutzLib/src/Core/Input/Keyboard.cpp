@@ -1,6 +1,8 @@
 #include "nutz_pch.h"
 #include "Keyboard.h"
 
+#include "Keydefs.h"
+
 #include "Core/Message/Messages.h"
 
 namespace Nutz
@@ -25,7 +27,7 @@ namespace Nutz
             return;
         }
 
-        m_KeyState.resize(256);
+        m_KeyState.resize(NUTZ_MAX_SCANCODE);
 
         for (auto it = m_KeyState.begin(); it != m_KeyState.end(); it++)
         {
@@ -34,19 +36,21 @@ namespace Nutz
 
         MessageQueue::Subscribe(MessageType::KeyPressed, [&](Ref<Message> msg)
         {
-            LOG_CORE_TRACE("Key pressed");
-            
+           
             Ref<KeyPressedMessage> message = std::dynamic_pointer_cast<KeyPressedMessage>(msg);
-            s_Instance->m_KeyState[message->Scancode()] = true;
+            s_Instance->m_KeyState[message->Key()] = true;
+
+//            LOG_CORE_TRACE("Key pressed: {}", message->Key());
 
             return false;
         });
 
         MessageQueue::Subscribe(MessageType::KeyReleased, [&](Ref<Message> msg)
         {
-            LOG_CORE_TRACE("Key released");
             Ref<KeyReleasedMessage> message = std::dynamic_pointer_cast<KeyReleasedMessage>(msg);
-            s_Instance->m_KeyState[message->Scancode()] = false;
+            s_Instance->m_KeyState[message->Key()] = false;
+
+//            LOG_CORE_TRACE("Key released");
 
             return false;
         });

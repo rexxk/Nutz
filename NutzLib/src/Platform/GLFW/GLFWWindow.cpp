@@ -31,12 +31,12 @@ namespace Nutz
         {
             if (action == GLFW_PRESS)
             {
-                Ref<Message> message = CreateRef<KeyPressedMessage>(scancode);
+                Ref<Message> message = CreateRef<KeyPressedMessage>(key, scancode);
                 MessageQueue::Add(message);
             }
             if (action == GLFW_RELEASE)
             {
-                Ref<Message> message = CreateRef<KeyReleasedMessage>(scancode);
+                Ref<Message> message = CreateRef<KeyReleasedMessage>(key, scancode);
                 MessageQueue::Add(message);
             }
             

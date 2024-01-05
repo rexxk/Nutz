@@ -122,6 +122,7 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\nutz_pch.h" />
+    <ClInclude Include="src\Core\Input\Keydefs.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Asset\Asset.cpp">

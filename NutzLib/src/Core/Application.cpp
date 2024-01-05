@@ -7,6 +7,7 @@
 
 #include "Utils/Statistics.h"
 
+#include "Core/Input/Keydefs.h"
 
 
 namespace Nutz
@@ -79,7 +80,7 @@ namespace Nutz
 				stats.FPS = 0;
 			}
 
-			if (Keyboard::IsKeyPressed(0x09))
+			if (Keyboard::IsKeyPressed(NUTZ_KEY_ESCAPE))
 				m_Running = false;
 		}
 
