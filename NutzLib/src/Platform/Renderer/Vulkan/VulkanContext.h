@@ -4,7 +4,7 @@
 #include "vulkan/vulkan.h"
 
 #include "VulkanDevice.h"
-
+#include "VulkanSurface.h"
 
 
 namespace Nutz
@@ -31,6 +31,7 @@ namespace Nutz
 		Ref<VulkanDevice> m_Device = nullptr;
 		Ref<VulkanPhysicalDevice> m_PhysicalDevice = nullptr;
 
+		Ref<VulkanSurface> m_Surface = nullptr;
 
 	};
 

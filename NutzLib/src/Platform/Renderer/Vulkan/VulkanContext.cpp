@@ -22,6 +22,9 @@ namespace Nutz
 		m_PhysicalDevice = VulkanPhysicalDevice::Select(m_Instance);
 
 		m_Device = VulkanDevice::Create(m_PhysicalDevice);
+
+		m_Surface = VulkanSurface::Create(m_Instance, windowHandle);
+
 	}
 
 	VulkanContext::~VulkanContext()
@@ -31,6 +34,9 @@ namespace Nutz
 
 	void VulkanContext::Shutdown()
 	{
+		if (m_Surface != nullptr)
+			m_Surface->Shutdown(m_Instance);
+
 		if (m_Device != nullptr)
 			m_Device->Shutdown();
 
