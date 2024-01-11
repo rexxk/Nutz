@@ -17,7 +17,7 @@ EditorLayer::EditorLayer()
     m_Window = Nutz::Window::Create(windowProps);
 
     // CreateRenderer(API..., windowHandle)....
-    Nutz::Renderer::Create(Nutz::RendererAPI::Vulkan, m_Window->GetHandle());
+    Nutz::Renderer::Create(Nutz::RendererAPI::Vulkan, m_Window->GetHandle(), windowProps.Width, windowProps.Height);
 
     m_Scene = Nutz::Scene::Create();
 }

@@ -8,7 +8,7 @@ namespace Nutz
 {
 
 
-    void Renderer::Create(RendererAPI api, void* windowHandle)
+    void Renderer::Create(RendererAPI api, void* windowHandle, uint32_t width, uint32_t height)
     {
         s_API = api;
 
@@ -21,7 +21,7 @@ namespace Nutz
 
         if (s_Renderer != nullptr)
         {
-            s_Renderer->Initialize();
+            s_Renderer->Initialize(width, height);
         }
     }
 
@@ -32,7 +32,7 @@ namespace Nutz
     }
 
 
-    void Renderer::Initialize()
+    void Renderer::Initialize(uint32_t width, uint32_t height)
     {
 
     }

@@ -44,6 +44,12 @@ project "NutEditor"
 			"$(VULKAN_SDK)/Lib/vulkan-1.lib",
 		}
 
+		defines
+		{
+			"_SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS",
+		}
+
+
 	filter { "system:Linux" }
 
 		links

@@ -11,7 +11,7 @@ namespace Nutz
     class Renderer
     {
     public:
-        static void Create(RendererAPI api, void* windowHandle);
+        static void Create(RendererAPI api, void* windowHandle, uint32_t width, uint32_t height);
 
         Renderer(void* windowHandle);
 
@@ -22,7 +22,7 @@ namespace Nutz
         inline static RendererAPI s_API = RendererAPI::None;
         inline static Ref<Renderer> s_Renderer = nullptr;
 
-        virtual void Initialize();
+        virtual void Initialize(uint32_t width, uint32_t height);
 
 
     protected:

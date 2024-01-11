@@ -5,6 +5,7 @@
 
 #include "VulkanDevice.h"
 #include "VulkanSurface.h"
+#include "VulkanSwapchain.h"
 
 
 namespace Nutz
@@ -14,9 +15,9 @@ namespace Nutz
 	class VulkanContext
 	{
 	public:
-		static Ref<VulkanContext> Create(void* windowHandle);
+		static Ref<VulkanContext> Create(void* windowHandle, uint32_t width, uint32_t height);
 
-		VulkanContext(void* windowHandle);
+		VulkanContext(void* windowHandle, uint32_t width, uint32_t height);
 		~VulkanContext();
 
 		void Shutdown();
@@ -33,6 +34,7 @@ namespace Nutz
 
 		Ref<VulkanSurface> m_Surface = nullptr;
 
+		Ref<VulkanSwapchain> m_Swapchain = nullptr;
 	};
 
 

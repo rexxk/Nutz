@@ -15,7 +15,7 @@ namespace Nutz
 
 
     private:
-        virtual void Initialize() override;
+        virtual void Initialize(uint32_t width, uint32_t height) override;
 
 
     private:

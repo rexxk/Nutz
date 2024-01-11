@@ -17,11 +17,11 @@ namespace Nutz
 
 
 
-    void VulkanRenderer::Initialize()
+    void VulkanRenderer::Initialize(uint32_t width, uint32_t height)
     {
         LOG_CORE_TRACE("Initializing Vulkan context");
 
-        m_Context = VulkanContext::Create(m_Handle);
+        m_Context = VulkanContext::Create(m_Handle, width, height);
     }
 
 
