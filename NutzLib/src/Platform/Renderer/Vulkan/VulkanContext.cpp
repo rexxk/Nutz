@@ -7,14 +7,14 @@ namespace Nutz
 {
 
 
-	Ref<VulkanContext> VulkanContext::Create(void* windowHandle, uint32_t width, uint32_t height)
+	Ref<VulkanContext> VulkanContext::Create(Ref<Window> window)
 	{
-		return CreateRef<VulkanContext>(windowHandle, width, height);
+		return CreateRef<VulkanContext>(window);
 	}
 
 
 
-	VulkanContext::VulkanContext(void* windowHandle, uint32_t width, uint32_t height)
+	VulkanContext::VulkanContext(Ref<Window> window)
 	{
 		if (!CreateInstance())
 			return;
@@ -23,9 +23,9 @@ namespace Nutz
 
 		m_Device = VulkanDevice::Create(m_PhysicalDevice);
 
-		m_Surface = VulkanSurface::Create(m_Instance, windowHandle);
+		m_Surface = VulkanSurface::Create(m_Instance, window->GetHandle());
 
-		m_Swapchain = VulkanSwapchain::Create(m_Instance, m_PhysicalDevice->GetVulkanPhysicalDevice(), m_Device->GetVulkanDevice(), m_Surface->Surface(), width, height, false);
+		m_Swapchain = VulkanSwapchain::Create(m_Instance, m_PhysicalDevice->GetVulkanPhysicalDevice(), m_Device->GetVulkanDevice(), m_Surface->Surface(), window);
 	}
 
 	VulkanContext::~VulkanContext()

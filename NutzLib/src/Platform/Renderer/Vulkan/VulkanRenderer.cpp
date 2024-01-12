@@ -21,8 +21,7 @@ namespace Nutz
     {
         LOG_CORE_TRACE("Initializing Vulkan context");
 
-        auto& windowProps = m_Window->GetProperties();
-        m_Context = VulkanContext::Create(m_Window->GetHandle(), windowProps.Width, windowProps.Height);
+        m_Context = VulkanContext::Create(m_Window);
     }
 
 

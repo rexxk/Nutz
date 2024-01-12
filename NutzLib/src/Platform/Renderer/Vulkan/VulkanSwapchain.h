@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Core/Window.h"
 
 #include <vulkan/vulkan.h>
 
@@ -19,9 +20,9 @@ namespace Nutz
 	class VulkanSwapchain
 	{
 	public:
-		static Ref<VulkanSwapchain> Create(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, VkSurfaceKHR surface, uint32_t width, uint32_t height, bool vsync);
+		static Ref<VulkanSwapchain> Create(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, VkSurfaceKHR surface, Ref<Window> window);
 
-		VulkanSwapchain(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, VkSurfaceKHR surface, uint32_t width, uint32_t height, bool vsync);
+		VulkanSwapchain(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, VkSurfaceKHR surface, Ref<Window> window);
 
 		void Shutdown();
 
@@ -45,6 +46,10 @@ namespace Nutz
 
 		uint32_t m_Width = 0, m_Height = 0;
 		bool m_VSync = false;
+
+		uint32_t m_ImageCount = 0;
+		std::vector<VkImage> m_Images;
+		std::vector<SwapchainBuffer> m_Buffers;
 	};
 
 

@@ -23,7 +23,6 @@ namespace Nutz
 		createInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
 		createInfo.hinstance = GetModuleHandle(NULL);
 		createInfo.hwnd = glfwGetWin32Window((GLFWwindow*)windowHandle);
-//		createInfo.hwnd = (HWND)windowHandle;
 
 		if (vkCreateWin32SurfaceKHR(instance, &createInfo, nullptr, &m_Surface) != VK_SUCCESS)
 		{

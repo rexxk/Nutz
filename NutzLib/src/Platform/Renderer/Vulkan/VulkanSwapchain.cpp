@@ -10,14 +10,19 @@ namespace Nutz
 {
 
 
-	Ref<VulkanSwapchain> VulkanSwapchain::Create(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, VkSurfaceKHR surface, uint32_t width, uint32_t height, bool vsync)
+	Ref<VulkanSwapchain> VulkanSwapchain::Create(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, VkSurfaceKHR surface, Ref<Window> window)
 	{
-		return CreateRef<VulkanSwapchain>(instance, physicalDevice, device, surface, width, height, vsync);
+		return CreateRef<VulkanSwapchain>(instance, physicalDevice, device, surface, window);
 	}
 
-	VulkanSwapchain::VulkanSwapchain(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, VkSurfaceKHR surface, uint32_t width, uint32_t height, bool vsync)
-		: m_Instance(instance), m_PhysicalDevice(physicalDevice), m_Device(device), m_Surface(surface), m_Width(width), m_Height(height), m_VSync(vsync)
+	VulkanSwapchain::VulkanSwapchain(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, VkSurfaceKHR surface, Ref<Window> window)
+		: m_Instance(instance), m_PhysicalDevice(physicalDevice), m_Device(device), m_Surface(surface)
 	{
+		auto& windowProps = window->GetProperties();
+		m_Width = windowProps.Width;
+		m_Height = windowProps.Height;
+		m_VSync = windowProps.VSync;
+
 		FindSurfaceFormat();
 
 		CreateSwapchain();
@@ -41,6 +46,12 @@ namespace Nutz
 		{
 			vkDestroySwapchainKHR(m_Device, m_Swapchain, nullptr);
 			m_Swapchain = nullptr;
+		}
+
+		for (uint32_t i = 0; i < m_ImageCount; i++)
+		{
+			vkDestroyImageView(m_Device, m_Buffers[i].ImageView, nullptr);
+			m_Buffers[i].ImageView = nullptr;
 		}
 	}
 
@@ -109,6 +120,105 @@ namespace Nutz
 		else
 		{
 			pretransform = surfaceCapabilities.currentTransform;
+		}
+
+		VkCompositeAlphaFlagBitsKHR compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+
+		std::vector<VkCompositeAlphaFlagBitsKHR> compositeAlphaFlags =
+		{
+			VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR,
+			VK_COMPOSITE_ALPHA_PRE_MULTIPLIED_BIT_KHR,
+			VK_COMPOSITE_ALPHA_POST_MULTIPLIED_BIT_KHR,
+			VK_COMPOSITE_ALPHA_INHERIT_BIT_KHR,
+		};
+
+		for (auto& actualCompositeAlpha : compositeAlphaFlags)
+		{
+			if (surfaceCapabilities.supportedCompositeAlpha & actualCompositeAlpha)
+			{
+				compositeAlpha = actualCompositeAlpha;
+				break;
+			}
+		}
+
+		VkSwapchainCreateInfoKHR createInfo = {};
+		createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+		createInfo.surface = m_Surface;
+		createInfo.minImageCount = desiredNumberOfSwapchainImages;
+		createInfo.imageColorSpace = m_ColorSpace;
+		createInfo.imageFormat = m_Format;
+		createInfo.imageExtent = swapchainExtent;
+		createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+		createInfo.preTransform = (VkSurfaceTransformFlagBitsKHR)pretransform;
+		createInfo.imageArrayLayers = 1;
+		createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+		createInfo.queueFamilyIndexCount = 0;
+		createInfo.presentMode = presentMode;
+		createInfo.oldSwapchain = oldSwapchain;
+		createInfo.clipped = VK_TRUE;
+		createInfo.compositeAlpha = compositeAlpha;
+
+		if (surfaceCapabilities.supportedUsageFlags & VK_IMAGE_USAGE_TRANSFER_SRC_BIT)
+		{
+			createInfo.imageUsage |= VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+		}
+
+		if (surfaceCapabilities.supportedUsageFlags & VK_IMAGE_USAGE_TRANSFER_DST_BIT)
+		{
+			createInfo.imageUsage |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+		}
+		
+		if (vkCreateSwapchainKHR(m_Device, &createInfo, nullptr, &m_Swapchain) != VK_SUCCESS)
+		{
+			LOG_CORE_ERROR("Unable to create Vulkan swapchain");
+			return;
+		}
+
+
+		if (oldSwapchain)
+		{
+			for (uint32_t i = 0; i < m_ImageCount; i++)
+			{
+				vkDestroyImageView(m_Device, m_Buffers[i].ImageView, nullptr);
+			}
+
+			vkDestroySwapchainKHR(m_Device, oldSwapchain, nullptr);
+		}
+
+		vkGetSwapchainImagesKHR(m_Device, m_Swapchain, &m_ImageCount, nullptr);
+		m_Images.resize(m_ImageCount);
+		vkGetSwapchainImagesKHR(m_Device, m_Swapchain, &m_ImageCount, m_Images.data());
+
+		m_Buffers.resize(m_ImageCount);
+
+		for (uint32_t i = 0; i < m_ImageCount; i++)
+		{
+			// Create color attachment views
+			VkImageViewCreateInfo createInfo = {};
+			createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+			createInfo.format = m_Format;
+			createInfo.components =
+			{
+				VK_COMPONENT_SWIZZLE_R,
+				VK_COMPONENT_SWIZZLE_G,
+				VK_COMPONENT_SWIZZLE_B,
+				VK_COMPONENT_SWIZZLE_A,
+			};
+			createInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+			createInfo.subresourceRange.baseArrayLayer = 0;
+			createInfo.subresourceRange.layerCount = 1;
+			createInfo.subresourceRange.baseMipLevel = 0;
+			createInfo.subresourceRange.levelCount = 1;
+			createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+
+			m_Buffers[i].Image = m_Images[i];
+			createInfo.image = m_Buffers[i].Image;
+
+			if (vkCreateImageView(m_Device, &createInfo, nullptr, &m_Buffers[i].ImageView) != VK_SUCCESS)
+			{
+				LOG_CORE_ERROR("Unable to create swapchain image view");
+				return;
+			}
 		}
 	}
 
