@@ -19,9 +19,9 @@ namespace Nutz
 	class VulkanSwapchain
 	{
 	public:
-		static Ref<VulkanSwapchain> Create(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, VkSurfaceKHR surface, uint32_t width, uint32_t height);
+		static Ref<VulkanSwapchain> Create(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, VkSurfaceKHR surface, uint32_t width, uint32_t height, bool vsync);
 
-		VulkanSwapchain(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, VkSurfaceKHR surface, uint32_t width, uint32_t height);
+		VulkanSwapchain(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, VkSurfaceKHR surface, uint32_t width, uint32_t height, bool vsync);
 
 		void Shutdown();
 
@@ -44,6 +44,7 @@ namespace Nutz
 		VkFormat m_Format;
 
 		uint32_t m_Width = 0, m_Height = 0;
+		bool m_VSync = false;
 	};
 
 

@@ -10,13 +10,13 @@ namespace Nutz
 {
 
 
-	Ref<VulkanSwapchain> VulkanSwapchain::Create(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, VkSurfaceKHR surface, uint32_t width, uint32_t height)
+	Ref<VulkanSwapchain> VulkanSwapchain::Create(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, VkSurfaceKHR surface, uint32_t width, uint32_t height, bool vsync)
 	{
-		return CreateRef<VulkanSwapchain>(instance, physicalDevice, device, surface, width, height);
+		return CreateRef<VulkanSwapchain>(instance, physicalDevice, device, surface, width, height, vsync);
 	}
 
-	VulkanSwapchain::VulkanSwapchain(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, VkSurfaceKHR surface, uint32_t width, uint32_t height)
-		: m_Instance(instance), m_PhysicalDevice(physicalDevice), m_Device(device), m_Surface(surface), m_Width(width), m_Height(height)
+	VulkanSwapchain::VulkanSwapchain(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, VkSurfaceKHR surface, uint32_t width, uint32_t height, bool vsync)
+		: m_Instance(instance), m_PhysicalDevice(physicalDevice), m_Device(device), m_Surface(surface), m_Width(width), m_Height(height), m_VSync(vsync)
 	{
 		FindSurfaceFormat();
 
@@ -59,6 +59,26 @@ namespace Nutz
 		std::vector<VkPresentModeKHR> presentModes(presentModeCount);
 		vkGetPhysicalDeviceSurfacePresentModesKHR(m_PhysicalDevice, m_Surface, &presentModeCount, presentModes.data());
 
+		VkPresentModeKHR presentMode = VK_PRESENT_MODE_FIFO_KHR;
+
+		if (!m_VSync)
+		{
+			for (auto& actualPresentMode : presentModes)
+			{
+				if (actualPresentMode == VK_PRESENT_MODE_MAILBOX_KHR)
+				{
+					presentMode = actualPresentMode;
+					break;
+				}
+
+				if (actualPresentMode == VK_PRESENT_MODE_IMMEDIATE_KHR)
+				{
+					presentMode = actualPresentMode;
+					break;
+				}
+			}
+		}
+
 		VkExtent2D swapchainExtent = {};
 
 		if (surfaceCapabilities.currentExtent.width == (uint32_t)-1)
@@ -73,6 +93,23 @@ namespace Nutz
 			m_Height = surfaceCapabilities.currentExtent.height;
 		}
 		
+		uint32_t desiredNumberOfSwapchainImages = surfaceCapabilities.minImageCount + 1;
+
+		if ((surfaceCapabilities.maxImageCount > 0) && (desiredNumberOfSwapchainImages > surfaceCapabilities.maxImageCount))
+		{
+			desiredNumberOfSwapchainImages = surfaceCapabilities.maxImageCount;
+		}
+
+		VkSurfaceTransformFlagsKHR pretransform;
+
+		if (surfaceCapabilities.supportedTransforms & VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR)
+		{
+			pretransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
+		}
+		else
+		{
+			pretransform = surfaceCapabilities.currentTransform;
+		}
 	}
 
 	void VulkanSwapchain::FindSurfaceFormat()

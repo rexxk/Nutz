@@ -1,6 +1,8 @@
 #include "nutz_pch.h"
 #include "VulkanSurface.h"
 
+#include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
 
 
 namespace Nutz
@@ -15,11 +17,13 @@ namespace Nutz
 
 	VulkanSurface::VulkanSurface(VkInstance instance, void* windowHandle)
 	{
-#ifdef WIN32
+
+#ifdef _WIN32
 		VkWin32SurfaceCreateInfoKHR createInfo = {};
 		createInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
 		createInfo.hinstance = GetModuleHandle(NULL);
-		createInfo.hwnd = (HWND)windowHandle;
+		createInfo.hwnd = glfwGetWin32Window((GLFWwindow*)windowHandle);
+//		createInfo.hwnd = (HWND)windowHandle;
 
 		if (vkCreateWin32SurfaceKHR(instance, &createInfo, nullptr, &m_Surface) != VK_SUCCESS)
 		{

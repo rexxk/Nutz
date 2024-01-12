@@ -25,7 +25,7 @@ namespace Nutz
 
 		m_Surface = VulkanSurface::Create(m_Instance, windowHandle);
 
-		m_Swapchain = VulkanSwapchain::Create(m_Instance, m_PhysicalDevice->GetVulkanPhysicalDevice(), m_Device->GetVulkanDevice(), m_Surface->Surface(), width, height);
+		m_Swapchain = VulkanSwapchain::Create(m_Instance, m_PhysicalDevice->GetVulkanPhysicalDevice(), m_Device->GetVulkanDevice(), m_Surface->Surface(), width, height, false);
 	}
 
 	VulkanContext::~VulkanContext()

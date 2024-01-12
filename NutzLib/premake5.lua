@@ -43,6 +43,7 @@ project "NutzLib"
 		defines
 		{
 			"_SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS",
+			"GLFW_EXPOSE_NATIVE_WIN32",
 		}
 
 	filter { "system:Linux" }
@@ -50,4 +51,9 @@ project "NutzLib"
 		links
 		{
 			"vulkan",
+		}
+
+		defines
+		{
+			"GLFW_EXPOSE_NATIVE_X11",
 		}
