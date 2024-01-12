@@ -11,11 +11,11 @@ namespace Nutz
     class VulkanRenderer : public Renderer
     {
     public:
-        VulkanRenderer(void* windowHandle);
+        VulkanRenderer(Ref<Window> window);
 
 
     private:
-        virtual void Initialize(uint32_t width, uint32_t height) override;
+        virtual void Initialize() override;
 
 
     private:

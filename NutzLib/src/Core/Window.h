@@ -40,6 +40,7 @@ namespace Nutz
 		std::pair<uint32_t, uint32_t> Size() { return std::make_pair(m_Properties.Width, m_Properties.Height); }
 
 		void* GetHandle() { return m_Handle; }
+		WindowProperties& GetProperties() { return m_Properties; }
 
 		virtual void HandleEvents() {}
 

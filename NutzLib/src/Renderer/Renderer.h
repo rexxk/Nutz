@@ -2,6 +2,7 @@
 
 #include "RendererAPI.h"
 
+#include "Core/Window.h"
 
 
 namespace Nutz
@@ -11,9 +12,9 @@ namespace Nutz
     class Renderer
     {
     public:
-        static void Create(RendererAPI api, void* windowHandle, uint32_t width, uint32_t height);
+        static void Create(RendererAPI api, Ref<Window> window);
 
-        Renderer(void* windowHandle);
+        Renderer(Ref<Window> window);
 
         static RendererAPI API() { return s_API; }
         static Ref<Renderer> Get() { return s_Renderer; }
@@ -22,11 +23,11 @@ namespace Nutz
         inline static RendererAPI s_API = RendererAPI::None;
         inline static Ref<Renderer> s_Renderer = nullptr;
 
-        virtual void Initialize(uint32_t width, uint32_t height);
+        virtual void Initialize();
 
 
     protected:
-        void* m_Handle = nullptr;
+        Ref<Window> m_Window = nullptr;
 
     };
 

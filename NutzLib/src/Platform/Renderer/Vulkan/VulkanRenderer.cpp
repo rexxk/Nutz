@@ -8,8 +8,8 @@ namespace Nutz
 {
 
 
-    VulkanRenderer::VulkanRenderer(void* windowHandle)
-        : Renderer(windowHandle)
+    VulkanRenderer::VulkanRenderer(Ref<Window> window)
+        : Renderer(window)
     {
         LOG_CORE_TRACE("Creating Vulkan renderer");
 
@@ -17,11 +17,12 @@ namespace Nutz
 
 
 
-    void VulkanRenderer::Initialize(uint32_t width, uint32_t height)
+    void VulkanRenderer::Initialize()
     {
         LOG_CORE_TRACE("Initializing Vulkan context");
 
-        m_Context = VulkanContext::Create(m_Handle, width, height);
+        auto& windowProps = m_Window->GetProperties();
+        m_Context = VulkanContext::Create(m_Window->GetHandle(), windowProps.Width, windowProps.Height);
     }
 
 
