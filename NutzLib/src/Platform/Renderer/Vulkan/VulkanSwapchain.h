@@ -26,6 +26,9 @@ namespace Nutz
 
 		void Shutdown();
 
+		VkResult AcquireNextImage(VkSemaphore presentCompleteSemaphore, uint32_t* imageIndex);
+		VkResult QueuePresent(VkQueue queue, uint32_t imageIndex, VkSemaphore waitSemaphore);
+
 	private:
 		void CreateSwapchain();
 
