@@ -17,10 +17,6 @@ namespace Nutz
     private:
         virtual void Initialize() override;
 
-
-    private:
-        Ref<VulkanContext> m_Context = nullptr;
-
     };
 
 

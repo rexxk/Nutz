@@ -1,7 +1,7 @@
 #include "nutz_pch.h"
 #include "VulkanRenderer.h"
 
-
+#include "Core/Application.h"
 
 
 namespace Nutz
@@ -20,7 +20,7 @@ namespace Nutz
     {
         LOG_CORE_TRACE("Initializing Vulkan context");
 
-        m_Context = VulkanContext::Create();
+        Application::Get().GetWindow()->CreateRendererContext();
     }
 
 

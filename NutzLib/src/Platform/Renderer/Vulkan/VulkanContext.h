@@ -3,6 +3,7 @@
 
 #include "vulkan/vulkan.h"
 
+#include "Renderer/RendererContext.h"
 #include "VulkanDevice.h"
 #include "VulkanSurface.h"
 #include "VulkanSwapchain.h"
@@ -13,15 +14,15 @@ namespace Nutz
 {
 
 
-	class VulkanContext
+	class VulkanContext : public RendererContext
 	{
 	public:
-		static Ref<VulkanContext> Create();
-
 		VulkanContext();
 		~VulkanContext();
 
 		void Shutdown();
+
+		VkDevice GetDevice() { return m_Device->GetVulkanDevice(); }
 
 	private:
 		bool CreateInstance();

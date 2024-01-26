@@ -4,6 +4,8 @@
 #undef CreateWindow
 #endif
 
+#include "Renderer/RendererContext.h"
+
 
 namespace Nutz
 {
@@ -41,6 +43,9 @@ namespace Nutz
 
 		void* GetHandle() { return m_Handle; }
 		WindowProperties& GetProperties() { return m_Properties; }
+		Ref<RendererContext> GetRendererContext() { return m_RendererContext; }
+
+		void CreateRendererContext();
 
 		virtual void HandleEvents() {}
 
@@ -51,6 +56,8 @@ namespace Nutz
 		void* m_Handle;
 
 		WindowProperties m_Properties;
+
+		Ref<RendererContext> m_RendererContext = nullptr;
 	};
 
 

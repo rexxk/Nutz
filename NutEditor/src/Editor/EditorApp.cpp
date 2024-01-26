@@ -18,6 +18,11 @@ EditorLayer::EditorLayer()
     Nutz::Renderer::Create(Nutz::RendererAPIType::Vulkan);
 
     m_Scene = Nutz::Scene::Create();
+
+
+//    Nutz::PipelineProperties pipelineProps;
+//    Ref<Nutz::Pipeline> pipeline = Nutz::Pipeline::Create(pipelineProps);
+
 }
 
 void EditorLayer::OnAttach()

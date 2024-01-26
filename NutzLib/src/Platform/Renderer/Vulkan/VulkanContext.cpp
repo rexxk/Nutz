@@ -7,13 +7,6 @@ namespace Nutz
 {
 
 
-	Ref<VulkanContext> VulkanContext::Create()
-	{
-		return CreateRef<VulkanContext>();
-	}
-
-
-
 	VulkanContext::VulkanContext()
 	{
 		if (!CreateInstance())

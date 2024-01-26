@@ -3,6 +3,7 @@
 
 #include "Platform/GLFW/GLFWWindow.h"
 
+#include "Renderer/RendererContext.h"
 
 namespace Nutz
 {
@@ -19,5 +20,8 @@ namespace Nutz
 
 	}
 
-
+	void Window::CreateRendererContext()
+	{
+		m_RendererContext = RendererContext::Create();
+	}
 }

@@ -13,5 +13,6 @@
 #include "Asset/AssetManager.h"
 
 #include "Renderer/Renderer.h"
+#include "Renderer/Pipeline.h"
 
 #include "Scene/Scene.h"
