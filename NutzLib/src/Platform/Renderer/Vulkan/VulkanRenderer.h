@@ -8,7 +8,7 @@ namespace Nutz
 {
 
 
-    class VulkanRenderer : public Renderer
+    class VulkanRenderer : public RendererAPI
     {
     public:
         VulkanRenderer(Ref<Window> window);

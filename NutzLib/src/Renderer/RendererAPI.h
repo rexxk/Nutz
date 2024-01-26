@@ -1,11 +1,13 @@
 #pragma once
 
+#include "Core/Window.h"
+
 
 namespace Nutz
 {
 
 
-    enum class RendererAPI
+    enum class RendererAPIType
     {
         None,
         OpenGL,
@@ -14,5 +16,18 @@ namespace Nutz
         DirectX12,
     };
 
+
+    class RendererAPI
+    {
+    public:
+        RendererAPI(Ref<Window> window);
+
+        virtual void Initialize() = 0;
+
+
+    protected:
+        Ref<Window> m_Window = nullptr;
+
+    };
 
 }

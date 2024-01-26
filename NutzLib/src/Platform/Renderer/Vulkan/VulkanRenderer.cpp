@@ -9,7 +9,7 @@ namespace Nutz
 
 
     VulkanRenderer::VulkanRenderer(Ref<Window> window)
-        : Renderer(window)
+        : RendererAPI(window)
     {
         LOG_CORE_TRACE("Creating Vulkan renderer");
 
