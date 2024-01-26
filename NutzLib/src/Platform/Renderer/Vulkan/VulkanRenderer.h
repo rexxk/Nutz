@@ -11,7 +11,7 @@ namespace Nutz
     class VulkanRenderer : public RendererAPI
     {
     public:
-        VulkanRenderer(Ref<Window> window);
+        VulkanRenderer();
 
 
     private:

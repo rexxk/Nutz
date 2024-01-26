@@ -16,6 +16,13 @@ namespace Nutz
 
 	Application::Application()
 	{
+		if (s_Instance)
+		{
+			LOG_CORE_ERROR("Application instance already exists");
+			return;
+		}
+
+		s_Instance = this;
 	
 		m_LayerStack = CreateScope<LayerStack>();
 
@@ -103,6 +110,13 @@ namespace Nutz
 	{
 		m_LayerStack->DetachLayer(layer);
 	}
+
+	void Application::CreateWindow(const WindowProperties& windowProperties)
+	{
+		if (s_Instance)
+			s_Instance->m_Window = Window::Create(windowProperties);
+	}
+
 
 }
 

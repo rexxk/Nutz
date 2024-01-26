@@ -14,10 +14,8 @@ EditorLayer::EditorLayer()
     windowProps.VSync = false;
     windowProps.Mode = Nutz::WindowMode::Windowed;
 
-    m_Window = Nutz::Window::Create(windowProps);
-
-    // CreateRenderer(API..., windowHandle)....
-    Nutz::Renderer::Create(Nutz::RendererAPIType::Vulkan, m_Window);
+    Nutz::Application::CreateWindow(windowProps);
+    Nutz::Renderer::Create(Nutz::RendererAPIType::Vulkan);
 
     m_Scene = Nutz::Scene::Create();
 }
@@ -30,5 +28,5 @@ void EditorLayer::OnAttach()
 
 void EditorLayer::OnUpdate(Nutz::Timestep ts)
 {
-    m_Window->HandleEvents();
+    Nutz::Application::Get().GetWindow()->HandleEvents();
 }

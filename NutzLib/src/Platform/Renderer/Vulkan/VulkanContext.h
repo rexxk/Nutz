@@ -16,9 +16,9 @@ namespace Nutz
 	class VulkanContext
 	{
 	public:
-		static Ref<VulkanContext> Create(Ref<Window> window);
+		static Ref<VulkanContext> Create();
 
-		VulkanContext(Ref<Window> window);
+		VulkanContext();
 		~VulkanContext();
 
 		void Shutdown();

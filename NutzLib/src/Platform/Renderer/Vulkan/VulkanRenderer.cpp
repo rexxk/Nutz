@@ -8,8 +8,7 @@ namespace Nutz
 {
 
 
-    VulkanRenderer::VulkanRenderer(Ref<Window> window)
-        : RendererAPI(window)
+    VulkanRenderer::VulkanRenderer()
     {
         LOG_CORE_TRACE("Creating Vulkan renderer");
 
@@ -21,7 +20,7 @@ namespace Nutz
     {
         LOG_CORE_TRACE("Initializing Vulkan context");
 
-        m_Context = VulkanContext::Create(m_Window);
+        m_Context = VulkanContext::Create();
     }
 
 

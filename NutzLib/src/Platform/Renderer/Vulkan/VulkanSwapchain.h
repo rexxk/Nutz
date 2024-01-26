@@ -20,9 +20,9 @@ namespace Nutz
 	class VulkanSwapchain
 	{
 	public:
-		static Ref<VulkanSwapchain> Create(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, VkSurfaceKHR surface, Ref<Window> window);
+		static Ref<VulkanSwapchain> Create(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, VkSurfaceKHR surface);
 
-		VulkanSwapchain(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, VkSurfaceKHR surface, Ref<Window> window);
+		VulkanSwapchain(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, VkSurfaceKHR surface);
 
 		void Shutdown();
 

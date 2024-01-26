@@ -20,13 +20,9 @@ namespace Nutz
     class RendererAPI
     {
     public:
-        RendererAPI(Ref<Window> window);
+        RendererAPI();
 
         virtual void Initialize() = 0;
-
-
-    protected:
-        Ref<Window> m_Window = nullptr;
 
     };
 

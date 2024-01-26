@@ -8,13 +8,13 @@ namespace Nutz
 {
 
 
-    void Renderer::Create(RendererAPIType apiType, Ref<Window> window)
+    void Renderer::Create(RendererAPIType apiType)
     {
         s_API = apiType;
 
         switch (s_API)
         {
-            case RendererAPIType::Vulkan: s_Renderer = CreateRef<VulkanRenderer>(window); break;
+            case RendererAPIType::Vulkan: s_Renderer = CreateRef<VulkanRenderer>(); break;
             case RendererAPIType::OpenGL: s_Renderer = nullptr; break;
         }
 
@@ -24,8 +24,7 @@ namespace Nutz
     }
 
 
-    RendererAPI::RendererAPI(Ref<Window> window)
-        : m_Window(window)
+    RendererAPI::RendererAPI()
     {
 
     }

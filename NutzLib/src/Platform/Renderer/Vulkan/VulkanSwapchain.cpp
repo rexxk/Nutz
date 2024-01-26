@@ -1,7 +1,7 @@
 #include "nutz_pch.h"
 #include "VulkanSwapchain.h"
 
-
+#include "Core/Application.h"
 #include "Core/Message/Messages.h"
 
 
@@ -10,15 +10,15 @@ namespace Nutz
 {
 
 
-	Ref<VulkanSwapchain> VulkanSwapchain::Create(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, VkSurfaceKHR surface, Ref<Window> window)
+	Ref<VulkanSwapchain> VulkanSwapchain::Create(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, VkSurfaceKHR surface)
 	{
-		return CreateRef<VulkanSwapchain>(instance, physicalDevice, device, surface, window);
+		return CreateRef<VulkanSwapchain>(instance, physicalDevice, device, surface);
 	}
 
-	VulkanSwapchain::VulkanSwapchain(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, VkSurfaceKHR surface, Ref<Window> window)
+	VulkanSwapchain::VulkanSwapchain(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, VkSurfaceKHR surface)
 		: m_Instance(instance), m_PhysicalDevice(physicalDevice), m_Device(device), m_Surface(surface)
 	{
-		auto& windowProps = window->GetProperties();
+		auto& windowProps = Application::Get().GetWindow()->GetProperties();
 		m_Width = windowProps.Width;
 		m_Height = windowProps.Height;
 		m_VSync = windowProps.VSync;
