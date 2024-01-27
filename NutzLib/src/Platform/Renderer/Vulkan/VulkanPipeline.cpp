@@ -8,6 +8,31 @@
 namespace Nutz
 {
 
+	VkPrimitiveTopology PrimitiveTopologyTypeToVulkan(PrimitiveTopologyType type)
+	{
+		switch (type)
+		{
+			case PrimitiveTopologyType::PointList: return VK_PRIMITIVE_TOPOLOGY_POINT_LIST;
+			case PrimitiveTopologyType::LineList: return VK_PRIMITIVE_TOPOLOGY_LINE_LIST;
+			case PrimitiveTopologyType::LineStrip: return VK_PRIMITIVE_TOPOLOGY_LINE_STRIP;
+			case PrimitiveTopologyType::TriangleList: return VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+			case PrimitiveTopologyType::TriangleStrip: return VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP;
+			case PrimitiveTopologyType::TriangleFan: return VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN;
+		}
+
+		return VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+	}
+
+	VkPolygonMode PolygonFillTypeToVulkan(PolygonFillType type)
+	{
+		switch (type)
+		{
+			case PolygonFillType::Wireframe: return VK_POLYGON_MODE_LINE;
+			case PolygonFillType::Solid: return VK_POLYGON_MODE_FILL;
+		}
+
+		return VK_POLYGON_MODE_FILL;
+	}
 
 	VulkanPipeline::VulkanPipeline(const PipelineProperties& pipelineProperties)
 	{
@@ -61,7 +86,7 @@ namespace Nutz
 
 		VkPipelineInputAssemblyStateCreateInfo inputAssemblyCreateInfo = {};
 		inputAssemblyCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-		inputAssemblyCreateInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+		inputAssemblyCreateInfo.topology = PrimitiveTopologyTypeToVulkan(m_Properties.PrimitiveTopology);
 		inputAssemblyCreateInfo.primitiveRestartEnable = VK_FALSE;
 
 		VkViewport viewport = {};
@@ -87,8 +112,8 @@ namespace Nutz
 		rasterizationStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
 		rasterizationStateCreateInfo.cullMode = VK_CULL_MODE_BACK_BIT;
 		rasterizationStateCreateInfo.frontFace = VK_FRONT_FACE_CLOCKWISE;
-		rasterizationStateCreateInfo.lineWidth = 1.0f;
-		rasterizationStateCreateInfo.polygonMode = VK_POLYGON_MODE_FILL;
+		rasterizationStateCreateInfo.lineWidth = m_Properties.LineWidth;
+		rasterizationStateCreateInfo.polygonMode = PolygonFillTypeToVulkan(m_Properties.PolygonFill);
 
 		rasterizationStateCreateInfo.rasterizerDiscardEnable = VK_FALSE;
 
