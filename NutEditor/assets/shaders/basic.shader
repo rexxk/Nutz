@@ -3,6 +3,11 @@
 
 layout(location = 0) in vec3 a_Position;
 
+layout(set = 0, binding = 0) uniform CameraBuffer
+{
+	mat4 view;
+	mat4 projection;
+} u_CameraBuffer;
 
 void main()
 {
@@ -15,7 +20,17 @@ void main()
 
 layout(location = 0) out vec4 o_Color;
 
+
+layout(push_constant) uniform Constants
+{
+	vec4 color;
+	vec3 lightDirection;
+} u_Constants;
+
+
 void main()
 {
-	o_Color = vec4(1.0);
+	vec3 lDir = u_Constants.lightDirection;
+
+	o_Color = u_Constants.color - vec4(lDir, 1.0);
 }

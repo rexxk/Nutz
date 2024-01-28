@@ -349,6 +349,11 @@ namespace Nutz
 			for (auto& descriptorSet : descriptorSets)
 			{
 				LOG_CORE_TRACE(" - Descriptor set: {}, binding count: {}", descriptorSet->set, descriptorSet->binding_count);
+
+				for (uint32_t i = 0; i < (uint32_t)descriptorSet->binding_count; i++)
+				{
+					LOG_CORE_TRACE("   Binding: {} - {}", descriptorSet->bindings[i]->name, descriptorSet->bindings[i]->binding);
+				}
 			}
 
 			uint32_t descriptorBindingsCount = 0;
@@ -360,6 +365,11 @@ namespace Nutz
 			for (auto& descriptorBinding : descriptorBindings)
 			{
 				LOG_CORE_TRACE(" - Descriptor binding: {}", descriptorBinding->name);
+
+				for (uint32_t i = 0; i < (uint32_t)descriptorBinding->block.member_count; i++)
+				{
+					LOG_CORE_TRACE("   Name: {}", descriptorBinding->block.members[i].name);
+				}
 			}
 
 			uint32_t outputVariableCount = 0;
@@ -382,6 +392,11 @@ namespace Nutz
 			for (auto& pushConstantBlock : pushConstantBlocks)
 			{
 				LOG_CORE_TRACE(" - Push constant block: {}", pushConstantBlock->name);
+
+				for (uint32_t i = 0; i < (uint32_t)pushConstantBlock->member_count; i++)
+				{
+					LOG_CORE_TRACE("   Name: {}", pushConstantBlock->members[i].name);
+				}
 			}
 
 
