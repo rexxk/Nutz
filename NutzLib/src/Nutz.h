@@ -14,5 +14,6 @@
 
 #include "Renderer/Renderer.h"
 #include "Renderer/Pipeline.h"
+#include "Renderer/Shader.h"
 
 #include "Scene/Scene.h"

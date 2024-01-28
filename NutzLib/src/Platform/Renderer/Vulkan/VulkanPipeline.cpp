@@ -152,6 +152,12 @@ namespace Nutz
 		colorBlendStateCreateInfo.blendConstants[2] = 0.0f;
 		colorBlendStateCreateInfo.blendConstants[3] = 0.0f;
 
+
+//		VkPipelineShaderStageCreateInfo shaderStageCreateInfo = {};
+//		shaderStageCreateInfo.sType = VK_STRUCTURE_TYPE_SHADER_CREATE_INFO_EXT;
+//		shaderStageCreateInfo.
+
+
 		VkPipelineLayoutCreateInfo layoutCreateInfo = {};
 		layoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
 		layoutCreateInfo.setLayoutCount = 0;
@@ -175,7 +181,7 @@ namespace Nutz
 		pipelineCreateInfo.pDepthStencilState = nullptr;
 		pipelineCreateInfo.pColorBlendState = &colorBlendStateCreateInfo;
 		pipelineCreateInfo.layout = m_PipelineLayout;
-
+//		pipelineCreateInfo.pStages = ;
 
 		if (vkCreateGraphicsPipelines(device, nullptr, 1, &pipelineCreateInfo, nullptr, &m_Pipeline) != VK_SUCCESS)
 		{

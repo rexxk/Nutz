@@ -20,6 +20,8 @@ EditorLayer::EditorLayer()
     m_Scene = Nutz::Scene::Create();
 
 
+    Nutz::ShaderLibrary::Load("assets/shaders/basic.shader");
+
 //    Nutz::PipelineProperties pipelineProps;
 //    Ref<Nutz::Pipeline> pipeline = Nutz::Pipeline::Create(pipelineProps);
 

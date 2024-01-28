@@ -12,6 +12,7 @@ namespace Nutz
 		static Ref<RendererContext> Create();
 
 		virtual ~RendererContext() {}
+		virtual void Shutdown() = 0;
 	};
 
 

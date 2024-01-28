@@ -97,7 +97,7 @@ namespace Nutz
 
 	void Application::Shutdown()
 	{
-
+		m_Window->ShutdownRendererContext();
 	}
 
 

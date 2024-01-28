@@ -46,6 +46,34 @@ project "NutzLib"
 			"GLFW_EXPOSE_NATIVE_WIN32",
 		}
 
+		filter { "configurations:Debug" }
+
+			links
+			{
+				"$(VULKAN_SDK)/Lib/glslangd.lib",
+				"$(VULKAN_SDK)/Lib/MachineIndependentd.lib",
+				"$(VULKAN_SDK)/Lib/GenericCodeGend.lib",
+				"$(VULKAN_SDK)/Lib/OGLCompilerd.lib",
+				"$(VULKAN_SDK)/Lib/SPIRVd.lib",
+				"$(VULKAN_SDK)/Lib/SPIRV-cross-glsld.lib",
+				"$(VULKAN_SDK)/Lib/SPIRV-Toolsd.lib",
+				"$(VULKAN_SDK)/Lib/SPIRV-Tools-optd.lib",
+			}
+
+		filter { "configurations:Release" }
+
+			links
+			{
+				"$(VULKAN_SDK)/Lib/glslang.lib",
+				"$(VULKAN_SDK)/Lib/MachineIndependent.lib",
+				"$(VULKAN_SDK)/Lib/GenericCodeGen.lib",
+				"$(VULKAN_SDK)/Lib/OGLCompiler.lib",
+				"$(VULKAN_SDK)/Lib/SPIRV.lib",
+				"$(VULKAN_SDK)/Lib/SPIRV-cross-glsl.lib",
+				"$(VULKAN_SDK)/Lib/SPIRV-Tools-opt.lib",
+				"$(VULKAN_SDK)/Lib/SPIRV-Tools-shared.lib",
+			}
+
 	filter { "system:Linux" }
 
 		links

@@ -20,7 +20,7 @@ namespace Nutz
 		VulkanContext();
 		~VulkanContext();
 
-		void Shutdown();
+		virtual void Shutdown() override;
 
 		VkDevice GetDevice() { return m_Device->GetVulkanDevice(); }
 

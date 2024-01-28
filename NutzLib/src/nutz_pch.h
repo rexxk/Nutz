@@ -12,6 +12,8 @@
 #include <filesystem>
 #include <string>
 
+#include <fstream>
+
 #include <deque>
 #include <unordered_map>
 #include <vector>

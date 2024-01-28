@@ -37,7 +37,7 @@ namespace Nutz
 		static Ref<Window> Create(const WindowProperties& props);
 
 		Window(const WindowProperties& props);
-		virtual ~Window() {}
+		virtual ~Window();
 
 		std::pair<uint32_t, uint32_t> Size() { return std::make_pair(m_Properties.Width, m_Properties.Height); }
 
@@ -46,6 +46,7 @@ namespace Nutz
 		Ref<RendererContext> GetRendererContext() { return m_RendererContext; }
 
 		void CreateRendererContext();
+		void ShutdownRendererContext();
 
 		virtual void HandleEvents() {}
 

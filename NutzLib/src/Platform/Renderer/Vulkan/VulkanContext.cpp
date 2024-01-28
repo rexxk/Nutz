@@ -1,6 +1,7 @@
 #include "nutz_pch.h"
 #include "VulkanContext.h"
 
+#include "VulkanShader.h"
 
 
 namespace Nutz
@@ -23,11 +24,14 @@ namespace Nutz
 
 	VulkanContext::~VulkanContext()
 	{
-		Shutdown();
+
 	}
 
 	void VulkanContext::Shutdown()
 	{
+		if (!ShaderLibrary::IsEmpty())
+			ShaderLibrary::Shutdown();
+
 		if (m_Swapchain != nullptr)
 			m_Swapchain->Shutdown();
 

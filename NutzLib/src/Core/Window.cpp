@@ -20,8 +20,22 @@ namespace Nutz
 
 	}
 
+	Window::~Window()
+	{
+
+	}
+
 	void Window::CreateRendererContext()
 	{
 		m_RendererContext = RendererContext::Create();
+	}
+
+	void Window::ShutdownRendererContext()
+	{
+		if (m_RendererContext != nullptr)
+		{
+			m_RendererContext->Shutdown();
+			m_RendererContext = nullptr;
+		}
 	}
 }
