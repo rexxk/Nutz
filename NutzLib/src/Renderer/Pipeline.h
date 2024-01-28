@@ -24,6 +24,8 @@ namespace Nutz
 
 	struct PipelineProperties
 	{
+		Ref<Shader> Shader = nullptr;
+
 		PrimitiveTopologyType PrimitiveTopology = PrimitiveTopologyType::TriangleList;
 		PolygonFillType PolygonFill = PolygonFillType::Solid;
 

@@ -53,4 +53,9 @@ namespace Nutz
 		return s_ShaderData.ShaderList.size() == 0;
 	}
 
+	Ref<Shader> ShaderLibrary::Get(const std::string& name)
+	{
+		return s_ShaderData.ShaderList[name];
+	}
+
 }

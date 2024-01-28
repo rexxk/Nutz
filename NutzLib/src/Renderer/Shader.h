@@ -32,6 +32,8 @@ namespace Nutz
 		static void Load(const std::filesystem::path& filePath);
 		static void Shutdown();
 
+		static Ref<Shader> Get(const std::string& name);
+
 		static bool IsEmpty();
 	};
 }

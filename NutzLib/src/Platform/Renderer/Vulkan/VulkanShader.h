@@ -18,6 +18,7 @@ namespace Nutz
 	};
 
 
+
 	class VulkanShader : public Shader
 	{
 	public:
@@ -34,6 +35,7 @@ namespace Nutz
 		void Compile();
 		void Reflect();
 
+
 	private:
 		std::filesystem::path m_FilePath;
 
@@ -41,6 +43,7 @@ namespace Nutz
 		std::unordered_map<ShaderDomain, SPIRVData> m_SPIRVBuffers;
 		std::vector<VkShaderModule> m_ShaderModules;
 
+		VkVertexInputAttributeDescription m_InputAttributeDescription;
 	};
 
 }
