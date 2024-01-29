@@ -11,11 +11,11 @@ namespace Nutz
 {
 
 
-	Ref<RenderPass> RenderPass::Create()
+	Ref<RenderPass> RenderPass::Create(const RenderPassSpecification& renderPassSpecification)
 	{
 		switch (Renderer::API())
 		{
-			case RendererAPIType::Vulkan: return CreateRef<VulkanRenderPass>();
+			case RendererAPIType::Vulkan: return CreateRef<VulkanRenderPass>(renderPassSpecification);
 			case RendererAPIType::OpenGL: return nullptr;
 		}
 

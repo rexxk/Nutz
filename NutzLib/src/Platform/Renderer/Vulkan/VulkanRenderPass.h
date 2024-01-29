@@ -12,12 +12,17 @@ namespace Nutz
 	class VulkanRenderPass : public RenderPass
 	{
 	public:
-		VulkanRenderPass();
+		VulkanRenderPass(const RenderPassSpecification& renderPassSpecification);
 
+		virtual void Shutdown() override;
+
+		VkRenderPass GetRenderPass() { return m_RenderPass; }
 
 	private:
 
 		VkRenderPass m_RenderPass = nullptr;
+
+		RenderPassSpecification m_Specification;
 
 	};
 

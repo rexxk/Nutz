@@ -13,6 +13,8 @@ namespace Nutz
     public:
         VulkanRenderer();
 
+        virtual void BeginScene() override;
+        virtual void EndScene() override;
 
     private:
         virtual void Initialize() override;

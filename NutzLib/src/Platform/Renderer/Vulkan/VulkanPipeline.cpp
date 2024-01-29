@@ -1,6 +1,7 @@
 #include "nutz_pch.h"
 #include "VulkanPipeline.h"
 #include "VulkanShader.h"
+#include "VulkanRenderPass.h"
 
 #include "Core/Application.h"
 
@@ -60,7 +61,8 @@ namespace Nutz
 
 		if (m_RenderPass != nullptr)
 		{
-			vkDestroyRenderPass(device, m_RenderPass, nullptr);
+			m_RenderPass->Shutdown();
+//			vkDestroyRenderPass(device, m_RenderPass, nullptr);
 			m_RenderPass = nullptr;
 		}
 
@@ -204,7 +206,10 @@ namespace Nutz
 
 		VkPipelineVertexInputStateCreateInfo vertexInputStateCreateInfo = shader->GetVertexInputStateCreateInfo(ShaderDomain::Vertex);
 
-		VkAttachmentDescription colorAttachmentDescription = {};
+		RenderPassSpecification renderPassSpec = {};
+		m_RenderPass = RenderPass::Create(renderPassSpec);
+
+/*		VkAttachmentDescription colorAttachmentDescription = {};
 		colorAttachmentDescription.format = swapchain->GetFormat();
 		colorAttachmentDescription.samples = VK_SAMPLE_COUNT_1_BIT;
 		colorAttachmentDescription.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
@@ -235,7 +240,7 @@ namespace Nutz
 			LOG_CORE_ERROR("Failed to create renderpass");
 			return;
 		}
-
+*/
 		pipelineCreateInfo.pDynamicState = &dynamicStateCreateInfo;
 		pipelineCreateInfo.pVertexInputState = &vertexInputStateCreateInfo;
 		pipelineCreateInfo.pInputAssemblyState = &inputAssemblyCreateInfo;
@@ -247,7 +252,7 @@ namespace Nutz
 		pipelineCreateInfo.layout = m_PipelineLayout;
 		pipelineCreateInfo.stageCount = (uint32_t)shaderStageCreateInfos.size();
 		pipelineCreateInfo.pStages = shaderStageCreateInfos.data();
-		pipelineCreateInfo.renderPass = m_RenderPass;
+		pipelineCreateInfo.renderPass = std::dynamic_pointer_cast<VulkanRenderPass>(m_RenderPass)->GetRenderPass();
 
 		if (vkCreateGraphicsPipelines(device, nullptr, 1, &pipelineCreateInfo, nullptr, &m_Pipeline) != VK_SUCCESS)
 		{
@@ -255,6 +260,11 @@ namespace Nutz
 			return;
 		}
 
+	}
+
+	void VulkanPipeline::Bind()
+	{
+//		vkCmdBindPipeline()
 	}
 
 }

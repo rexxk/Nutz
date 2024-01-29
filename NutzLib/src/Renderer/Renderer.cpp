@@ -34,13 +34,6 @@ namespace Nutz
 
     void Renderer::Initialize()
     {
-//        Nutz::PipelineProperties pipelineProps;
-//        pipelineProps.Shader = Nutz::ShaderLibrary::Get("basic");
-//        Nutz::Pipeline::Create(pipelineProps);
-
-
-
-
         if (s_Renderer != nullptr)
         {
             s_Renderer->Initialize();

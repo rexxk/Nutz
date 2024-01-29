@@ -26,4 +26,14 @@ namespace Nutz
     }
 
 
+    void VulkanRenderer::BeginScene()
+    {
+
+    }
+
+    void VulkanRenderer::EndScene()
+    {
+
+    }
+
 }

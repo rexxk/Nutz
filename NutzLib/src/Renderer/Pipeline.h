@@ -44,6 +44,8 @@ namespace Nutz
 		virtual ~Pipeline() {}
 
 		virtual void Shutdown() = 0;
+
+		virtual void Bind() = 0;
 	};
 
 
