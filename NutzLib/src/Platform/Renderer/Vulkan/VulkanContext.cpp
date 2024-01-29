@@ -8,18 +8,31 @@ namespace Nutz
 {
 
 
+	struct VulkanContextData
+	{
+		VkInstance Instance = nullptr;
+		Ref<VulkanPhysicalDevice> PhysicalDevice = nullptr;
+		Ref<VulkanDevice> Device = nullptr;
+
+		Ref<VulkanSurface> Surface = nullptr;
+
+		Ref<VulkanSwapchain> Swapchain = nullptr;
+
+	};
+	
+	static VulkanContextData s_ContextData;
+
+
+
 	VulkanContext::VulkanContext()
 	{
 		if (!CreateInstance())
 			return;
 
-		m_PhysicalDevice = VulkanPhysicalDevice::Select(m_Instance);
-
-		m_Device = VulkanDevice::Create(m_PhysicalDevice);
-
-		m_Surface = VulkanSurface::Create(m_Instance);
-
-		m_Swapchain = VulkanSwapchain::Create(m_Instance, m_PhysicalDevice->GetVulkanPhysicalDevice(), m_Device->GetVulkanDevice(), m_Surface->Surface());
+		s_ContextData.PhysicalDevice = VulkanPhysicalDevice::Select(s_ContextData.Instance);
+		s_ContextData.Device = VulkanDevice::Create(s_ContextData.PhysicalDevice);
+		s_ContextData.Surface = VulkanSurface::Create(s_ContextData.Instance);
+		s_ContextData.Swapchain = VulkanSwapchain::Create(s_ContextData.Instance, s_ContextData.PhysicalDevice->GetVulkanPhysicalDevice(), s_ContextData.Device->GetVulkanDevice(), s_ContextData.Surface->Surface());
 	}
 
 	VulkanContext::~VulkanContext()
@@ -27,24 +40,27 @@ namespace Nutz
 
 	}
 
+	VkDevice VulkanContext::GetDevice() { return s_ContextData.Device->GetVulkanDevice(); }
+	Ref<VulkanSwapchain> VulkanContext::GetSwapchain() { return s_ContextData.Swapchain; }
+
 	void VulkanContext::Shutdown()
 	{
 		if (!ShaderLibrary::IsEmpty())
 			ShaderLibrary::Shutdown();
 
-		if (m_Swapchain != nullptr)
-			m_Swapchain->Shutdown();
+		if (s_ContextData.Swapchain != nullptr)
+			s_ContextData.Swapchain->Shutdown();
 
-		if (m_Surface != nullptr)
-			m_Surface->Shutdown(m_Instance);
+		if (s_ContextData.Surface != nullptr)
+			s_ContextData.Surface->Shutdown(s_ContextData.Instance);
 
-		if (m_Device != nullptr)
-			m_Device->Shutdown();
+		if (s_ContextData.Device != nullptr)
+			s_ContextData.Device->Shutdown();
 
-		if (m_Instance != nullptr)
+		if (s_ContextData.Instance != nullptr)
 		{
-			vkDestroyInstance(m_Instance, nullptr);
-			m_Instance = nullptr;
+			vkDestroyInstance(s_ContextData.Instance, nullptr);
+			s_ContextData.Instance = nullptr;
 
 			LOG_CORE_TRACE("Vulkan instance object destroyed");
 		}
@@ -83,7 +99,7 @@ namespace Nutz
 		createInfo.enabledExtensionCount = (uint32_t)instanceExtensions.size();
 		createInfo.ppEnabledExtensionNames = instanceExtensions.data();
 
-		if (vkCreateInstance(&createInfo, nullptr, &m_Instance) != VK_SUCCESS)
+		if (vkCreateInstance(&createInfo, nullptr, &s_ContextData.Instance) != VK_SUCCESS)
 		{
 			LOG_CORE_ERROR("Unable to create Vulkan instance object");
 			return false;

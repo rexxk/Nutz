@@ -22,23 +22,15 @@ namespace Nutz
 
 		virtual void Shutdown() override;
 
-		VkDevice GetDevice() { return m_Device->GetVulkanDevice(); }
+		//VkDevice GetDevice() { return m_Device->GetVulkanDevice(); }
+		VkDevice GetDevice();
 
-		Ref<VulkanSwapchain> GetSwapchain() { return m_Swapchain; }
+//		Ref<VulkanSwapchain> GetSwapchain() { return m_Swapchain; }
+		Ref<VulkanSwapchain> GetSwapchain();
 
 	private:
 		bool CreateInstance();
 
-	private:
-
-		VkInstance m_Instance = nullptr;
-
-		Ref<VulkanDevice> m_Device = nullptr;
-		Ref<VulkanPhysicalDevice> m_PhysicalDevice = nullptr;
-
-		Ref<VulkanSurface> m_Surface = nullptr;
-
-		Ref<VulkanSwapchain> m_Swapchain = nullptr;
 	};
 
 

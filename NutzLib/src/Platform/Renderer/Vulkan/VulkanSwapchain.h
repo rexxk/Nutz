@@ -45,6 +45,7 @@ namespace Nutz
 		VkSwapchainKHR m_Swapchain = nullptr;
 
 		std::vector<SwapchainBuffer> m_SwapchainBuffers;
+		std::vector<VkFramebuffer> m_Framebuffers;
 
 		VkColorSpaceKHR m_ColorSpace;
 		VkFormat m_Format;
