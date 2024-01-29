@@ -20,12 +20,8 @@ namespace Nutz
         virtual void EndScene() override;
 
 
-        Ref<VulkanSwapchain> GetSwapchain() { return m_Swapchain; }
-
     private:
         virtual void Initialize() override;
-
-        Ref<VulkanSwapchain> m_Swapchain = nullptr;
 
     };
 

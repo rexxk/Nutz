@@ -24,7 +24,7 @@ namespace Nutz
 	class VulkanContext : public RendererContext
 	{
 	public:
-		VulkanContext();
+		VulkanContext(void* windowHandle);
 		~VulkanContext();
 
 		virtual void Shutdown() override;

@@ -13,14 +13,14 @@ namespace Nutz
 
 
 
-	VulkanContext::VulkanContext()
+	VulkanContext::VulkanContext(void* windowHandle)
 	{
 		if (!CreateInstance())
 			return;
 
 		s_ContextData.PhysicalDevice = VulkanPhysicalDevice::Select(s_ContextData.Instance);
 		s_ContextData.Device = VulkanDevice::Create(s_ContextData.PhysicalDevice);
-		s_ContextData.Surface = VulkanSurface::Create(s_ContextData.Instance);
+		s_ContextData.Surface = VulkanSurface::Create(s_ContextData.Instance, windowHandle);
 	}
 
 	VulkanContext::~VulkanContext()

@@ -20,9 +20,6 @@ namespace Nutz
             case RendererAPIType::OpenGL: s_Renderer = nullptr; break;
         }
 
-
-        Initialize();
-
     }
 
 
@@ -39,7 +36,6 @@ namespace Nutz
             s_Renderer->Initialize();
         }
 
-        Nutz::ShaderLibrary::Load("assets/shaders/basic.shader");
 
     }
 

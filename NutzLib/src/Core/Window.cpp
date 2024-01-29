@@ -2,8 +2,10 @@
 #include "Window.h"
 
 #include "Platform/GLFW/GLFWWindow.h"
+#include "Platform/Renderer/Vulkan/VulkanSwapchain.h"
 
 #include "Renderer/RendererContext.h"
+
 
 namespace Nutz
 {
@@ -22,20 +24,15 @@ namespace Nutz
 
 	Window::~Window()
 	{
+		if (m_Swapchain != nullptr)
+		{
+			m_Swapchain->Shutdown();
+		}
 
-	}
-
-	void Window::CreateRendererContext()
-	{
-		m_RendererContext = RendererContext::Create();
-	}
-
-	void Window::ShutdownRendererContext()
-	{
 		if (m_RendererContext != nullptr)
 		{
 			m_RendererContext->Shutdown();
-			m_RendererContext = nullptr;
 		}
 	}
+
 }

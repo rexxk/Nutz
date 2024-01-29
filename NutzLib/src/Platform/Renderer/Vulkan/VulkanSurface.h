@@ -18,9 +18,9 @@ namespace Nutz
 	class VulkanSurface
 	{
 	public:
-		static Ref<VulkanSurface> Create(VkInstance instance);
+		static Ref<VulkanSurface> Create(VkInstance instance, void* windowHandle);
 
-		VulkanSurface(VkInstance instance);
+		VulkanSurface(VkInstance instance, void* windowHandle);
 		~VulkanSurface();
 
 		void Shutdown(VkInstance instance);

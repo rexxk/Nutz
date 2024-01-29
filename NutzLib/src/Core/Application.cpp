@@ -9,6 +9,7 @@
 
 #include "Core/Input/Keydefs.h"
 
+#include "Renderer/Renderer.h"
 
 namespace Nutz
 {
@@ -106,11 +107,6 @@ namespace Nutz
 		{
 			layer->OnDetach();
 		}
-
-		if (m_Window)
-		{
-			m_Window->ShutdownRendererContext();
-		}
 	}
 
 
@@ -126,6 +122,8 @@ namespace Nutz
 
 	void Application::CreateWindow(const WindowProperties& windowProperties)
 	{
+		Renderer::Create(RendererAPIType::Vulkan);
+
 		if (s_Instance)
 			s_Instance->m_Window = Window::Create(windowProperties);
 	}

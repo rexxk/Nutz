@@ -7,6 +7,8 @@
 #include "Renderer/RendererContext.h"
 
 
+
+
 namespace Nutz
 {
 
@@ -30,6 +32,7 @@ namespace Nutz
 		WindowMode Mode = WindowMode::Windowed;
 	};
 
+	class VulkanSwapchain;
 
 	class Window
 	{
@@ -45,9 +48,6 @@ namespace Nutz
 		WindowProperties& GetProperties() { return m_Properties; }
 		Ref<RendererContext> GetRendererContext() { return m_RendererContext; }
 
-		void CreateRendererContext();
-		void ShutdownRendererContext();
-
 		virtual void HandleEvents() {}
 
 	private:
@@ -59,6 +59,8 @@ namespace Nutz
 		WindowProperties m_Properties;
 
 		Ref<RendererContext> m_RendererContext = nullptr;
+		Ref<VulkanSwapchain> m_Swapchain = nullptr;
+
 	};
 
 

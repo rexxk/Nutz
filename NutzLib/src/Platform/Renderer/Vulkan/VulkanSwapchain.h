@@ -22,9 +22,9 @@ namespace Nutz
 	class VulkanSwapchain
 	{
 	public:
-		static Ref<VulkanSwapchain> Create(const VulkanContextData& contextData);
+		static Ref<VulkanSwapchain> Create(const VulkanContextData& contextData, const WindowProperties& windowProperties);
 
-		VulkanSwapchain(const VulkanContextData& contextData);
+		VulkanSwapchain(const VulkanContextData& contextData, const WindowProperties& windowProperties);
 
 		void Shutdown();
 

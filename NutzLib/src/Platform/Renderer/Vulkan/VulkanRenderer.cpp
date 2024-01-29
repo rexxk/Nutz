@@ -2,6 +2,7 @@
 #include "VulkanRenderer.h"
 
 #include "VulkanContext.h"
+#include "VulkanShader.h"
 
 #include "Core/Application.h"
 
@@ -22,18 +23,13 @@ namespace Nutz
     {
         LOG_CORE_TRACE("Initializing Vulkan context");
 
-        Application::Get().GetWindow()->CreateRendererContext();
-
-        m_Swapchain = VulkanSwapchain::Create(std::dynamic_pointer_cast<VulkanContext>(Application::Get().GetWindow()->GetRendererContext())->GetContextData());
+        Nutz::ShaderLibrary::Load("assets/shaders/basic.shader");
 
     }
 
     void VulkanRenderer::Shutdown()
     {
-        if (m_Swapchain != nullptr)
-        {
-            m_Swapchain->Shutdown();
-        }
+
     }
 
     void VulkanRenderer::BeginScene()

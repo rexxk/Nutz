@@ -3,6 +3,8 @@
 
 #include "Core/Message/Messages.h"
 
+#include "Platform/Renderer/Vulkan/VulkanSwapchain.h"
+
 
 namespace Nutz
 {
@@ -82,6 +84,9 @@ namespace Nutz
             glfwMaximizeWindow((GLFWwindow*)m_Handle);
         }
 
+
+        m_RendererContext = RendererContext::Create(m_Handle);
+        m_Swapchain = VulkanSwapchain::Create(std::dynamic_pointer_cast<VulkanContext>(m_RendererContext)->GetContextData(), m_Properties);
     }
 
 }

@@ -10,19 +10,18 @@ namespace Nutz
 {
 
 
-	Ref<VulkanSwapchain> VulkanSwapchain::Create(const VulkanContextData& contextData)
+	Ref<VulkanSwapchain> VulkanSwapchain::Create(const VulkanContextData& contextData, const WindowProperties& windowProperties)
 	{
-		return CreateRef<VulkanSwapchain>(contextData);
+		return CreateRef<VulkanSwapchain>(contextData, windowProperties);
 	}
 
-	VulkanSwapchain::VulkanSwapchain(const VulkanContextData& contextData)
+	VulkanSwapchain::VulkanSwapchain(const VulkanContextData& contextData, const WindowProperties& windowProperties)
 		: m_Instance(contextData.Instance), m_PhysicalDevice(contextData.PhysicalDevice->GetVulkanPhysicalDevice()), 
 		  m_Device(contextData.Device->GetVulkanDevice()), m_Surface(contextData.Surface->Surface())
 	{
-		auto& windowProps = Application::Get().GetWindow()->GetProperties();
-		m_Width = windowProps.Width;
-		m_Height = windowProps.Height;
-		m_VSync = windowProps.VSync;
+		m_Width = windowProperties.Width;
+		m_Height = windowProperties.Height;
+		m_VSync = windowProperties.VSync;
 
 		FindSurfaceFormat();
 
