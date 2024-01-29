@@ -35,7 +35,7 @@ namespace Nutz
 		return VK_POLYGON_MODE_FILL;
 	}
 
-	VkShaderStageFlagBits DomainToShaderStageFlag(ShaderDomain shaderDomain)
+	VkShaderStageFlagBits ShaderDomainToShaderStageFlag(ShaderDomain shaderDomain)
 	{
 		switch (shaderDomain)
 		{
@@ -170,19 +170,21 @@ namespace Nutz
 
 			VkPipelineShaderStageCreateInfo shaderStageCreateInfo = {};
 			shaderStageCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-			shaderStageCreateInfo.stage = DomainToShaderStageFlag(domain);
+			shaderStageCreateInfo.stage = ShaderDomainToShaderStageFlag(domain);
 			shaderStageCreateInfo.module = shaderModule;
 			shaderStageCreateInfo.pName = "main";
 
 			shaderStageCreateInfos.push_back(shaderStageCreateInfo);
 		}
 
+		std::vector<VkPushConstantRange> pushConstantRanges = shader->GetPushConstantRanges();
+
 		VkPipelineLayoutCreateInfo layoutCreateInfo = {};
 		layoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
 		layoutCreateInfo.setLayoutCount = 0;
 		layoutCreateInfo.pSetLayouts = nullptr;
-		layoutCreateInfo.pushConstantRangeCount = 0;
-		layoutCreateInfo.pPushConstantRanges = nullptr;
+		layoutCreateInfo.pushConstantRangeCount = (uint32_t)pushConstantRanges.size();
+		layoutCreateInfo.pPushConstantRanges = pushConstantRanges.data();
 
 
 		if (vkCreatePipelineLayout(device, &layoutCreateInfo, nullptr, &m_PipelineLayout) != VK_SUCCESS)

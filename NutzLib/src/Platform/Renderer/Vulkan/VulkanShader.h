@@ -50,6 +50,7 @@ namespace Nutz
 		VkPipelineVertexInputStateCreateInfo GetVertexInputStateCreateInfo(ShaderDomain shaderDomain) { return m_VertexInputStateCreateInfos[shaderDomain]; }
 
 		const std::unordered_map<ShaderDomain, VkShaderModule>& GetShaderModules() const { return m_ShaderModules; }
+		const std::vector<VkPushConstantRange>& GetPushConstantRanges() const { return m_PushConstants; }
 
 	private:
 		void GetShaderSources();
@@ -58,6 +59,7 @@ namespace Nutz
 		void Reflect();
 
 		void BuildInputAssemblyStateCreateInfo(ShaderDomain shaderDomain);
+		void BuildPushConstantRanges(ShaderDomain shaderDomain);
 
 	private:
 		std::filesystem::path m_FilePath;
@@ -66,7 +68,9 @@ namespace Nutz
 		std::unordered_map<ShaderDomain, SPIRVData> m_SPIRVBuffers;
 		std::unordered_map<ShaderDomain, VkShaderModule> m_ShaderModules;
 
-		ReflectionData m_ReflectionData;
+		std::vector<VkPushConstantRange> m_PushConstants;
+
+		std::unordered_map<ShaderDomain, ReflectionData> m_ReflectionData;
 
 		std::unordered_map<ShaderDomain, InputLayoutData> m_InputLayouts;
 

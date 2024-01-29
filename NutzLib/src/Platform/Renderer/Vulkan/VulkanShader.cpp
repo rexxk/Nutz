@@ -48,6 +48,18 @@ namespace Nutz
 		return EShLangVertex;
 	}
 
+	VkShaderStageFlagBits ShaderDomainToStageFlag(ShaderDomain shaderDomain)
+	{
+		switch (shaderDomain)
+		{
+		case ShaderDomain::Vertex: return VK_SHADER_STAGE_VERTEX_BIT;
+		case ShaderDomain::Fragment: return VK_SHADER_STAGE_FRAGMENT_BIT;
+		case ShaderDomain::Compute: return VK_SHADER_STAGE_COMPUTE_BIT;
+		}
+
+		return VK_SHADER_STAGE_VERTEX_BIT;
+	}
+	
 	void InitCompilerResources(TBuiltInResource& resources)
 	{
 		resources.maxLights = 32;
@@ -335,15 +347,15 @@ namespace Nutz
 			uint32_t inputVariableCount = 0;
 			result = spvReflectEnumerateInputVariables(&shaderModule, &inputVariableCount, nullptr);
 
-			m_ReflectionData.InputVariables.resize(inputVariableCount);
-			result = spvReflectEnumerateInputVariables(&shaderModule, &inputVariableCount, m_ReflectionData.InputVariables.data());
+			m_ReflectionData[shaderDomain].InputVariables.resize(inputVariableCount);
+			result = spvReflectEnumerateInputVariables(&shaderModule, &inputVariableCount, m_ReflectionData[shaderDomain].InputVariables.data());
 
 			if (inputVariableCount > 0)
 			{
 				BuildInputAssemblyStateCreateInfo(shaderDomain);
 			}
 
-			for (auto& inputVariable : m_ReflectionData.InputVariables)
+			for (auto& inputVariable : m_ReflectionData[shaderDomain].InputVariables)
 			{
 				LOG_CORE_TRACE(" - Input variable: {} @{}", inputVariable->name, inputVariable->location);
 			}
@@ -352,10 +364,10 @@ namespace Nutz
 			uint32_t descriptorSetCount = 0;
 			spvReflectEnumerateDescriptorSets(&shaderModule, &descriptorSetCount, nullptr);
 
-			m_ReflectionData.DescriptorSets.resize(descriptorSetCount);
-			spvReflectEnumerateDescriptorSets(&shaderModule, &descriptorSetCount, m_ReflectionData.DescriptorSets.data());
+			m_ReflectionData[shaderDomain].DescriptorSets.resize(descriptorSetCount);
+			spvReflectEnumerateDescriptorSets(&shaderModule, &descriptorSetCount, m_ReflectionData[shaderDomain].DescriptorSets.data());
 
-			for (auto& descriptorSet : m_ReflectionData.DescriptorSets)
+			for (auto& descriptorSet : m_ReflectionData[shaderDomain].DescriptorSets)
 			{
 				LOG_CORE_TRACE(" - Descriptor set: {}, binding count: {}", descriptorSet->set, descriptorSet->binding_count);
 
@@ -368,10 +380,10 @@ namespace Nutz
 			uint32_t descriptorBindingsCount = 0;
 			spvReflectEnumerateDescriptorBindings(&shaderModule, &descriptorBindingsCount, nullptr);
 
-			m_ReflectionData.DescriptorBindings.resize(descriptorBindingsCount);
-			spvReflectEnumerateDescriptorBindings(&shaderModule, &descriptorBindingsCount, m_ReflectionData.DescriptorBindings.data());
+			m_ReflectionData[shaderDomain].DescriptorBindings.resize(descriptorBindingsCount);
+			spvReflectEnumerateDescriptorBindings(&shaderModule, &descriptorBindingsCount, m_ReflectionData[shaderDomain].DescriptorBindings.data());
 
-			for (auto& descriptorBinding : m_ReflectionData.DescriptorBindings)
+			for (auto& descriptorBinding : m_ReflectionData[shaderDomain].DescriptorBindings)
 			{
 				LOG_CORE_TRACE(" - Descriptor binding: {}", descriptorBinding->name);
 
@@ -384,10 +396,10 @@ namespace Nutz
 			uint32_t outputVariableCount = 0;
 			spvReflectEnumerateOutputVariables(&shaderModule, &outputVariableCount, nullptr);
 
-			m_ReflectionData.OutputVariables.resize(outputVariableCount);
-			spvReflectEnumerateOutputVariables(&shaderModule, &outputVariableCount, m_ReflectionData.OutputVariables.data());
+			m_ReflectionData[shaderDomain].OutputVariables.resize(outputVariableCount);
+			spvReflectEnumerateOutputVariables(&shaderModule, &outputVariableCount, m_ReflectionData[shaderDomain].OutputVariables.data());
 
-			for (auto& outputVariable : m_ReflectionData.OutputVariables)
+			for (auto& outputVariable : m_ReflectionData[shaderDomain].OutputVariables)
 			{
 				LOG_CORE_TRACE(" - Output variable: {} @{}", outputVariable->name, outputVariable->location);
 			}
@@ -395,10 +407,12 @@ namespace Nutz
 			uint32_t pushConstantBlocksCount = 0;
 			spvReflectEnumeratePushConstantBlocks(&shaderModule, &pushConstantBlocksCount, nullptr);
 
-			m_ReflectionData.PushConstantBlocks.resize(pushConstantBlocksCount);
-			spvReflectEnumeratePushConstantBlocks(&shaderModule, &pushConstantBlocksCount, m_ReflectionData.PushConstantBlocks.data());
+			m_ReflectionData[shaderDomain].PushConstantBlocks.resize(pushConstantBlocksCount);
+			spvReflectEnumeratePushConstantBlocks(&shaderModule, &pushConstantBlocksCount, m_ReflectionData[shaderDomain].PushConstantBlocks.data());
 
-			for (auto& pushConstantBlock : m_ReflectionData.PushConstantBlocks)
+			BuildPushConstantRanges(shaderDomain);
+
+			for (auto& pushConstantBlock : m_ReflectionData[shaderDomain].PushConstantBlocks)
 			{
 				LOG_CORE_TRACE(" - Push constant block: {}", pushConstantBlock->name);
 
@@ -428,7 +442,7 @@ namespace Nutz
 
 		std::vector<VkVertexInputAttributeDescription>& attributeDescriptions = layoutData.AttributeDescriptions;
 
-		for (auto& var : m_ReflectionData.InputVariables)
+		for (auto& var : m_ReflectionData[shaderDomain].InputVariables)
 		{
 			if (var->decoration_flags & SPV_REFLECT_DECORATION_BUILT_IN)
 				continue;
@@ -462,6 +476,23 @@ namespace Nutz
 		vertexInputStateCreateInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
 
 		m_VertexInputStateCreateInfos[shaderDomain] = vertexInputStateCreateInfo;
+	}
+
+	void VulkanShader::BuildPushConstantRanges(ShaderDomain shaderDomain)
+	{
+
+		for (auto& pushConstantBlock : m_ReflectionData[shaderDomain].PushConstantBlocks)
+		{
+			VkPushConstantRange pushConstantRange = {};
+
+			pushConstantRange.offset = pushConstantBlock->offset;
+			pushConstantRange.size = pushConstantBlock->size;
+			pushConstantRange.stageFlags = ShaderDomainToStageFlag(shaderDomain);
+
+			m_PushConstants.push_back(pushConstantRange);
+		}
+
+
 	}
 
 
