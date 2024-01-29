@@ -86,7 +86,6 @@ namespace Nutz
 
 		Ref<VulkanContext> context = std::dynamic_pointer_cast<VulkanContext>(Application::Get().GetWindow()->GetRendererContext());
 		VkDevice device = context->GetDevice();
-		Ref<VulkanSwapchain> swapchain = context->GetSwapchain();
 
 		Ref<VulkanShader> shader = std::dynamic_pointer_cast<VulkanShader>(m_Properties.Shader);
 

@@ -43,4 +43,8 @@ namespace Nutz
 
     }
 
+    void Renderer::Shutdown()
+    {
+        s_Renderer->Shutdown();
+    }
 }

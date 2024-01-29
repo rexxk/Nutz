@@ -8,17 +8,6 @@ namespace Nutz
 {
 
 
-	struct VulkanContextData
-	{
-		VkInstance Instance = nullptr;
-		Ref<VulkanPhysicalDevice> PhysicalDevice = nullptr;
-		Ref<VulkanDevice> Device = nullptr;
-
-		Ref<VulkanSurface> Surface = nullptr;
-
-		Ref<VulkanSwapchain> Swapchain = nullptr;
-
-	};
 	
 	static VulkanContextData s_ContextData;
 
@@ -32,7 +21,6 @@ namespace Nutz
 		s_ContextData.PhysicalDevice = VulkanPhysicalDevice::Select(s_ContextData.Instance);
 		s_ContextData.Device = VulkanDevice::Create(s_ContextData.PhysicalDevice);
 		s_ContextData.Surface = VulkanSurface::Create(s_ContextData.Instance);
-		s_ContextData.Swapchain = VulkanSwapchain::Create(s_ContextData.Instance, s_ContextData.PhysicalDevice->GetVulkanPhysicalDevice(), s_ContextData.Device->GetVulkanDevice(), s_ContextData.Surface->Surface());
 	}
 
 	VulkanContext::~VulkanContext()
@@ -41,15 +29,13 @@ namespace Nutz
 	}
 
 	VkDevice VulkanContext::GetDevice() { return s_ContextData.Device->GetVulkanDevice(); }
-	Ref<VulkanSwapchain> VulkanContext::GetSwapchain() { return s_ContextData.Swapchain; }
+
+	VulkanContextData VulkanContext::GetContextData() { return s_ContextData; }
 
 	void VulkanContext::Shutdown()
 	{
 		if (!ShaderLibrary::IsEmpty())
 			ShaderLibrary::Shutdown();
-
-		if (s_ContextData.Swapchain != nullptr)
-			s_ContextData.Swapchain->Shutdown();
 
 		if (s_ContextData.Surface != nullptr)
 			s_ContextData.Surface->Shutdown(s_ContextData.Instance);

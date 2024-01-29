@@ -10,13 +10,14 @@ namespace Nutz
 {
 
 
-	Ref<VulkanSwapchain> VulkanSwapchain::Create(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, VkSurfaceKHR surface)
+	Ref<VulkanSwapchain> VulkanSwapchain::Create(const VulkanContextData& contextData)
 	{
-		return CreateRef<VulkanSwapchain>(instance, physicalDevice, device, surface);
+		return CreateRef<VulkanSwapchain>(contextData);
 	}
 
-	VulkanSwapchain::VulkanSwapchain(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, VkSurfaceKHR surface)
-		: m_Instance(instance), m_PhysicalDevice(physicalDevice), m_Device(device), m_Surface(surface)
+	VulkanSwapchain::VulkanSwapchain(const VulkanContextData& contextData)
+		: m_Instance(contextData.Instance), m_PhysicalDevice(contextData.PhysicalDevice->GetVulkanPhysicalDevice()), 
+		  m_Device(contextData.Device->GetVulkanDevice()), m_Surface(contextData.Surface->Surface())
 	{
 		auto& windowProps = Application::Get().GetWindow()->GetProperties();
 		m_Width = windowProps.Width;
@@ -42,17 +43,20 @@ namespace Nutz
 
 	void VulkanSwapchain::Shutdown()
 	{
+		for (uint32_t i = 0; i < (uint32_t)m_Buffers.size(); i++)
+		{
+			vkDestroyImageView(m_Device, m_Buffers[i].ImageView, nullptr);
+			m_Buffers[i].ImageView = nullptr;
+		}
+
+		m_Buffers.clear();
+
 		if (m_Swapchain != nullptr)
 		{
 			vkDestroySwapchainKHR(m_Device, m_Swapchain, nullptr);
 			m_Swapchain = nullptr;
 		}
 
-		for (uint32_t i = 0; i < m_ImageCount; i++)
-		{
-			vkDestroyImageView(m_Device, m_Buffers[i].ImageView, nullptr);
-			m_Buffers[i].ImageView = nullptr;
-		}
 	}
 
 	void VulkanSwapchain::CreateSwapchain()

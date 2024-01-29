@@ -18,6 +18,7 @@ namespace Nutz
         static Ref<RendererAPI> Get() { return s_Renderer; }
 
         static void Initialize();
+        static void Shutdown();
 
     private:
         inline static RendererAPIType s_API = RendererAPIType::None;

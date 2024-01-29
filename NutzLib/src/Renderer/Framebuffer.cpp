@@ -3,6 +3,8 @@
 
 #include "Renderer.h"
 
+#include "Platform/Renderer/Vulkan/VulkanFramebuffer.h"
+
 
 namespace Nutz
 {

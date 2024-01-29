@@ -23,6 +23,7 @@ namespace Nutz
         RendererAPI();
 
         virtual void Initialize() = 0;
+        virtual void Shutdown() = 0;
 
         virtual void BeginScene() = 0;
         virtual void EndScene() = 0;

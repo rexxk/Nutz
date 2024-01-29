@@ -6,13 +6,20 @@
 #include "Renderer/RendererContext.h"
 #include "VulkanDevice.h"
 #include "VulkanSurface.h"
-#include "VulkanSwapchain.h"
 
 #include "Core/Window.h"
 
 namespace Nutz
 {
 
+	struct VulkanContextData
+	{
+		VkInstance Instance = nullptr;
+		Ref<VulkanPhysicalDevice> PhysicalDevice = nullptr;
+		Ref<VulkanDevice> Device = nullptr;
+
+		Ref<VulkanSurface> Surface = nullptr;
+	};
 
 	class VulkanContext : public RendererContext
 	{
@@ -25,8 +32,9 @@ namespace Nutz
 		//VkDevice GetDevice() { return m_Device->GetVulkanDevice(); }
 		VkDevice GetDevice();
 
+		VulkanContextData GetContextData();
+
 //		Ref<VulkanSwapchain> GetSwapchain() { return m_Swapchain; }
-		Ref<VulkanSwapchain> GetSwapchain();
 
 	private:
 		bool CreateInstance();

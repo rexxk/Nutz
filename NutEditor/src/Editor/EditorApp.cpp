@@ -33,6 +33,8 @@ void EditorLayer::OnAttach()
 void EditorLayer::OnDetach()
 {
     m_SceneRenderer->Shutdown();
+
+    Nutz::Renderer::Shutdown();
 }
 
 

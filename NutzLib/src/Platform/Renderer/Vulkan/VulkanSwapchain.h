@@ -1,5 +1,7 @@
 #pragma once
 
+#include "VulkanContext.h"
+
 #include "Core/Window.h"
 
 #include <vulkan/vulkan.h>
@@ -20,9 +22,9 @@ namespace Nutz
 	class VulkanSwapchain
 	{
 	public:
-		static Ref<VulkanSwapchain> Create(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, VkSurfaceKHR surface);
+		static Ref<VulkanSwapchain> Create(const VulkanContextData& contextData);
 
-		VulkanSwapchain(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, VkSurfaceKHR surface);
+		VulkanSwapchain(const VulkanContextData& contextData);
 
 		void Shutdown();
 

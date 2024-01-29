@@ -3,6 +3,7 @@
 
 #include "Renderer/Framebuffer.h"
 
+#include <vulkan/vulkan.h>
 
 
 namespace Nutz
@@ -16,8 +17,16 @@ namespace Nutz
 
 		virtual void Shutdown() override;
 
+		void AttachImageViews(const std::vector<VkImageView>& imageViews);
+
+		VkFramebuffer GetNextFramebuffer();
+
 	private:
 		FramebufferSpecification m_Specification;
+
+		std::vector<VkFramebuffer> m_Framebuffers;
+
+		uint32_t m_ActiveFramebuffer = 0;
 	};
 
 
