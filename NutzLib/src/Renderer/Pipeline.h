@@ -42,6 +42,8 @@ namespace Nutz
 		static Ref<Pipeline> Create(const PipelineProperties& pipelineProperties);
 
 		virtual ~Pipeline() {}
+
+		virtual void Shutdown() = 0;
 	};
 
 

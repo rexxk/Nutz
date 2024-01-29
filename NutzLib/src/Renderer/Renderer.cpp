@@ -1,6 +1,8 @@
 #include "nutz_pch.h"
 #include "Renderer.h"
 
+#include "Renderer/Shader.h"
+
 #include "Platform/Renderer/Vulkan/VulkanRenderer.h"
 
 
@@ -32,6 +34,10 @@ namespace Nutz
 
     void Renderer::Initialize()
     {
+//        Nutz::PipelineProperties pipelineProps;
+//        pipelineProps.Shader = Nutz::ShaderLibrary::Get("basic");
+//        Nutz::Pipeline::Create(pipelineProps);
+
 
 
 
@@ -39,6 +45,8 @@ namespace Nutz
         {
             s_Renderer->Initialize();
         }
+
+        Nutz::ShaderLibrary::Load("assets/shaders/basic.shader");
 
     }
 

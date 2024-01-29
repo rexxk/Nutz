@@ -18,6 +18,8 @@ namespace Nutz
 
     void VulkanRenderer::Initialize()
     {
+
+
         LOG_CORE_TRACE("Initializing Vulkan context");
 
         Application::Get().GetWindow()->CreateRendererContext();

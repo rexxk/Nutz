@@ -55,6 +55,11 @@ namespace Nutz
 
 	}
 
+	Application::~Application()
+	{
+
+	}
+
 
 	void Application::Run()
 	{
@@ -97,7 +102,15 @@ namespace Nutz
 
 	void Application::Shutdown()
 	{
-		m_Window->ShutdownRendererContext();
+		for (auto& layer : *m_LayerStack)
+		{
+			layer->OnDetach();
+		}
+
+		if (m_Window)
+		{
+			m_Window->ShutdownRendererContext();
+		}
 	}
 
 

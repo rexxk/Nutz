@@ -24,6 +24,8 @@ namespace Nutz
 
 		VkDevice GetDevice() { return m_Device->GetVulkanDevice(); }
 
+		Ref<VulkanSwapchain> GetSwapchain() { return m_Swapchain; }
+
 	private:
 		bool CreateInstance();
 

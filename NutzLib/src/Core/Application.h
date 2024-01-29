@@ -15,6 +15,7 @@ namespace Nutz
 	{
 	public:
 		Application();
+		virtual ~Application();
 
 		void Run();
 

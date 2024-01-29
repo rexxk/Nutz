@@ -17,7 +17,7 @@ namespace Nutz
 	public:
 		VulkanPipeline(const PipelineProperties& pipelineProperties);
 
-		void Shutdown();
+		virtual void Shutdown() override;
 
 	private:
 		void CreatePipeline();
@@ -27,6 +27,7 @@ namespace Nutz
 		VkPipeline m_Pipeline = nullptr;
 		VkPipelineLayout m_PipelineLayout = nullptr;
 
+		VkRenderPass m_RenderPass = nullptr;
 
 		PipelineProperties m_Properties;
 

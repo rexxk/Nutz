@@ -58,10 +58,10 @@ namespace Nutz
 	{
 		VkDevice device = std::dynamic_pointer_cast<VulkanContext>(Application::Get().GetWindow()->GetRendererContext())->GetDevice();
 
-		if (m_Pipeline != nullptr)
+		if (m_RenderPass != nullptr)
 		{
-			vkDestroyPipeline(device, m_Pipeline, nullptr);
-			m_Pipeline = nullptr;
+			vkDestroyRenderPass(device, m_RenderPass, nullptr);
+			m_RenderPass = nullptr;
 		}
 
 		if (m_PipelineLayout != nullptr)
@@ -69,13 +69,22 @@ namespace Nutz
 			vkDestroyPipelineLayout(device, m_PipelineLayout, nullptr);
 			m_PipelineLayout = nullptr;
 		}
+
+		if (m_Pipeline != nullptr)
+		{
+			vkDestroyPipeline(device, m_Pipeline, nullptr);
+			m_Pipeline = nullptr;
+		}
+
 	}
 
 	void VulkanPipeline::CreatePipeline()
 	{
 		WindowProperties& windowProperties = Application::Get().GetWindow()->GetProperties();
 
-		VkDevice device = std::dynamic_pointer_cast<VulkanContext>(Application::Get().GetWindow()->GetRendererContext())->GetDevice();
+		Ref<VulkanContext> context = std::dynamic_pointer_cast<VulkanContext>(Application::Get().GetWindow()->GetRendererContext());
+		VkDevice device = context->GetDevice();
+		Ref<VulkanSwapchain> swapchain = context->GetSwapchain();
 
 		Ref<VulkanShader> shader = std::dynamic_pointer_cast<VulkanShader>(m_Properties.Shader);
 
@@ -195,6 +204,38 @@ namespace Nutz
 
 		VkPipelineVertexInputStateCreateInfo vertexInputStateCreateInfo = shader->GetVertexInputStateCreateInfo(ShaderDomain::Vertex);
 
+		VkAttachmentDescription colorAttachmentDescription = {};
+		colorAttachmentDescription.format = swapchain->GetFormat();
+		colorAttachmentDescription.samples = VK_SAMPLE_COUNT_1_BIT;
+		colorAttachmentDescription.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+		colorAttachmentDescription.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+		colorAttachmentDescription.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+		colorAttachmentDescription.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+		colorAttachmentDescription.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+		colorAttachmentDescription.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+
+		VkAttachmentReference colorAttachmentReference = {};
+		colorAttachmentReference.attachment = 0;
+		colorAttachmentReference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+		VkSubpassDescription subpassDescription = {};
+		subpassDescription.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+		subpassDescription.colorAttachmentCount = 1;
+		subpassDescription.pColorAttachments = &colorAttachmentReference;
+
+		VkRenderPassCreateInfo renderPassCreateInfo = {};
+		renderPassCreateInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+		renderPassCreateInfo.attachmentCount = 1;
+		renderPassCreateInfo.pAttachments = &colorAttachmentDescription;
+		renderPassCreateInfo.subpassCount = 1;
+		renderPassCreateInfo.pSubpasses = &subpassDescription;
+
+		if (vkCreateRenderPass(device, &renderPassCreateInfo, nullptr, &m_RenderPass) != VK_SUCCESS)
+		{
+			LOG_CORE_ERROR("Failed to create renderpass");
+			return;
+		}
+
 		pipelineCreateInfo.pDynamicState = &dynamicStateCreateInfo;
 		pipelineCreateInfo.pVertexInputState = &vertexInputStateCreateInfo;
 		pipelineCreateInfo.pInputAssemblyState = &inputAssemblyCreateInfo;
@@ -206,7 +247,7 @@ namespace Nutz
 		pipelineCreateInfo.layout = m_PipelineLayout;
 		pipelineCreateInfo.stageCount = (uint32_t)shaderStageCreateInfos.size();
 		pipelineCreateInfo.pStages = shaderStageCreateInfos.data();
-//		pipelineCreateInfo.renderPass
+		pipelineCreateInfo.renderPass = m_RenderPass;
 
 		if (vkCreateGraphicsPipelines(device, nullptr, 1, &pipelineCreateInfo, nullptr, &m_Pipeline) != VK_SUCCESS)
 		{

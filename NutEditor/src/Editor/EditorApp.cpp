@@ -20,11 +20,7 @@ EditorLayer::EditorLayer()
     m_Scene = Nutz::Scene::Create();
 
 
-    Nutz::ShaderLibrary::Load("assets/shaders/basic.shader");
-
-    Nutz::PipelineProperties pipelineProps;
-    pipelineProps.Shader = Nutz::ShaderLibrary::Get("basic");
-    Ref<Nutz::Pipeline> pipeline = Nutz::Pipeline::Create(pipelineProps);
+    m_SceneRenderer = CreateRef<Nutz::SceneRenderer>();
 
 }
 
@@ -33,6 +29,12 @@ void EditorLayer::OnAttach()
     Nutz::AssetManager::Clear();
 
 }
+
+void EditorLayer::OnDetach()
+{
+    m_SceneRenderer->Shutdown();
+}
+
 
 void EditorLayer::OnUpdate(Nutz::Timestep ts)
 {
