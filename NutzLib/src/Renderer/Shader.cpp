@@ -32,8 +32,19 @@ namespace Nutz
 
 	void ShaderLibrary::Load(const std::filesystem::path& filePath)
 	{
-		LOG_CORE_TRACE("Loading shader {} to ShaderLibrary", filePath.filename().string());
-		s_ShaderData.ShaderList[filePath.filename().string()] = Shader::Create(filePath);
+		std::string filename;
+
+		uint32_t offset = (uint32_t)filePath.string().find_last_of('/') + 1;
+
+		if (offset == std::string::npos)
+			offset = 0;
+
+		uint32_t length = (uint32_t)filePath.string().find('.') - offset;
+
+		filename = filePath.string().substr(offset, length);
+
+		LOG_CORE_TRACE("Loading shader {} to ShaderLibrary", filename);
+		s_ShaderData.ShaderList[filename] = Shader::Create(filePath);
 	}
 
 	void ShaderLibrary::Shutdown()
@@ -55,7 +66,17 @@ namespace Nutz
 
 	Ref<Shader> ShaderLibrary::Get(const std::string& name)
 	{
-		return s_ShaderData.ShaderList[name];
+		for (auto& iterator : s_ShaderData.ShaderList)
+		{
+			auto& shaderName = iterator.first;
+
+			if (name == shaderName)
+			{
+				return iterator.second;
+			}
+		}
+
+		return nullptr;
 	}
 
 }

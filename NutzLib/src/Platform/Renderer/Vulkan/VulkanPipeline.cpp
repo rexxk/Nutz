@@ -1,5 +1,6 @@
 #include "nutz_pch.h"
 #include "VulkanPipeline.h"
+#include "VulkanShader.h"
 
 #include "Core/Application.h"
 
@@ -34,7 +35,20 @@ namespace Nutz
 		return VK_POLYGON_MODE_FILL;
 	}
 
+	VkShaderStageFlagBits DomainToShaderStageFlag(ShaderDomain shaderDomain)
+	{
+		switch (shaderDomain)
+		{
+			case ShaderDomain::Vertex: return VK_SHADER_STAGE_VERTEX_BIT;
+			case ShaderDomain::Fragment: return VK_SHADER_STAGE_FRAGMENT_BIT;
+			case ShaderDomain::Compute: return VK_SHADER_STAGE_COMPUTE_BIT;
+		}
+
+		return VK_SHADER_STAGE_VERTEX_BIT;
+	}
+
 	VulkanPipeline::VulkanPipeline(const PipelineProperties& pipelineProperties)
+		: m_Properties(pipelineProperties)
 	{
 		CreatePipeline();
 
@@ -63,6 +77,8 @@ namespace Nutz
 
 		VkDevice device = std::dynamic_pointer_cast<VulkanContext>(Application::Get().GetWindow()->GetRendererContext())->GetDevice();
 
+		Ref<VulkanShader> shader = std::dynamic_pointer_cast<VulkanShader>(m_Properties.Shader);
+
 		VkGraphicsPipelineCreateInfo pipelineCreateInfo = {};
 		pipelineCreateInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
 
@@ -76,13 +92,6 @@ namespace Nutz
 		dynamicStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
 		dynamicStateCreateInfo.dynamicStateCount = (uint32_t)dynamicStates.size();
 		dynamicStateCreateInfo.pDynamicStates = dynamicStates.data();
-
-		VkPipelineVertexInputStateCreateInfo vertexInputCreateInfo = {};
-		vertexInputCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-		vertexInputCreateInfo.vertexAttributeDescriptionCount = 0;
-		vertexInputCreateInfo.pVertexAttributeDescriptions = nullptr;
-		vertexInputCreateInfo.vertexBindingDescriptionCount = 0;
-		vertexInputCreateInfo.pVertexBindingDescriptions = nullptr;
 
 		VkPipelineInputAssemblyStateCreateInfo inputAssemblyCreateInfo = {};
 		inputAssemblyCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
@@ -152,11 +161,21 @@ namespace Nutz
 		colorBlendStateCreateInfo.blendConstants[2] = 0.0f;
 		colorBlendStateCreateInfo.blendConstants[3] = 0.0f;
 
+		std::vector<VkPipelineShaderStageCreateInfo> shaderStageCreateInfos;
 
-//		VkPipelineShaderStageCreateInfo shaderStageCreateInfo = {};
-//		shaderStageCreateInfo.sType = VK_STRUCTURE_TYPE_SHADER_CREATE_INFO_EXT;
-//		shaderStageCreateInfo.
+		for (auto& iterator : shader->GetShaderModules())
+		{
+			auto& domain = iterator.first;
+			auto& shaderModule = iterator.second;
 
+			VkPipelineShaderStageCreateInfo shaderStageCreateInfo = {};
+			shaderStageCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+			shaderStageCreateInfo.stage = DomainToShaderStageFlag(domain);
+			shaderStageCreateInfo.module = shaderModule;
+			shaderStageCreateInfo.pName = "main";
+
+			shaderStageCreateInfos.push_back(shaderStageCreateInfo);
+		}
 
 		VkPipelineLayoutCreateInfo layoutCreateInfo = {};
 		layoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -172,8 +191,10 @@ namespace Nutz
 			return;
 		}
 
+		VkPipelineVertexInputStateCreateInfo vertexInputStateCreateInfo = shader->GetVertexInputStateCreateInfo(ShaderDomain::Vertex);
+
 		pipelineCreateInfo.pDynamicState = &dynamicStateCreateInfo;
-		pipelineCreateInfo.pVertexInputState = &vertexInputCreateInfo;
+		pipelineCreateInfo.pVertexInputState = &vertexInputStateCreateInfo;
 		pipelineCreateInfo.pInputAssemblyState = &inputAssemblyCreateInfo;
 		pipelineCreateInfo.pViewportState = &viewportStateCreateInfo;
 		pipelineCreateInfo.pRasterizationState = &rasterizationStateCreateInfo;
@@ -181,7 +202,9 @@ namespace Nutz
 		pipelineCreateInfo.pDepthStencilState = nullptr;
 		pipelineCreateInfo.pColorBlendState = &colorBlendStateCreateInfo;
 		pipelineCreateInfo.layout = m_PipelineLayout;
-//		pipelineCreateInfo.pStages = ;
+		pipelineCreateInfo.stageCount = (uint32_t)shaderStageCreateInfos.size();
+		pipelineCreateInfo.pStages = shaderStageCreateInfos.data();
+//		pipelineCreateInfo.renderPass
 
 		if (vkCreateGraphicsPipelines(device, nullptr, 1, &pipelineCreateInfo, nullptr, &m_Pipeline) != VK_SUCCESS)
 		{

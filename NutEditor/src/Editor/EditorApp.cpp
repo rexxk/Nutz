@@ -23,7 +23,7 @@ EditorLayer::EditorLayer()
     Nutz::ShaderLibrary::Load("assets/shaders/basic.shader");
 
     Nutz::PipelineProperties pipelineProps;
-    pipelineProps.Shader = ShaderLibrary::Get("basic");
+    pipelineProps.Shader = Nutz::ShaderLibrary::Get("basic");
     Ref<Nutz::Pipeline> pipeline = Nutz::Pipeline::Create(pipelineProps);
 
 }

@@ -6,7 +6,6 @@
 
 #include <glslang/SPIRV/GlslangToSpv.h>
 
-#include "SPIRV-Reflect/spirv_reflect.h"
 
 
 namespace Nutz
@@ -155,7 +154,10 @@ namespace Nutz
 
 	}
 
-	VulkanShader::VulkanShader(const std::filesystem::path& filePath)
+    static uint32_t FormatSize(VkFormat format);
+
+    
+    VulkanShader::VulkanShader(const std::filesystem::path& filePath)
 		: m_FilePath(filePath)
 	{
 		LOG_CORE_TRACE("Loading shader: {}", filePath.string());
@@ -172,8 +174,9 @@ namespace Nutz
 	{
 		VkDevice device = std::dynamic_pointer_cast<VulkanContext>(Application::Get().GetWindow()->GetRendererContext())->GetDevice();
 
-		for (auto& shaderModule : m_ShaderModules)
+		for (auto& iterator : m_ShaderModules)
 		{
+			auto& shaderModule = iterator.second;
 			vkDestroyShaderModule(device, shaderModule, nullptr);
 			shaderModule = nullptr;
 		}
@@ -303,7 +306,7 @@ namespace Nutz
 				return;
 			}
 
-			m_ShaderModules.emplace_back(shaderModule);
+			m_ShaderModules[shaderDomain] = shaderModule;
 			m_SPIRVBuffers[shaderDomain] = spirvData;
 		}
 
@@ -329,24 +332,30 @@ namespace Nutz
 				return;
 			}
 
-			uint32_t variableCount = 0;
-			result = spvReflectEnumerateInputVariables(&shaderModule, &variableCount, nullptr);
+			uint32_t inputVariableCount = 0;
+			result = spvReflectEnumerateInputVariables(&shaderModule, &inputVariableCount, nullptr);
 
-			std::vector<SpvReflectInterfaceVariable*> inputVariables(variableCount);
-			result = spvReflectEnumerateInputVariables(&shaderModule, &variableCount, inputVariables.data());
+			m_ReflectionData.InputVariables.resize(inputVariableCount);
+			result = spvReflectEnumerateInputVariables(&shaderModule, &inputVariableCount, m_ReflectionData.InputVariables.data());
 
-			for (auto& inputVariable : inputVariables)
+			if (inputVariableCount > 0)
+			{
+				BuildInputAssemblyStateCreateInfo(shaderDomain);
+			}
+
+			for (auto& inputVariable : m_ReflectionData.InputVariables)
 			{
 				LOG_CORE_TRACE(" - Input variable: {} @{}", inputVariable->name, inputVariable->location);
 			}
 
+
 			uint32_t descriptorSetCount = 0;
 			spvReflectEnumerateDescriptorSets(&shaderModule, &descriptorSetCount, nullptr);
 
-			std::vector<SpvReflectDescriptorSet*> descriptorSets(descriptorSetCount);
-			spvReflectEnumerateDescriptorSets(&shaderModule, &descriptorSetCount, descriptorSets.data());
+			m_ReflectionData.DescriptorSets.resize(descriptorSetCount);
+			spvReflectEnumerateDescriptorSets(&shaderModule, &descriptorSetCount, m_ReflectionData.DescriptorSets.data());
 
-			for (auto& descriptorSet : descriptorSets)
+			for (auto& descriptorSet : m_ReflectionData.DescriptorSets)
 			{
 				LOG_CORE_TRACE(" - Descriptor set: {}, binding count: {}", descriptorSet->set, descriptorSet->binding_count);
 
@@ -359,10 +368,10 @@ namespace Nutz
 			uint32_t descriptorBindingsCount = 0;
 			spvReflectEnumerateDescriptorBindings(&shaderModule, &descriptorBindingsCount, nullptr);
 
-			std::vector<SpvReflectDescriptorBinding*> descriptorBindings(descriptorBindingsCount);
-			spvReflectEnumerateDescriptorBindings(&shaderModule, &descriptorBindingsCount, descriptorBindings.data());
+			m_ReflectionData.DescriptorBindings.resize(descriptorBindingsCount);
+			spvReflectEnumerateDescriptorBindings(&shaderModule, &descriptorBindingsCount, m_ReflectionData.DescriptorBindings.data());
 
-			for (auto& descriptorBinding : descriptorBindings)
+			for (auto& descriptorBinding : m_ReflectionData.DescriptorBindings)
 			{
 				LOG_CORE_TRACE(" - Descriptor binding: {}", descriptorBinding->name);
 
@@ -375,10 +384,10 @@ namespace Nutz
 			uint32_t outputVariableCount = 0;
 			spvReflectEnumerateOutputVariables(&shaderModule, &outputVariableCount, nullptr);
 
-			std::vector<SpvReflectInterfaceVariable*> outputVariables(outputVariableCount);
-			spvReflectEnumerateOutputVariables(&shaderModule, &outputVariableCount, outputVariables.data());
+			m_ReflectionData.OutputVariables.resize(outputVariableCount);
+			spvReflectEnumerateOutputVariables(&shaderModule, &outputVariableCount, m_ReflectionData.OutputVariables.data());
 
-			for (auto& outputVariable : outputVariables)
+			for (auto& outputVariable : m_ReflectionData.OutputVariables)
 			{
 				LOG_CORE_TRACE(" - Output variable: {} @{}", outputVariable->name, outputVariable->location);
 			}
@@ -386,10 +395,10 @@ namespace Nutz
 			uint32_t pushConstantBlocksCount = 0;
 			spvReflectEnumeratePushConstantBlocks(&shaderModule, &pushConstantBlocksCount, nullptr);
 
-			std::vector<SpvReflectBlockVariable*> pushConstantBlocks(pushConstantBlocksCount);
-			spvReflectEnumeratePushConstantBlocks(&shaderModule, &pushConstantBlocksCount, pushConstantBlocks.data());
+			m_ReflectionData.PushConstantBlocks.resize(pushConstantBlocksCount);
+			spvReflectEnumeratePushConstantBlocks(&shaderModule, &pushConstantBlocksCount, m_ReflectionData.PushConstantBlocks.data());
 
-			for (auto& pushConstantBlock : pushConstantBlocks)
+			for (auto& pushConstantBlock : m_ReflectionData.PushConstantBlocks)
 			{
 				LOG_CORE_TRACE(" - Push constant block: {}", pushConstantBlock->name);
 
@@ -407,4 +416,186 @@ namespace Nutz
 
 	}
 
+
+	void VulkanShader::BuildInputAssemblyStateCreateInfo(ShaderDomain shaderDomain)
+	{
+		InputLayoutData& layoutData = m_InputLayouts[shaderDomain];
+
+		VkVertexInputBindingDescription &bindingDescription = layoutData.BindingDescription;
+		bindingDescription.binding = 0;
+		bindingDescription.stride = 0;
+		bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+		std::vector<VkVertexInputAttributeDescription>& attributeDescriptions = layoutData.AttributeDescriptions;
+
+		for (auto& var : m_ReflectionData.InputVariables)
+		{
+			if (var->decoration_flags & SPV_REFLECT_DECORATION_BUILT_IN)
+				continue;
+
+			VkVertexInputAttributeDescription description = {};
+			description.location = var->location;
+			description.binding = bindingDescription.binding;
+			description.format = (VkFormat)var->format;
+			description.offset = 0;
+
+			attributeDescriptions.push_back(description);
+		}
+
+		std::sort(attributeDescriptions.begin(), attributeDescriptions.end(), [](const VkVertexInputAttributeDescription& a, const VkVertexInputAttributeDescription& b)
+			{
+				return a.location < b.location;
+			});
+
+		for (auto& attribute : attributeDescriptions)
+		{
+			uint32_t formatSize = FormatSize(attribute.format);
+			attribute.offset = bindingDescription.stride;
+			bindingDescription.stride += formatSize;
+		}
+
+		VkPipelineVertexInputStateCreateInfo vertexInputStateCreateInfo = {};
+		vertexInputStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+		vertexInputStateCreateInfo.vertexBindingDescriptionCount = 1;
+		vertexInputStateCreateInfo.pVertexBindingDescriptions = &bindingDescription;
+		vertexInputStateCreateInfo.vertexAttributeDescriptionCount = (uint32_t)attributeDescriptions.size();
+		vertexInputStateCreateInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
+
+		m_VertexInputStateCreateInfos[shaderDomain] = vertexInputStateCreateInfo;
+	}
+
+
+
+    static uint32_t FormatSize(VkFormat format)
+    {
+		switch (format)
+		{
+			case VK_FORMAT_UNDEFINED: return 0;
+			case VK_FORMAT_R4G4_UNORM_PACK8: return 1;
+			case VK_FORMAT_R4G4B4A4_UNORM_PACK16: return 2;
+			case VK_FORMAT_B4G4R4A4_UNORM_PACK16: return 2;
+			case VK_FORMAT_R5G6B5_UNORM_PACK16: return 2;
+			case VK_FORMAT_B5G6R5_UNORM_PACK16: return 2;
+			case VK_FORMAT_R5G5B5A1_UNORM_PACK16: return 2;
+			case VK_FORMAT_B5G5R5A1_UNORM_PACK16: return 2;
+			case VK_FORMAT_A1R5G5B5_UNORM_PACK16: return 2;
+			case VK_FORMAT_R8_UNORM: return 1;
+			case VK_FORMAT_R8_SNORM: return 1;
+			case VK_FORMAT_R8_USCALED: return 1;
+			case VK_FORMAT_R8_SSCALED: return 1;
+			case VK_FORMAT_R8_UINT: return 1;
+			case VK_FORMAT_R8_SINT: return 1;
+			case VK_FORMAT_R8_SRGB: return 1;
+			case VK_FORMAT_R8G8_UNORM: return 2;
+			case VK_FORMAT_R8G8_SNORM: return 2;
+			case VK_FORMAT_R8G8_USCALED: return 2;
+			case VK_FORMAT_R8G8_SSCALED: return 2;
+			case VK_FORMAT_R8G8_UINT: return 2;
+			case VK_FORMAT_R8G8_SINT: return 2;
+			case VK_FORMAT_R8G8_SRGB: return 2;
+			case VK_FORMAT_R8G8B8_UNORM: return 3;
+			case VK_FORMAT_R8G8B8_SNORM: return 3;
+			case VK_FORMAT_R8G8B8_USCALED: return 3;
+			case VK_FORMAT_R8G8B8_SSCALED: return 3;
+			case VK_FORMAT_R8G8B8_UINT: return 3;
+			case VK_FORMAT_R8G8B8_SINT: return 3;
+			case VK_FORMAT_R8G8B8_SRGB: return 3;
+			case VK_FORMAT_B8G8R8_UNORM: return 3;
+			case VK_FORMAT_B8G8R8_SNORM: return 3;
+			case VK_FORMAT_B8G8R8_USCALED: return 3;
+			case VK_FORMAT_B8G8R8_SSCALED: return 3;
+			case VK_FORMAT_B8G8R8_UINT: return 3;
+			case VK_FORMAT_B8G8R8_SINT: return 3;
+			case VK_FORMAT_B8G8R8_SRGB: return 3;
+			case VK_FORMAT_R8G8B8A8_UNORM: return 4;
+			case VK_FORMAT_R8G8B8A8_SNORM: return 4;
+			case VK_FORMAT_R8G8B8A8_USCALED: return 4;
+			case VK_FORMAT_R8G8B8A8_SSCALED: return 4;
+			case VK_FORMAT_R8G8B8A8_UINT: return 4;
+			case VK_FORMAT_R8G8B8A8_SINT: return 4;
+			case VK_FORMAT_R8G8B8A8_SRGB: return 4;
+			case VK_FORMAT_B8G8R8A8_UNORM: return 4;
+			case VK_FORMAT_B8G8R8A8_SNORM: return 4;
+			case VK_FORMAT_B8G8R8A8_USCALED: return 4;
+			case VK_FORMAT_B8G8R8A8_SSCALED: return 4;
+			case VK_FORMAT_B8G8R8A8_UINT: return 4;
+			case VK_FORMAT_B8G8R8A8_SINT: return 4;
+			case VK_FORMAT_B8G8R8A8_SRGB: return 4;
+			case VK_FORMAT_A8B8G8R8_UNORM_PACK32: return 4;
+			case VK_FORMAT_A8B8G8R8_SNORM_PACK32: return 4;
+			case VK_FORMAT_A8B8G8R8_USCALED_PACK32: return 4;
+			case VK_FORMAT_A8B8G8R8_SSCALED_PACK32: return 4;
+			case VK_FORMAT_A8B8G8R8_UINT_PACK32: return 4;
+			case VK_FORMAT_A8B8G8R8_SINT_PACK32: return 4;
+			case VK_FORMAT_A8B8G8R8_SRGB_PACK32: return 4;
+			case VK_FORMAT_A2R10G10B10_UNORM_PACK32: return 4;
+			case VK_FORMAT_A2R10G10B10_SNORM_PACK32: return 4;
+			case VK_FORMAT_A2R10G10B10_USCALED_PACK32: return 4;
+			case VK_FORMAT_A2R10G10B10_SSCALED_PACK32: return 4;
+			case VK_FORMAT_A2R10G10B10_UINT_PACK32: return 4;
+			case VK_FORMAT_A2R10G10B10_SINT_PACK32: return 4;
+			case VK_FORMAT_A2B10G10R10_UNORM_PACK32: return 4;
+			case VK_FORMAT_A2B10G10R10_SNORM_PACK32: return 4;
+			case VK_FORMAT_A2B10G10R10_USCALED_PACK32: return 4;
+			case VK_FORMAT_A2B10G10R10_SSCALED_PACK32: return 4;
+			case VK_FORMAT_A2B10G10R10_UINT_PACK32: return 4;
+			case VK_FORMAT_A2B10G10R10_SINT_PACK32: return 4;
+			case VK_FORMAT_R16_UNORM: return 2;
+			case VK_FORMAT_R16_SNORM: return 2;
+			case VK_FORMAT_R16_USCALED: return 2;
+			case VK_FORMAT_R16_SSCALED: return 2;
+			case VK_FORMAT_R16_UINT: return 2;
+			case VK_FORMAT_R16_SINT: return 2;
+			case VK_FORMAT_R16_SFLOAT: return 2;
+			case VK_FORMAT_R16G16_UNORM: return 4;
+			case VK_FORMAT_R16G16_SNORM: return 4;
+			case VK_FORMAT_R16G16_USCALED: return 4;
+			case VK_FORMAT_R16G16_SSCALED: return 4;
+			case VK_FORMAT_R16G16_UINT: return 4;
+			case VK_FORMAT_R16G16_SINT: return 4;
+			case VK_FORMAT_R16G16_SFLOAT: return 4;
+			case VK_FORMAT_R16G16B16_UNORM: return 6;
+			case VK_FORMAT_R16G16B16_SNORM: return 6;
+			case VK_FORMAT_R16G16B16_USCALED: return 6;
+			case VK_FORMAT_R16G16B16_SSCALED: return 6;
+			case VK_FORMAT_R16G16B16_UINT: return 6;
+			case VK_FORMAT_R16G16B16_SINT: return 6;
+			case VK_FORMAT_R16G16B16_SFLOAT: return 6;
+			case VK_FORMAT_R16G16B16A16_UNORM: return 8;
+			case VK_FORMAT_R16G16B16A16_SNORM: return 8;
+			case VK_FORMAT_R16G16B16A16_USCALED: return 8;
+			case VK_FORMAT_R16G16B16A16_SSCALED: return 8;
+			case VK_FORMAT_R16G16B16A16_UINT: return 8;
+			case VK_FORMAT_R16G16B16A16_SINT: return 8;
+			case VK_FORMAT_R16G16B16A16_SFLOAT: return 8;
+			case VK_FORMAT_R32_UINT: return 4;
+			case VK_FORMAT_R32_SINT: return 4;
+			case VK_FORMAT_R32_SFLOAT: return 4;
+			case VK_FORMAT_R32G32_UINT: return 8;
+			case VK_FORMAT_R32G32_SINT: return 8;
+			case VK_FORMAT_R32G32_SFLOAT: return 8;
+			case VK_FORMAT_R32G32B32_UINT: return 12;
+			case VK_FORMAT_R32G32B32_SINT: return 12;
+			case VK_FORMAT_R32G32B32_SFLOAT: return 12;
+			case VK_FORMAT_R32G32B32A32_UINT: return 16;
+			case VK_FORMAT_R32G32B32A32_SINT: return 16;
+			case VK_FORMAT_R32G32B32A32_SFLOAT: return 16;
+			case VK_FORMAT_R64_UINT: return 8;
+			case VK_FORMAT_R64_SINT: return 8;
+			case VK_FORMAT_R64_SFLOAT: return 8;
+			case VK_FORMAT_R64G64_UINT: return 16;
+			case VK_FORMAT_R64G64_SINT: return 16;
+			case VK_FORMAT_R64G64_SFLOAT: return 16;
+			case VK_FORMAT_R64G64B64_UINT: return 24;
+			case VK_FORMAT_R64G64B64_SINT: return 24;
+			case VK_FORMAT_R64G64B64_SFLOAT: return 24;
+			case VK_FORMAT_R64G64B64A64_UINT: return 32;
+			case VK_FORMAT_R64G64B64A64_SINT: return 32;
+			case VK_FORMAT_R64G64B64A64_SFLOAT: return 32;
+			case VK_FORMAT_B10G11R11_UFLOAT_PACK32: return 4;
+			case VK_FORMAT_E5B9G9R9_UFLOAT_PACK32: return 4;
+		}
+
+        return 0;
+    }
 }
