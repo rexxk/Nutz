@@ -84,6 +84,10 @@ namespace Nutz
 				layer->OnUpdate(frameTime);
 			}
 
+
+
+			m_Window->Present();
+
 			stats.FPS++;
 
 			frameTime.Reset();

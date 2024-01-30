@@ -18,6 +18,8 @@ namespace Nutz
 
         virtual void SetupRenderer() override;
 
+        virtual void Present() override;
+
 	private:
 		virtual void CreateWindow() override;
 

@@ -44,6 +44,8 @@ namespace Nutz
 		virtual ~Window();
 
 		virtual void SetupRenderer() = 0;
+		
+		virtual void Present() {}
 
 		std::pair<uint32_t, uint32_t> Size() { return std::make_pair(m_Properties.Width, m_Properties.Height); }
 

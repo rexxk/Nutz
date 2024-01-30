@@ -93,4 +93,9 @@ namespace Nutz
         Renderer::Initialize();
     }
 
+    void GLFWWindow::Present()
+    {
+
+    }
+
 }
