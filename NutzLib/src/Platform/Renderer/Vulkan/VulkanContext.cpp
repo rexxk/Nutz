@@ -13,14 +13,14 @@ namespace Nutz
 
 
 
-	VulkanContext::VulkanContext(void* windowHandle)
+	VulkanContext::VulkanContext()
 	{
 		if (!CreateInstance())
 			return;
 
 		s_ContextData.PhysicalDevice = VulkanPhysicalDevice::Select(s_ContextData.Instance);
 		s_ContextData.Device = VulkanDevice::Create(s_ContextData.PhysicalDevice);
-		s_ContextData.Surface = VulkanSurface::Create(s_ContextData.Instance, windowHandle);
+		s_ContextData.Surface = VulkanSurface::Create(s_ContextData.Instance);
 	}
 
 	VulkanContext::~VulkanContext()
@@ -34,8 +34,8 @@ namespace Nutz
 
 	void VulkanContext::Shutdown()
 	{
-		if (!ShaderLibrary::IsEmpty())
-			ShaderLibrary::Shutdown();
+//		if (!ShaderLibrary::IsEmpty())
+//			ShaderLibrary::Shutdown();
 
 		if (s_ContextData.Surface != nullptr)
 			s_ContextData.Surface->Shutdown(s_ContextData.Instance);

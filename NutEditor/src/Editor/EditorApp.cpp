@@ -15,7 +15,6 @@ EditorLayer::EditorLayer()
     windowProps.Mode = Nutz::WindowMode::Windowed;
 
     Nutz::Application::CreateWindow(windowProps);
-    Nutz::Renderer::Create(Nutz::RendererAPIType::Vulkan);
 
     m_Scene = Nutz::Scene::Create();
 

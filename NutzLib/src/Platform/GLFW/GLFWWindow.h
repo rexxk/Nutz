@@ -16,6 +16,8 @@ namespace Nutz
 
 		virtual void HandleEvents() override;
 
+        virtual void SetupRenderer() override;
+
 	private:
 		virtual void CreateWindow() override;
 

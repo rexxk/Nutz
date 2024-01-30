@@ -4,8 +4,9 @@
 #undef CreateWindow
 #endif
 
+#include "Renderer/Renderer.h"
+#include "Renderer/RendererAPI.h"
 #include "Renderer/RendererContext.h"
-
 
 
 
@@ -41,6 +42,8 @@ namespace Nutz
 
 		Window(const WindowProperties& props);
 		virtual ~Window();
+
+		virtual void SetupRenderer() = 0;
 
 		std::pair<uint32_t, uint32_t> Size() { return std::make_pair(m_Properties.Width, m_Properties.Height); }
 

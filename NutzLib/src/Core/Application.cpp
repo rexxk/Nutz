@@ -10,6 +10,8 @@
 #include "Core/Input/Keydefs.h"
 
 #include "Renderer/Renderer.h"
+#include "Renderer/Shader.h"
+
 
 namespace Nutz
 {
@@ -107,6 +109,9 @@ namespace Nutz
 		{
 			layer->OnDetach();
 		}
+
+
+		ShaderLibrary::Shutdown();
 	}
 
 
@@ -125,7 +130,11 @@ namespace Nutz
 		Renderer::Create(RendererAPIType::Vulkan);
 
 		if (s_Instance)
+		{
 			s_Instance->m_Window = Window::Create(windowProperties);
+
+			s_Instance->m_Window->SetupRenderer();
+		}
 	}
 
 

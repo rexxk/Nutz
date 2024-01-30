@@ -2,8 +2,6 @@
 
 #include "RendererAPI.h"
 
-#include "Core/Window.h"
-
 
 namespace Nutz
 {

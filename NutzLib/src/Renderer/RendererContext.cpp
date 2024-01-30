@@ -9,11 +9,11 @@
 namespace Nutz
 {
 
-	Ref<RendererContext> RendererContext::Create(void* windowHandle)
+	Ref<RendererContext> RendererContext::Create()
 	{
 		switch (Renderer::API())
 		{
-			case RendererAPIType::Vulkan: return CreateRef<VulkanContext>(windowHandle);
+			case RendererAPIType::Vulkan: return CreateRef<VulkanContext>();
 			case RendererAPIType::OpenGL: return nullptr;
 		}
 

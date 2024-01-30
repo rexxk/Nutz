@@ -83,10 +83,14 @@ namespace Nutz
         {
             glfwMaximizeWindow((GLFWwindow*)m_Handle);
         }
+    }
 
-
-        m_RendererContext = RendererContext::Create(m_Handle);
+    void GLFWWindow::SetupRenderer()
+    {
+        m_RendererContext = RendererContext::Create();
         m_Swapchain = VulkanSwapchain::Create(std::dynamic_pointer_cast<VulkanContext>(m_RendererContext)->GetContextData(), m_Properties);
+
+        Renderer::Initialize();
     }
 
 }

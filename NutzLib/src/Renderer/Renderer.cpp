@@ -36,7 +36,6 @@ namespace Nutz
             s_Renderer->Initialize();
         }
 
-
     }
 
     void Renderer::Shutdown()
