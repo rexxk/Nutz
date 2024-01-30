@@ -184,7 +184,7 @@ namespace Nutz
 
 	void VulkanShader::Shutdown()
 	{
-		VkDevice device = std::dynamic_pointer_cast<VulkanContext>(Application::Get().GetWindow()->GetRendererContext())->GetDevice();
+		VkDevice device = VulkanContext::Device();
 
 		for (auto& iterator : m_ShaderModules)
 		{
@@ -310,7 +310,7 @@ namespace Nutz
 
 			VkShaderModule shaderModule = nullptr;
 
-			VkDevice device = std::dynamic_pointer_cast<VulkanContext>(Application::Get().GetWindow()->GetRendererContext())->GetDevice();
+			VkDevice device = VulkanContext::Device();
 
 			if (vkCreateShaderModule(device, &moduleCreateInfo, nullptr, &shaderModule) != VK_SUCCESS)
 			{

@@ -28,10 +28,12 @@ namespace Nutz
 
 		void Shutdown();
 
-		VkResult AcquireNextImage(VkSemaphore presentCompleteSemaphore, uint32_t* imageIndex);
-		VkResult QueuePresent(VkQueue queue, uint32_t imageIndex, VkSemaphore waitSemaphore);
+		VkResult AcquireNextImage(VkSemaphore presentCompleteSemaphore);
 
 		VkFormat GetFormat() { return m_Format; }
+
+		void BeginFrame();
+		void Present();
 
 	private:
 		void CreateSwapchain();
@@ -58,6 +60,16 @@ namespace Nutz
 		uint32_t m_ImageCount = 0;
 		std::vector<VkImage> m_Images;
 		std::vector<SwapchainBuffer> m_Buffers;
+
+		uint32_t m_ActualImage = 0;
+
+		struct
+		{
+			VkSemaphore RenderComplete = nullptr;
+			VkSemaphore PresentComplete = nullptr;
+		} m_Semaphores;
+
+		std::vector<VkFence> m_WaitFences;
 	};
 
 

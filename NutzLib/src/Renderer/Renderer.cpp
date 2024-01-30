@@ -5,6 +5,8 @@
 
 #include "Platform/Renderer/Vulkan/VulkanRenderer.h"
 
+#include "Core/Application.h"
+
 
 namespace Nutz
 {
@@ -42,4 +44,17 @@ namespace Nutz
     {
         s_Renderer->Shutdown();
     }
+
+    Ref<RendererContext> Renderer::GetContext() { return Application::Get().GetWindow()->GetRendererContext(); }
+
+    void Renderer::BeginScene()
+    {
+        s_Renderer->BeginScene();
+    }
+
+    void Renderer::EndScene()
+    {
+        s_Renderer->EndScene();
+    }
+
 }

@@ -28,7 +28,7 @@ namespace Nutz
 
 	}
 
-	VkDevice VulkanContext::GetDevice() { return s_ContextData.Device->GetVulkanDevice(); }
+//	VkDevice VulkanContext::GetDevice() { return s_ContextData.Device->GetVulkanDevice(); }
 
 	VulkanContextData VulkanContext::GetContextData() { return s_ContextData; }
 

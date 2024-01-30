@@ -67,6 +67,8 @@ namespace Nutz
 		void Shutdown();
 
 		VkDevice GetVulkanDevice() { return m_Device; }
+		VkQueue GetGraphicsQueue() { return m_GraphicsQueue; }
+		VkQueue GetComputeQueue() { return m_ComputeQueue; }
 
 	private:
 		VkDevice m_Device = nullptr;

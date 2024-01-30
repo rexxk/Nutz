@@ -65,7 +65,7 @@ namespace Nutz
 	VulkanRenderPass::VulkanRenderPass(const RenderPassSpecification& renderPassSpecification)
 		: m_Specification(renderPassSpecification)
 	{
-		VkDevice device = std::dynamic_pointer_cast<VulkanContext>(Application::Get().GetWindow()->GetRendererContext())->GetDevice();
+		VkDevice device = VulkanContext::Device();
 
 		VkAttachmentDescription colorAttachmentDescription = {};
 		colorAttachmentDescription.format = FormatTypeToVulkanFormat(renderPassSpecification.Format);
@@ -103,7 +103,7 @@ namespace Nutz
 
 	void VulkanRenderPass::Shutdown()
 	{
-		VkDevice device = std::dynamic_pointer_cast<VulkanContext>(Application::Get().GetWindow()->GetRendererContext())->GetDevice();
+		VkDevice device = VulkanContext::Device();
 
 		if (m_RenderPass != nullptr)
 		{

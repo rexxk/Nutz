@@ -7,6 +7,9 @@ namespace Nutz
 {
 
 
+    class RendererContext;
+
+
     class Renderer
     {
     public:
@@ -17,6 +20,12 @@ namespace Nutz
 
         static void Initialize();
         static void Shutdown();
+
+        static void BeginScene();
+        static void EndScene();
+
+
+        static Ref<RendererContext> GetContext();
 
     private:
         inline static RendererAPIType s_API = RendererAPIType::None;

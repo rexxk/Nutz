@@ -20,7 +20,7 @@ namespace Nutz
 
 	void VulkanFramebuffer::Shutdown()
 	{
-		VkDevice device = std::dynamic_pointer_cast<VulkanContext>(Application::Get().GetWindow()->GetRendererContext())->GetDevice();
+		VkDevice device = VulkanContext::Device();
 
 		for (auto& framebuffer : m_Framebuffers)
 		{
@@ -35,7 +35,7 @@ namespace Nutz
 
 	void VulkanFramebuffer::AttachImageViews(const std::vector<VkImageView>& imageViews)
 	{
-		VkDevice device = std::dynamic_pointer_cast<VulkanContext>(Application::Get().GetWindow()->GetRendererContext())->GetDevice();
+		VkDevice device = VulkanContext::Device();
 
 		for (auto& imageView : imageViews)
 		{
