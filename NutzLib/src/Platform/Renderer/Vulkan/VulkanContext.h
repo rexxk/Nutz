@@ -40,6 +40,7 @@ namespace Nutz
 		static Ref<VulkanContext> Get() { return std::dynamic_pointer_cast<VulkanContext>(Renderer::GetContext()); }
 		static VkDevice Device() { return Get()->GetContextData().Device->GetVulkanDevice(); }
 		static Ref<VulkanDevice> GetVulkanDevice() { return Get()->GetContextData().Device; }
+		static Ref<VulkanPhysicalDevice> GetPhysicalDevice() { return Get()->GetContextData().PhysicalDevice; }
 
 	private:
 		bool CreateInstance();

@@ -58,16 +58,28 @@ namespace Nutz
 		bool m_VSync = false;
 
 		uint32_t m_ImageCount = 0;
+
 		std::vector<VkImage> m_Images;
 		std::vector<SwapchainBuffer> m_Buffers;
 
-		uint32_t m_ActualImage = 0;
+		uint32_t m_CurrentBufferIndex = 0;
+		uint32_t m_CurrentImageIndex = 0;
 
 		struct
 		{
 			VkSemaphore RenderComplete = nullptr;
 			VkSemaphore PresentComplete = nullptr;
 		} m_Semaphores;
+
+		struct SwapchainCommandBuffer
+		{
+			VkCommandPool CommandPool = nullptr;
+			VkCommandBuffer CommandBuffer = nullptr;	
+		};
+
+		VkRenderPass m_RenderPass = nullptr;
+
+		std::vector<SwapchainCommandBuffer> m_CommandBuffers;
 
 		std::vector<VkFence> m_WaitFences;
 	};

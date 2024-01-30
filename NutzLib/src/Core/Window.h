@@ -53,6 +53,8 @@ namespace Nutz
 		WindowProperties& GetProperties() { return m_Properties; }
 		Ref<RendererContext> GetRendererContext() { return m_RendererContext; }
 
+		Ref<VulkanSwapchain> GetSwapchain() { return m_Swapchain; }
+
 		virtual void HandleEvents() {}
 
 	private:

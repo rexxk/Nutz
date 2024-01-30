@@ -95,7 +95,7 @@ namespace Nutz
 
     void GLFWWindow::Present()
     {
-
+        m_Swapchain->Present();
     }
 
 }

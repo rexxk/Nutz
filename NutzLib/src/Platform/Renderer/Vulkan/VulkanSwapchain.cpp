@@ -34,7 +34,11 @@ namespace Nutz
 				m_Width = message->Width();
 				m_Height = message->Height();
 
+				VkDevice device = VulkanContext::Device();
+
+				vkDeviceWaitIdle(device);
 				CreateSwapchain();
+				vkDeviceWaitIdle(device);
 
 				return false;
 			});
@@ -42,6 +46,57 @@ namespace Nutz
 
 	void VulkanSwapchain::Shutdown()
 	{
+		for (auto& framebuffer : m_Framebuffers)
+		{
+			if (framebuffer != nullptr)
+			{
+				vkDestroyFramebuffer(m_Device, framebuffer, nullptr);
+				framebuffer = nullptr;
+			}
+		}
+
+		m_Framebuffers.clear();
+
+		for (auto& fence : m_WaitFences)
+		{
+			if (fence != nullptr)
+			{
+				vkDestroyFence(m_Device, fence, nullptr);
+				fence = nullptr;
+			}
+		}
+
+		m_WaitFences.clear();
+
+		if (m_RenderPass != nullptr)
+		{
+			vkDestroyRenderPass(m_Device, m_RenderPass, nullptr);
+			m_RenderPass = nullptr;
+		}
+
+		if (m_Semaphores.PresentComplete != nullptr)
+		{
+			vkDestroySemaphore(m_Device, m_Semaphores.PresentComplete, nullptr);
+			m_Semaphores.PresentComplete = nullptr;
+		}
+
+		if (m_Semaphores.RenderComplete != nullptr)
+		{
+			vkDestroySemaphore(m_Device, m_Semaphores.RenderComplete, nullptr);
+			m_Semaphores.RenderComplete = nullptr;
+		}
+
+		for (auto& commandBuffer : m_CommandBuffers)
+		{
+			if (commandBuffer.CommandPool != nullptr)
+			{
+				vkDestroyCommandPool(m_Device, commandBuffer.CommandPool, nullptr);
+				commandBuffer.CommandPool = nullptr;
+			}
+		}
+
+		m_CommandBuffers.clear();
+
 		for (uint32_t i = 0; i < (uint32_t)m_Buffers.size(); i++)
 		{
 			vkDestroyImageView(m_Device, m_Buffers[i].ImageView, nullptr);
@@ -56,6 +111,7 @@ namespace Nutz
 			m_Swapchain = nullptr;
 		}
 
+		vkDeviceWaitIdle(m_Device);
 	}
 
 	void VulkanSwapchain::CreateSwapchain()
@@ -155,7 +211,7 @@ namespace Nutz
 		createInfo.preTransform = (VkSurfaceTransformFlagBitsKHR)pretransform;
 		createInfo.imageArrayLayers = 1;
 		createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
-		createInfo.queueFamilyIndexCount = 0;
+		createInfo.queueFamilyIndexCount = VulkanContext::GetPhysicalDevice()->GetQueueFamilyIndices().Graphics;
 		createInfo.presentMode = presentMode;
 		createInfo.oldSwapchain = oldSwapchain;
 		createInfo.clipped = VK_TRUE;
@@ -224,6 +280,122 @@ namespace Nutz
 			}
 		}
 
+		for (auto& commandBuffer : m_CommandBuffers)
+		{
+			vkDestroyCommandPool(m_Device, commandBuffer.CommandPool, nullptr);
+		}
+
+		VkCommandPoolCreateInfo commandPoolCreateInfo = {};
+		commandPoolCreateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+		commandPoolCreateInfo.queueFamilyIndex = VulkanContext::GetPhysicalDevice()->GetQueueFamilyIndices().Graphics;
+		commandPoolCreateInfo.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
+
+		VkCommandBufferAllocateInfo commandBufferAllocateInfo = {};
+		commandBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+		commandBufferAllocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+		commandBufferAllocateInfo.commandBufferCount = 1;
+
+		m_CommandBuffers.resize(m_ImageCount);
+
+		for (auto& commandBuffer : m_CommandBuffers)
+		{
+			vkCreateCommandPool(m_Device, &commandPoolCreateInfo, nullptr, &commandBuffer.CommandPool);
+
+			commandBufferAllocateInfo.commandPool = commandBuffer.CommandPool;
+			vkAllocateCommandBuffers(m_Device, &commandBufferAllocateInfo, &commandBuffer.CommandBuffer);
+		}
+
+		if (!m_Semaphores.PresentComplete || m_Semaphores.RenderComplete)
+		{
+			VkSemaphoreCreateInfo semaphoreCreateInfo = {};
+			semaphoreCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+			vkCreateSemaphore(m_Device, &semaphoreCreateInfo, nullptr, &m_Semaphores.PresentComplete);
+			vkCreateSemaphore(m_Device, &semaphoreCreateInfo, nullptr, &m_Semaphores.RenderComplete);
+		}
+
+		if (m_WaitFences.size() != m_ImageCount)
+		{
+			VkFenceCreateInfo fenceCreateInfo = {};
+			fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+			fenceCreateInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+
+			m_WaitFences.resize(m_ImageCount);
+
+			for (auto& fence : m_WaitFences)
+			{
+				vkCreateFence(m_Device, &fenceCreateInfo, nullptr, &fence);
+			}
+		}
+
+		VkAttachmentDescription attachmentDescription = {};
+		attachmentDescription.format = m_Format;
+		attachmentDescription.samples = VK_SAMPLE_COUNT_1_BIT;
+		attachmentDescription.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+		attachmentDescription.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+		attachmentDescription.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+		attachmentDescription.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+		attachmentDescription.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+		attachmentDescription.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+
+		VkAttachmentReference colorAttachmentReference = {};
+		colorAttachmentReference.attachment = 0;
+		colorAttachmentReference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+		VkSubpassDescription subpassDescription = {};
+		subpassDescription.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+		subpassDescription.colorAttachmentCount = 1;
+		subpassDescription.pColorAttachments = &colorAttachmentReference;
+		subpassDescription.inputAttachmentCount = 0;
+		subpassDescription.pInputAttachments = nullptr;
+		subpassDescription.preserveAttachmentCount = 0;
+		subpassDescription.pPreserveAttachments = nullptr;
+		subpassDescription.pResolveAttachments = nullptr;
+
+		VkSubpassDependency subpassDependency = {};
+		subpassDependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+		subpassDependency.dstSubpass = 0;
+		subpassDependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+		subpassDependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+		subpassDependency.srcAccessMask = 0;
+		subpassDependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+
+		VkRenderPassCreateInfo renderPassCreateInfo = {};
+		renderPassCreateInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+		renderPassCreateInfo.attachmentCount = 1;
+		renderPassCreateInfo.pAttachments = &attachmentDescription;
+		renderPassCreateInfo.subpassCount = 1;
+		renderPassCreateInfo.pSubpasses = &subpassDescription;
+		renderPassCreateInfo.dependencyCount = 1;
+		renderPassCreateInfo.pDependencies = &subpassDependency;
+
+		if (vkCreateRenderPass(m_Device, &renderPassCreateInfo, nullptr, &m_RenderPass) != VK_SUCCESS)
+		{
+			LOG_CORE_ERROR("Unable to create swapchain renderpass");
+			return;
+		}
+
+
+		for (auto& framebuffer : m_Framebuffers)
+		{
+			vkDestroyFramebuffer(m_Device, framebuffer, nullptr);
+		}
+
+		VkFramebufferCreateInfo framebufferCreateInfo = {};
+		framebufferCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+		framebufferCreateInfo.renderPass = m_RenderPass;
+		framebufferCreateInfo.attachmentCount = 1;
+		framebufferCreateInfo.width = m_Width;
+		framebufferCreateInfo.height = m_Height;
+		framebufferCreateInfo.layers = 1;
+
+		m_Framebuffers.resize(m_ImageCount);
+
+		for (uint32_t i = 0; i < m_ImageCount; i++)
+		{
+			framebufferCreateInfo.pAttachments = &m_Buffers[i].ImageView;
+			vkCreateFramebuffer(m_Device, &framebufferCreateInfo, nullptr, &m_Framebuffers[i]);
+		}
+
 	}
 
 	void VulkanSwapchain::FindSurfaceFormat()
@@ -258,7 +430,7 @@ namespace Nutz
 
 	VkResult VulkanSwapchain::AcquireNextImage(VkSemaphore presentCompleteSemaphore)
 	{
-		return vkAcquireNextImageKHR(m_Device, m_Swapchain, UINT64_MAX, presentCompleteSemaphore, (VkFence)nullptr, &m_ActualImage);
+		return vkAcquireNextImageKHR(m_Device, m_Swapchain, UINT64_MAX, presentCompleteSemaphore, (VkFence)nullptr, &m_CurrentImageIndex);
 	}
 
 	void VulkanSwapchain::Present()
@@ -276,17 +448,17 @@ namespace Nutz
 		submitInfo.waitSemaphoreCount = 1;
 		submitInfo.pWaitSemaphores = &m_Semaphores.PresentComplete;
 		submitInfo.pWaitDstStageMask = &waitStageMask;
-		submitInfo.pCommandBuffers = nullptr;
-		submitInfo.commandBufferCount = 0;
+		submitInfo.pCommandBuffers = &m_CommandBuffers[m_CurrentBufferIndex].CommandBuffer;
+		submitInfo.commandBufferCount = 1;
 
-		vkResetFences(device->GetVulkanDevice(), 1, &m_WaitFences[m_ActualImage]);
-		vkQueueSubmit(device->GetGraphicsQueue(), 1, &submitInfo, m_WaitFences[m_ActualImage]);
+		vkResetFences(device->GetVulkanDevice(), 1, &m_WaitFences[m_CurrentBufferIndex]);
+		vkQueueSubmit(device->GetGraphicsQueue(), 1, &submitInfo, m_WaitFences[m_CurrentBufferIndex]);
 
 		VkPresentInfoKHR presentInfo = {};
 		presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 		presentInfo.swapchainCount = 1;
 		presentInfo.pSwapchains = &m_Swapchain;
-		presentInfo.pImageIndices = &m_ActualImage;
+		presentInfo.pImageIndices = &m_CurrentImageIndex;
 
 		presentInfo.pWaitSemaphores = &m_Semaphores.RenderComplete;
 		presentInfo.waitSemaphoreCount = 1;
@@ -301,13 +473,30 @@ namespace Nutz
 			}
 		}
 
-		vkWaitForFences(device->GetVulkanDevice(), 1, &m_WaitFences[m_ActualImage], VK_TRUE, UINT64_MAX);
+		if (++m_CurrentBufferIndex > 2)
+			m_CurrentBufferIndex = 0;
+
+		vkWaitForFences(device->GetVulkanDevice(), 1, &m_WaitFences[m_CurrentBufferIndex], VK_TRUE, UINT64_MAX);
 
 	}
 
 	void VulkanSwapchain::BeginFrame()
 	{
 		AcquireNextImage(m_Semaphores.PresentComplete);
+
+		vkResetCommandPool(m_Device, m_CommandBuffers[m_CurrentBufferIndex].CommandPool, 0);
+
+
+
+		VkCommandBufferBeginInfo commandBufferBeginInfo = {};
+		commandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+		
+		vkBeginCommandBuffer(m_CommandBuffers[m_CurrentBufferIndex].CommandBuffer, &commandBufferBeginInfo);
+
+		
+
+
+		vkEndCommandBuffer(m_CommandBuffers[m_CurrentBufferIndex].CommandBuffer);
 	}
 
 }

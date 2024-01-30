@@ -11,6 +11,7 @@
 
 #include "Renderer/Renderer.h"
 #include "Renderer/Shader.h"
+#include "Platform/Renderer/Vulkan/VulkanSwapchain.h"
 
 
 namespace Nutz
@@ -78,6 +79,10 @@ namespace Nutz
 		{
 //			m_MainWindow->HandleEvents();
 			MessageQueue::Process();
+
+			m_Window->GetSwapchain()->BeginFrame();
+
+			Renderer::BeginScene();
 
 			for (auto& layer : *m_LayerStack)
 			{
