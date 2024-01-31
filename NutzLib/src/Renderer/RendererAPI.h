@@ -27,6 +27,8 @@ namespace Nutz
         virtual void BeginScene() = 0;
         virtual void EndScene() = 0;
 
+        virtual void Submit() = 0;
+
     };
 
 }

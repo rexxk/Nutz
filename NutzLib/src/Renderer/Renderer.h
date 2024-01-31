@@ -24,6 +24,7 @@ namespace Nutz
         static void BeginScene();
         static void EndScene();
 
+        static void Submit();
 
         static Ref<RendererContext> GetContext();
 

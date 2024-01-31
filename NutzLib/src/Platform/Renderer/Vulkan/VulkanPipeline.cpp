@@ -2,6 +2,7 @@
 #include "VulkanPipeline.h"
 #include "VulkanShader.h"
 #include "VulkanRenderPass.h"
+#include "VulkanSwapchain.h"
 
 #include "Core/Application.h"
 
@@ -229,7 +230,13 @@ namespace Nutz
 
 	void VulkanPipeline::Bind()
 	{
-//		vkCmdBindPipeline()
+
+		VkCommandBuffer currentCommandBuffer = VulkanSwapchain::Get()->GetCurrentCommandBuffer();
+
+		VkPipelineBindPoint pipelineBindPoint;;
+
+		vkCmdBindPipeline(currentCommandBuffer, pipelineBindPoint, m_Pipeline);
+
 	}
 
 }

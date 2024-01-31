@@ -73,4 +73,9 @@ namespace Nutz
 
     }
 
+    void VulkanRenderer::Submit()
+    {
+
+    }
+
 }

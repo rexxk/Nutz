@@ -57,4 +57,8 @@ namespace Nutz
         s_Renderer->EndScene();
     }
 
+    void Renderer::Submit()
+    {
+        s_Renderer->Submit();
+    }
 }

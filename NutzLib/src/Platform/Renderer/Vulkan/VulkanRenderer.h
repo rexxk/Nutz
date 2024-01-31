@@ -19,6 +19,7 @@ namespace Nutz
         virtual void BeginScene() override;
         virtual void EndScene() override;
 
+        virtual void Submit() override;
 
     private:
         virtual void Initialize() override;

@@ -23,6 +23,7 @@ namespace Nutz
 
 		virtual void Shutdown() = 0;
 		virtual void Reload() = 0;
+
 	};
 
 
@@ -36,4 +37,5 @@ namespace Nutz
 
 		static bool IsEmpty();
 	};
+
 }
