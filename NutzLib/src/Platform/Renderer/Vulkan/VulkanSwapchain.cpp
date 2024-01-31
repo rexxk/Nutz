@@ -46,16 +46,8 @@ namespace Nutz
 
 	void VulkanSwapchain::Shutdown()
 	{
-		for (auto& framebuffer : m_Framebuffers)
-		{
-			if (framebuffer != nullptr)
-			{
-				vkDestroyFramebuffer(m_Device, framebuffer, nullptr);
-				framebuffer = nullptr;
-			}
-		}
 
-		m_Framebuffers.clear();
+		vkDeviceWaitIdle(m_Device);
 
 		for (auto& fence : m_WaitFences)
 		{
@@ -96,6 +88,17 @@ namespace Nutz
 		}
 
 		m_CommandBuffers.clear();
+
+		for (auto& framebuffer : m_Framebuffers)
+		{
+			if (framebuffer != nullptr)
+			{
+				vkDestroyFramebuffer(m_Device, framebuffer, nullptr);
+				framebuffer = nullptr;
+			}
+		}
+
+		m_Framebuffers.clear();
 
 		for (uint32_t i = 0; i < (uint32_t)m_Buffers.size(); i++)
 		{
@@ -493,7 +496,25 @@ namespace Nutz
 		
 		vkBeginCommandBuffer(m_CommandBuffers[m_CurrentBufferIndex].CommandBuffer, &commandBufferBeginInfo);
 
+
+		VkRenderPassBeginInfo renderpassBeginInfo = {};
+		renderpassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+		renderpassBeginInfo.renderPass = m_RenderPass;
+		renderpassBeginInfo.framebuffer = m_Framebuffers[m_CurrentBufferIndex];
+		renderpassBeginInfo.renderArea.offset = { 0, 0 };
+		renderpassBeginInfo.renderArea.extent = { m_Width, m_Height };
+
+		std::array<VkClearValue, 1> clearValues = {};
+		clearValues[0].color = { { 0.2f, 0.3f, 0.45f, 1.0f } };
+
+		renderpassBeginInfo.clearValueCount = (uint32_t)clearValues.size();
+		renderpassBeginInfo.pClearValues = clearValues.data();
+
+		vkCmdBeginRenderPass(m_CommandBuffers[m_CurrentBufferIndex].CommandBuffer, &renderpassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
 		
+
+
+		vkCmdEndRenderPass(m_CommandBuffers[m_CurrentBufferIndex].CommandBuffer);
 
 
 		vkEndCommandBuffer(m_CommandBuffers[m_CurrentBufferIndex].CommandBuffer);
