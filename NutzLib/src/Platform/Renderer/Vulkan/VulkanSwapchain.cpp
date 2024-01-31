@@ -41,6 +41,8 @@ namespace Nutz
 				VkDevice device = VulkanContext::Device();
 
 				vkDeviceWaitIdle(device);
+				m_CurrentBufferIndex = 0;
+				m_CurrentImageIndex = 0;
 				CreateSwapchain();
 				vkDeviceWaitIdle(device);
 
