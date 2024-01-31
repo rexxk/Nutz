@@ -233,7 +233,7 @@ namespace Nutz
 
 		VkCommandBuffer currentCommandBuffer = VulkanSwapchain::Get()->GetCurrentCommandBuffer();
 
-		VkPipelineBindPoint pipelineBindPoint;;
+		VkPipelineBindPoint pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
 
 		vkCmdBindPipeline(currentCommandBuffer, pipelineBindPoint, m_Pipeline);
 
