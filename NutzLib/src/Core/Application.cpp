@@ -13,6 +13,7 @@
 #include "Renderer/Shader.h"
 #include "Platform/Renderer/Vulkan/VulkanSwapchain.h"
 
+#include <GLFW/glfw3.h>
 
 namespace Nutz
 {
@@ -54,6 +55,20 @@ namespace Nutz
 				Ref<WindowResizedMessage> message = std::dynamic_pointer_cast<WindowResizedMessage>(msg);
 				LOG_CORE_TRACE("Window resized : {},{}", message->Width(), message->Height());
 
+				if (message->Width() == 0 || message->Height() == 0)
+				{
+					m_Window->SetWindowMode(WindowMode::Minimized);
+					return false;
+				}
+
+				if (glfwGetWindowAttrib((GLFWwindow*)message->Handle(), GLFW_MAXIMIZED))
+				{
+					m_Window->SetWindowMode(WindowMode::Maximized);
+					return false;
+				}
+
+				m_Window->SetWindowMode(WindowMode::Windowed);
+
 				return false;
 			});
 
@@ -79,6 +94,12 @@ namespace Nutz
 		{
 //			m_MainWindow->HandleEvents();
 			MessageQueue::Process();
+
+			if (m_Window->GetWindowMode() == WindowMode::Minimized)
+			{
+				m_Window->HandleEvents();
+				continue;
+			}
 
 			m_Window->GetSwapchain()->BeginFrame();
 

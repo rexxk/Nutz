@@ -32,9 +32,6 @@ namespace Nutz
 			{
 				Ref<WindowResizedMessage> message = std::dynamic_pointer_cast<WindowResizedMessage>(msg);
 
-				if (message->Width() == 0 || message->Height() == 0)
-					return false;
-
 				m_Width = message->Width();
 				m_Height = message->Height();
 
@@ -129,6 +126,27 @@ namespace Nutz
 
 		VkSwapchainKHR oldSwapchain = m_Swapchain;
 
+
+		VkSurfaceCapabilitiesKHR surfaceCapabilities;
+		vkGetPhysicalDeviceSurfaceCapabilitiesKHR(m_PhysicalDevice, m_Surface, &surfaceCapabilities);
+
+		VkExtent2D swapchainExtent = {};
+
+		if (surfaceCapabilities.currentExtent.width == (uint32_t)-1)
+		{
+			swapchainExtent.width = m_Width;
+			swapchainExtent.height = m_Height;
+		}
+		else
+		{
+			swapchainExtent = surfaceCapabilities.currentExtent;
+			m_Width = surfaceCapabilities.currentExtent.width;
+			m_Height = surfaceCapabilities.currentExtent.height;
+		}
+
+		if (m_Width == 0 || m_Height == 0)
+			return;
+
 		vkDeviceWaitIdle(m_Device);
 
 		for (auto& framebuffer : m_Framebuffers)
@@ -140,8 +158,6 @@ namespace Nutz
 			}
 		}
 
-		VkSurfaceCapabilitiesKHR surfaceCapabilities;
-		vkGetPhysicalDeviceSurfaceCapabilitiesKHR(m_PhysicalDevice, m_Surface, &surfaceCapabilities);
 
 		uint32_t presentModeCount;
 		vkGetPhysicalDeviceSurfacePresentModesKHR(m_PhysicalDevice, m_Surface, &presentModeCount, nullptr);
@@ -166,20 +182,6 @@ namespace Nutz
 					break;
 				}
 			}
-		}
-
-		VkExtent2D swapchainExtent = {};
-
-		if (surfaceCapabilities.currentExtent.width == (uint32_t)-1)
-		{
-			swapchainExtent.width = m_Width;
-			swapchainExtent.height = m_Height;
-		}
-		else
-		{
-			swapchainExtent = surfaceCapabilities.currentExtent;
-			m_Width = surfaceCapabilities.currentExtent.width;
-			m_Height = surfaceCapabilities.currentExtent.height;
 		}
 		
 		uint32_t desiredNumberOfSwapchainImages = surfaceCapabilities.minImageCount + 1;
@@ -494,7 +496,8 @@ namespace Nutz
 		{
 			if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR)
 			{
-				CreateSwapchain();
+				if (m_Width != 0 && m_Height != 0)
+					CreateSwapchain();
 			}
 		}
 

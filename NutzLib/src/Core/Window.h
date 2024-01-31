@@ -20,6 +20,7 @@ namespace Nutz
 		Windowed,
 		Maximized,
 		Fullscreen,
+		Minimized,
 	};
 
 
@@ -53,6 +54,9 @@ namespace Nutz
 		void* GetHandle() { return m_Handle; }
 		WindowProperties& GetProperties() { return m_Properties; }
 		Ref<RendererContext> GetRendererContext() { return m_RendererContext; }
+
+		const WindowMode& GetWindowMode() const { return m_Properties.Mode; }
+		void SetWindowMode(WindowMode mode);
 
 		Ref<Swapchain> GetSwapchain() { return m_Swapchain; }
 

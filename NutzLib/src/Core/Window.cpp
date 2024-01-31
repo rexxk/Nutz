@@ -35,4 +35,9 @@ namespace Nutz
 		}
 	}
 
+	void Window::SetWindowMode(WindowMode mode)
+	{
+		m_Properties.Mode = mode;
+	}
+
 }
