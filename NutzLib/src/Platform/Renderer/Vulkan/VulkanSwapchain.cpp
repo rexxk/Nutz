@@ -123,6 +123,16 @@ namespace Nutz
 
 		VkSwapchainKHR oldSwapchain = m_Swapchain;
 
+		vkDeviceWaitIdle(m_Device);
+
+		for (auto& framebuffer : m_Framebuffers)
+		{
+			if (framebuffer != nullptr)
+			{
+				vkDestroyFramebuffer(m_Device, framebuffer, nullptr);
+				framebuffer = nullptr;
+			}
+		}
 
 		VkSurfaceCapabilitiesKHR surfaceCapabilities;
 		vkGetPhysicalDeviceSurfaceCapabilitiesKHR(m_PhysicalDevice, m_Surface, &surfaceCapabilities);
@@ -308,7 +318,7 @@ namespace Nutz
 			vkAllocateCommandBuffers(m_Device, &commandBufferAllocateInfo, &commandBuffer.CommandBuffer);
 		}
 
-		if (!m_Semaphores.PresentComplete || m_Semaphores.RenderComplete)
+		if (!m_Semaphores.PresentComplete || !m_Semaphores.RenderComplete)
 		{
 			VkSemaphoreCreateInfo semaphoreCreateInfo = {};
 			semaphoreCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
@@ -328,6 +338,12 @@ namespace Nutz
 			{
 				vkCreateFence(m_Device, &fenceCreateInfo, nullptr, &fence);
 			}
+		}
+
+		if (m_RenderPass != nullptr)
+		{
+			vkDestroyRenderPass(m_Device, m_RenderPass, nullptr);
+			m_RenderPass = nullptr;
 		}
 
 		VkAttachmentDescription attachmentDescription = {};
