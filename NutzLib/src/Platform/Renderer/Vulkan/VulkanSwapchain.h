@@ -2,6 +2,8 @@
 
 #include "VulkanContext.h"
 
+#include "Renderer/Swapchain.h"
+
 #include "Core/Window.h"
 
 #include <vulkan/vulkan.h>
@@ -19,21 +21,29 @@ namespace Nutz
 	};
 
 
-	class VulkanSwapchain
+	class VulkanSwapchain : public Swapchain
 	{
 	public:
 		static Ref<VulkanSwapchain> Create(const VulkanContextData& contextData, const WindowProperties& windowProperties);
 
 		VulkanSwapchain(const VulkanContextData& contextData, const WindowProperties& windowProperties);
 
-		void Shutdown();
+		virtual void Shutdown() override;
 
 		VkResult AcquireNextImage(VkSemaphore presentCompleteSemaphore);
 
 		VkFormat GetFormat() { return m_Format; }
+		VkRenderPass GetRenderPass() { return m_RenderPass; }
 
-		void BeginFrame();
-		void Present();
+		VkCommandBuffer GetCurrentCommandBuffer() { return m_CommandBuffers[m_CurrentBufferIndex].CommandBuffer; }
+		VkFramebuffer GetCurrentFramebuffer() { return m_Framebuffers[m_CurrentBufferIndex]; }
+
+		VkExtent2D GetCurrentExtent() { return { m_Width, m_Height }; }
+
+		virtual void BeginFrame() override;
+		virtual void Present() override;
+
+		static Ref<VulkanSwapchain> Get() { return std::dynamic_pointer_cast<VulkanSwapchain>(Swapchain::Get()); }
 
 	private:
 		void CreateSwapchain();

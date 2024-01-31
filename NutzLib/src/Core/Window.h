@@ -7,6 +7,7 @@
 #include "Renderer/Renderer.h"
 #include "Renderer/RendererAPI.h"
 #include "Renderer/RendererContext.h"
+#include "Renderer/Swapchain.h"
 
 
 
@@ -53,7 +54,7 @@ namespace Nutz
 		WindowProperties& GetProperties() { return m_Properties; }
 		Ref<RendererContext> GetRendererContext() { return m_RendererContext; }
 
-		Ref<VulkanSwapchain> GetSwapchain() { return m_Swapchain; }
+		Ref<Swapchain> GetSwapchain() { return m_Swapchain; }
 
 		virtual void HandleEvents() {}
 
@@ -66,7 +67,7 @@ namespace Nutz
 		WindowProperties m_Properties;
 
 		Ref<RendererContext> m_RendererContext = nullptr;
-		Ref<VulkanSwapchain> m_Swapchain = nullptr;
+		Ref<Swapchain> m_Swapchain = nullptr;
 
 	};
 

@@ -31,6 +31,10 @@ namespace Nutz
 		MessageQueue::Subscribe(MessageType::WindowResized, [&](Ref<Nutz::Message> msg)
 			{
 				Ref<WindowResizedMessage> message = std::dynamic_pointer_cast<WindowResizedMessage>(msg);
+
+				if (message->Width() == 0 || message->Height() == 0)
+					return false;
+
 				m_Width = message->Width();
 				m_Height = message->Height();
 
@@ -507,33 +511,8 @@ namespace Nutz
 
 
 
-		VkCommandBufferBeginInfo commandBufferBeginInfo = {};
-		commandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-		
-		vkBeginCommandBuffer(m_CommandBuffers[m_CurrentBufferIndex].CommandBuffer, &commandBufferBeginInfo);
 
 
-		VkRenderPassBeginInfo renderpassBeginInfo = {};
-		renderpassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-		renderpassBeginInfo.renderPass = m_RenderPass;
-		renderpassBeginInfo.framebuffer = m_Framebuffers[m_CurrentBufferIndex];
-		renderpassBeginInfo.renderArea.offset = { 0, 0 };
-		renderpassBeginInfo.renderArea.extent = { m_Width, m_Height };
-
-		std::array<VkClearValue, 1> clearValues = {};
-		clearValues[0].color = { { 0.2f, 0.3f, 0.45f, 1.0f } };
-
-		renderpassBeginInfo.clearValueCount = (uint32_t)clearValues.size();
-		renderpassBeginInfo.pClearValues = clearValues.data();
-
-		vkCmdBeginRenderPass(m_CommandBuffers[m_CurrentBufferIndex].CommandBuffer, &renderpassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
-		
-
-
-		vkCmdEndRenderPass(m_CommandBuffers[m_CurrentBufferIndex].CommandBuffer);
-
-
-		vkEndCommandBuffer(m_CommandBuffers[m_CurrentBufferIndex].CommandBuffer);
 	}
 
 }

@@ -91,6 +91,9 @@ namespace Nutz
 
 
 
+
+			Renderer::EndScene();
+
 			m_Window->Present();
 
 			stats.FPS++;
