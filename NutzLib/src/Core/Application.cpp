@@ -2,6 +2,7 @@
 #include "Core/Application.h"
 #include "Core/Timer.h"
 #include "Core/Timestep.h"
+#include "Core/RenderThread.h"
 
 #include "Message/Messages.h"
 
@@ -42,7 +43,10 @@ namespace Nutz
 
 		m_Keyboard = Keyboard::Create();
 		m_Mouse = Mouse::Create();
-		
+
+		RenderThread renderThread;
+
+		renderThread.Join();
 
 		MessageQueue::Subscribe(MessageType::WindowClosed, [&](Ref<Message> msg)
 			{
