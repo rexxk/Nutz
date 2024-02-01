@@ -12,7 +12,6 @@ namespace Nutz
 	static VulkanContextData s_ContextData;
 
 
-
 	VulkanContext::VulkanContext()
 	{
 		if (!CreateInstance())

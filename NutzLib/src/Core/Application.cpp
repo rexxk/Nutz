@@ -44,10 +44,6 @@ namespace Nutz
 		m_Keyboard = Keyboard::Create();
 		m_Mouse = Mouse::Create();
 
-		RenderThread renderThread;
-
-		renderThread.Join();
-
 		MessageQueue::Subscribe(MessageType::WindowClosed, [&](Ref<Message> msg)
 			{
 				m_Running = false;
@@ -99,6 +95,9 @@ namespace Nutz
 //			m_MainWindow->HandleEvents();
 			MessageQueue::Process();
 
+			RenderThread renderThread;
+
+
 			if (m_Window->GetWindowMode() == WindowMode::Minimized)
 			{
 				m_Window->HandleEvents();
@@ -115,11 +114,11 @@ namespace Nutz
 			}
 
 
-
-
 			Renderer::EndScene();
 
 			m_Window->Present();
+
+			renderThread.Join();
 
 			stats.FPS++;
 

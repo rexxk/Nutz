@@ -9,7 +9,6 @@ namespace Nutz
 
     class RendererContext;
 
-
     class Renderer
     {
     public:
@@ -25,6 +24,9 @@ namespace Nutz
         static void EndScene();
 
         static void Submit();
+        static void SubmitToRenderThread(std::function<void()> fn);
+
+        static void Pump();
 
         static Ref<RendererContext> GetContext();
 

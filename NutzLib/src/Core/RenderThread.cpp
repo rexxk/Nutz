@@ -1,10 +1,13 @@
 #include "nutz_pch.h"
 #include "RenderThread.h"
 
+#include "Renderer/Renderer.h"
 
 
 namespace Nutz
 {
+
+
 
 
 	RenderThread::RenderThread()
@@ -19,7 +22,9 @@ namespace Nutz
 
 	void RenderThread::ThreadFunction()
 	{
-		LOG_CORE_WARN("RenderThread execution function");
+		Renderer::Get()->Pump();
 	}
+
+
 
 }
