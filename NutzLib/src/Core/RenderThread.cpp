@@ -12,19 +12,73 @@ namespace Nutz
 
 	RenderThread::RenderThread()
 	{
-		m_Thread = std::thread(ThreadFunction);
+		m_State = RenderThread::State::Idle;
 	}
 
-	void RenderThread::Join()
+	RenderThread::~RenderThread()
 	{
-		m_Thread.join();
+
 	}
 
-	void RenderThread::ThreadFunction()
+	void RenderThread::Run()
 	{
-		Renderer::Get()->Pump();
+		m_IsRunning = true;
+
+		m_RenderThread = std::thread(Renderer::RenderThreadFunction, this);
 	}
 
+	void RenderThread::Terminate()
+	{
+		m_IsRunning = false;
+		Pump();
 
+		m_RenderThread.join();
+	}
+
+	void RenderThread::Wait(State waitState)
+	{
+		while (m_State != waitState)
+		{
+
+		}
+	}
+
+	void RenderThread::WaitAndSet(State waitState, State setState)
+	{
+		while (m_State != waitState)
+		{
+
+		}
+
+		m_State = setState;
+	}
+
+	void RenderThread::Set(State setState)
+	{
+		m_State = setState;
+	}
+
+	void RenderThread::NextFrame()
+	{
+		m_AppThreadFrame++;
+		Renderer::SwapQueues();
+	}
+
+	void RenderThread::BlockUntilRenderComplete()
+	{
+		Wait(State::Idle);
+	}
+
+	void RenderThread::Kick()
+	{
+		Set(State::Kick);
+	}
+
+	void RenderThread::Pump()
+	{
+		NextFrame();
+		Kick();
+		BlockUntilRenderComplete();
+	}
 
 }

@@ -11,6 +11,10 @@
 namespace Nutz
 {
 
+    constexpr static uint32_t s_RenderCommandQueueCount = 2;
+    static RenderCommandQueue* s_RenderCommandQueues[s_RenderCommandQueueCount];
+    static std::atomic<uint32_t> s_RenderCommandQueueSubmissionIndex = 0;
+
 
     void Renderer::Create(RendererAPIType apiType)
     {
@@ -30,9 +34,19 @@ namespace Nutz
 
     }
 
+    RenderCommandQueue& Renderer::GetRenderCommandQueue() { return *s_RenderCommandQueues[s_RenderCommandQueueSubmissionIndex]; }
+    
+    uint32_t Renderer::GetRenderCommandQueueSubmissionIndex() { return s_RenderCommandQueueSubmissionIndex; }
+
+    uint32_t Renderer::GetRenderQueueIndex() { return (s_RenderCommandQueueSubmissionIndex + 1) % s_RenderCommandQueueCount; }
 
     void Renderer::Initialize()
     {
+
+        s_RenderCommandQueues[0] = new RenderCommandQueue();
+        s_RenderCommandQueues[1] = new RenderCommandQueue();
+
+
         if (s_Renderer != nullptr)
         {
             s_Renderer->Initialize();
@@ -55,6 +69,28 @@ namespace Nutz
     void Renderer::EndScene()
     {
         s_Renderer->EndScene();
+    }
+
+    void Renderer::RenderThreadFunction(RenderThread* renderThread)
+    {
+        while (renderThread->IsRunning())
+        {
+            WaitAndRender(renderThread);
+        }
+    }
+
+    void Renderer::WaitAndRender(RenderThread* renderThread)
+    {
+        renderThread->WaitAndSet(RenderThread::State::Kick, RenderThread::State::Busy);
+
+        s_RenderCommandQueues[GetRenderQueueIndex()]->Execute();
+
+        renderThread->Set(RenderThread::State::Idle);
+    }
+
+    void Renderer::SwapQueues()
+    {
+        s_RenderCommandQueueSubmissionIndex = (s_RenderCommandQueueSubmissionIndex + 1) % s_RenderCommandQueueCount;
     }
 
     void Renderer::Submit()

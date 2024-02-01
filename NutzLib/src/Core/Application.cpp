@@ -96,7 +96,7 @@ namespace Nutz
 			MessageQueue::Process();
 
 			RenderThread renderThread;
-
+			renderThread.Run();
 
 			if (m_Window->GetWindowMode() == WindowMode::Minimized)
 			{
@@ -118,7 +118,7 @@ namespace Nutz
 
 			m_Window->Present();
 
-			renderThread.Join();
+			renderThread.Terminate();
 
 			stats.FPS++;
 

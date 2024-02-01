@@ -6,25 +6,44 @@ namespace Nutz
 {
 
 
-	enum class ThreadState
-	{
-		Idle,
-		Executing,
-		Waiting,
-	};
-
 	class RenderThread
 	{
 	public:
+		enum class State
+		{
+			Idle = 0,
+			Busy,
+			Kick,
+		};
+
+	public:
 		RenderThread();
+		~RenderThread();
 
+		void Run();
 
-		void Join();
+		bool IsRunning() const { return m_IsRunning; }
+		void Terminate();
 
-		static void ThreadFunction();
+		void Wait(State waitState);
+		void WaitAndSet(State waitState, State setState);
+		void Set(State setState);
+
+		void NextFrame();
+		void BlockUntilRenderComplete();
+		void Kick();
+
+		void Pump();
 
 	private:
-		std::thread m_Thread;
+
+		RenderThread::State m_State = RenderThread::State::Idle;
+
+		std::thread m_RenderThread;
+
+		bool m_IsRunning = false;
+
+		std::atomic<uint32_t> m_AppThreadFrame = 0;
 	};
 
 
