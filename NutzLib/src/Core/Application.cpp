@@ -111,6 +111,7 @@ namespace Nutz
 
 			Renderer::BeginScene();
 
+
 			for (auto& layer : *m_LayerStack)
 			{
 				layer->OnUpdate(frameTime);
@@ -118,6 +119,8 @@ namespace Nutz
 
 
 			Renderer::EndScene();
+
+			renderThread.Wait(RenderThread::State::Idle);
 
 			m_Window->Present();
 

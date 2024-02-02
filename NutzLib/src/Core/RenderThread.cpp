@@ -22,6 +22,8 @@ namespace Nutz
 
 	void RenderThread::Run()
 	{
+		LOG_CORE_TRACE("Starting renderthread");
+
 		m_IsRunning = true;
 
 		m_RenderThread = std::thread(Renderer::RenderThreadFunction, this);
@@ -33,6 +35,8 @@ namespace Nutz
 		Pump();
 
 		m_RenderThread.join();
+
+		LOG_CORE_TRACE("Renderthread stopped");
 	}
 
 	void RenderThread::Wait(State waitState)

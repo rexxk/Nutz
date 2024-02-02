@@ -462,57 +462,64 @@ namespace Nutz
 
 	void VulkanSwapchain::Present()
 	{
-		Ref<VulkanDevice> device = VulkanContext::GetVulkanDevice();
-
-		const uint64_t FENCE_TIMEOUT = 1000000000;
-
-		VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-
-		VkSubmitInfo submitInfo = {};
-		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-		submitInfo.signalSemaphoreCount = 1;
-		submitInfo.pSignalSemaphores = &m_Semaphores.RenderComplete;
-		submitInfo.waitSemaphoreCount = 1;
-		submitInfo.pWaitSemaphores = &m_Semaphores.PresentComplete;
-		submitInfo.pWaitDstStageMask = &waitStageMask;
-		submitInfo.pCommandBuffers = &m_CommandBuffers[m_CurrentBufferIndex].CommandBuffer;
-		submitInfo.commandBufferCount = 1;
-
-		vkResetFences(device->GetVulkanDevice(), 1, &m_WaitFences[m_CurrentBufferIndex]);
-		vkQueueSubmit(device->GetGraphicsQueue(), 1, &submitInfo, m_WaitFences[m_CurrentBufferIndex]);
-
-		VkPresentInfoKHR presentInfo = {};
-		presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-		presentInfo.swapchainCount = 1;
-		presentInfo.pSwapchains = &m_Swapchain;
-		presentInfo.pImageIndices = &m_CurrentImageIndex;
-
-		presentInfo.pWaitSemaphores = &m_Semaphores.RenderComplete;
-		presentInfo.waitSemaphoreCount = 1;
-
-		VkResult result = vkQueuePresentKHR(device->GetGraphicsQueue(), &presentInfo);
-
-		if (result != VK_SUCCESS)
-		{
-			if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR)
+		Renderer::Submit([=]()
 			{
-				if (m_Width != 0 && m_Height != 0)
-					CreateSwapchain();
-			}
-		}
+				Ref<VulkanDevice> device = VulkanContext::GetVulkanDevice();
 
-		if (++m_CurrentBufferIndex > 2)
-			m_CurrentBufferIndex = 0;
+				const uint64_t FENCE_TIMEOUT = 1000000000;
 
-		vkWaitForFences(device->GetVulkanDevice(), 1, &m_WaitFences[m_CurrentBufferIndex], VK_TRUE, UINT64_MAX);
+				VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+
+				VkSubmitInfo submitInfo = {};
+				submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+				submitInfo.signalSemaphoreCount = 1;
+				submitInfo.pSignalSemaphores = &m_Semaphores.RenderComplete;
+				submitInfo.waitSemaphoreCount = 1;
+				submitInfo.pWaitSemaphores = &m_Semaphores.PresentComplete;
+				submitInfo.pWaitDstStageMask = &waitStageMask;
+				submitInfo.pCommandBuffers = &m_CommandBuffers[m_CurrentBufferIndex].CommandBuffer;
+				submitInfo.commandBufferCount = 1;
+
+				vkResetFences(device->GetVulkanDevice(), 1, &m_WaitFences[m_CurrentBufferIndex]);
+				vkQueueSubmit(device->GetGraphicsQueue(), 1, &submitInfo, m_WaitFences[m_CurrentBufferIndex]);
+
+				VkPresentInfoKHR presentInfo = {};
+				presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+				presentInfo.swapchainCount = 1;
+				presentInfo.pSwapchains = &m_Swapchain;
+				presentInfo.pImageIndices = &m_CurrentImageIndex;
+
+				presentInfo.pWaitSemaphores = &m_Semaphores.RenderComplete;
+				presentInfo.waitSemaphoreCount = 1;
+
+				VkResult result = vkQueuePresentKHR(device->GetGraphicsQueue(), &presentInfo);
+
+				if (result != VK_SUCCESS)
+				{
+					if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR)
+					{
+						if (m_Width != 0 && m_Height != 0)
+							CreateSwapchain();
+					}
+				}
+
+				if (++m_CurrentBufferIndex > 2)
+					m_CurrentBufferIndex = 0;
+
+				vkWaitForFences(device->GetVulkanDevice(), 1, &m_WaitFences[m_CurrentBufferIndex], VK_TRUE, UINT64_MAX);
+
+			});
 
 	}
 
 	void VulkanSwapchain::BeginFrame()
 	{
-		AcquireNextImage(m_Semaphores.PresentComplete);
+		Renderer::Submit([=]()
+			{
+				AcquireNextImage(m_Semaphores.PresentComplete);
 
-		vkResetCommandPool(m_Device, m_CommandBuffers[m_CurrentBufferIndex].CommandPool, 0);
+				vkResetCommandPool(m_Device, m_CommandBuffers[m_CurrentBufferIndex].CommandPool, 0);
+			});
 
 
 
