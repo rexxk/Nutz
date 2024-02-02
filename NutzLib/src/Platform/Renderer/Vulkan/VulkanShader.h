@@ -40,6 +40,13 @@ namespace Nutz
 			std::vector<VkVertexInputAttributeDescription> AttributeDescriptions;
 		};
 
+		struct DescriptorSetLayoutData
+		{
+			uint32_t SetNumber;
+			VkDescriptorSetLayoutCreateInfo CreateInfo;
+			std::vector<VkDescriptorSetLayoutBinding> Bindings;
+		};
+
 	public:
 		VulkanShader(const std::filesystem::path& filePath);
 		virtual ~VulkanShader();
@@ -60,6 +67,7 @@ namespace Nutz
 
 		void BuildInputAssemblyStateCreateInfo(ShaderDomain shaderDomain);
 		void BuildPushConstantRanges(ShaderDomain shaderDomain);
+		void BuildDescriptorSets(ShaderDomain shaderDomain, const SpvReflectShaderModule& shaderModule);
 
 	private:
 		std::filesystem::path m_FilePath;

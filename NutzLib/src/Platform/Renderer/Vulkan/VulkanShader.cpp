@@ -393,6 +393,11 @@ namespace Nutz
 				}
 			}
 
+			if (descriptorSetCount > 0)
+			{
+				BuildDescriptorSets(shaderDomain, shaderModule);
+			}
+
 			uint32_t outputVariableCount = 0;
 			spvReflectEnumerateOutputVariables(&shaderModule, &outputVariableCount, nullptr);
 
@@ -495,6 +500,39 @@ namespace Nutz
 
 	}
 
+	void VulkanShader::BuildDescriptorSets(ShaderDomain shaderDomain, const SpvReflectShaderModule& shaderModule)
+	{
+		std::vector<DescriptorSetLayoutData> setLayouts(m_ReflectionData[shaderDomain].DescriptorSets.size(), DescriptorSetLayoutData());
+
+		for (size_t i = 0; i < m_ReflectionData[shaderDomain].DescriptorSets.size(); i++)
+		{
+			const SpvReflectDescriptorSet& reflectSet = *(m_ReflectionData[shaderDomain].DescriptorSets[i]);
+			DescriptorSetLayoutData& layout = setLayouts[i];
+
+			layout.Bindings.resize(reflectSet.binding_count);
+
+			for (uint32_t bindingIndex = 0; bindingIndex < reflectSet.binding_count; bindingIndex++)
+			{
+				const SpvReflectDescriptorBinding& reflectBinding = *(reflectSet).bindings[bindingIndex];
+				VkDescriptorSetLayoutBinding& layoutBinding = layout.Bindings[bindingIndex];
+				layoutBinding.binding = reflectBinding.binding;
+				layoutBinding.descriptorType = static_cast<VkDescriptorType>(reflectBinding.descriptor_type);
+				layoutBinding.descriptorCount = 1;
+
+				for (uint32_t dimIndex = 0; dimIndex < reflectBinding.array.dims_count; dimIndex++)
+				{
+					layoutBinding.descriptorCount *= reflectBinding.array.dims[dimIndex];
+				}
+				
+				layoutBinding.stageFlags = static_cast<VkShaderStageFlagBits>(shaderModule.shader_stage);
+			}
+
+			layout.SetNumber = reflectSet.set;
+			layout.CreateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+			layout.CreateInfo.bindingCount = reflectSet.binding_count;
+			layout.CreateInfo.pBindings = layout.Bindings.data();
+		}
+	}
 
 
     static uint32_t FormatSize(VkFormat format)
