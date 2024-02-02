@@ -19,11 +19,6 @@ namespace Nutz
         virtual void BeginScene() override;
         virtual void EndScene() override;
 
-        virtual void Submit() override;
-
-        virtual void Pump() override;
-        virtual void SubmitToRenderThread(std::function<void()> fn);
-
     private:
         virtual void Initialize() override;
 

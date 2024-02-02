@@ -90,19 +90,22 @@ namespace Nutz
 
 		Statistics& stats = Statistics::Get();
 
+		RenderThread renderThread;
+		renderThread.Run();
+
 		while (m_Running)
 		{
 //			m_MainWindow->HandleEvents();
 			MessageQueue::Process();
 
-			RenderThread renderThread;
-			renderThread.Run();
 
 			if (m_Window->GetWindowMode() == WindowMode::Minimized)
 			{
 				m_Window->HandleEvents();
 				continue;
 			}
+
+			renderThread.Pump();
 
 			m_Window->GetSwapchain()->BeginFrame();
 
@@ -118,7 +121,6 @@ namespace Nutz
 
 			m_Window->Present();
 
-			renderThread.Terminate();
 
 			stats.FPS++;
 
@@ -135,6 +137,7 @@ namespace Nutz
 				m_Running = false;
 		}
 
+		renderThread.Terminate();
 
 	}
 

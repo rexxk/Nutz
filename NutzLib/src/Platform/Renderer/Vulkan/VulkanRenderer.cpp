@@ -11,9 +11,6 @@
 namespace Nutz
 {
 
-    static std::vector<std::function<void()>> s_RendererFunctions;
-
-
 
     VulkanRenderer::VulkanRenderer()
     {
@@ -63,7 +60,6 @@ namespace Nutz
 
         vkCmdBeginRenderPass(currentCommandBuffer, &renderpassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
 
-        Submit();
     }
 
     void VulkanRenderer::EndScene()
@@ -76,27 +72,6 @@ namespace Nutz
 
         vkEndCommandBuffer(currentCommandBuffer);
 
-    }
-
-    void VulkanRenderer::Submit()
-    {
-
-    }
-
-    void VulkanRenderer::SubmitToRenderThread(std::function<void()> fn)
-    {
-        s_RendererFunctions.emplace_back(fn);
-    }
-
-    void VulkanRenderer::Pump()
-    {
-        for (auto& function : s_RendererFunctions)
-        {
-            function();
-        }
-
-
-        s_RendererFunctions.clear();
     }
 
 }

@@ -93,8 +93,4 @@ namespace Nutz
         s_RenderCommandQueueSubmissionIndex = (s_RenderCommandQueueSubmissionIndex + 1) % s_RenderCommandQueueCount;
     }
 
-    void Renderer::Submit()
-    {
-        s_Renderer->Submit();
-    }
 }

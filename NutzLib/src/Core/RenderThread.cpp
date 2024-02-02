@@ -45,6 +45,7 @@ namespace Nutz
 
 	void RenderThread::WaitAndSet(State waitState, State setState)
 	{
+
 		while (m_State != waitState)
 		{
 

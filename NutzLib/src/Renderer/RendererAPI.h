@@ -27,11 +27,6 @@ namespace Nutz
         virtual void BeginScene() = 0;
         virtual void EndScene() = 0;
 
-        virtual void Submit() = 0;
-
-        virtual void SubmitToRenderThread(std::function<void()> fn) = 0;
-        virtual void Pump() = 0;
-
     };
 
 }

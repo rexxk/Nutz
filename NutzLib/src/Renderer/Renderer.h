@@ -33,7 +33,7 @@ namespace Nutz
                     pFunc->~FuncT();
                 };
 
-            auto storageBuffer = GetRenderCommandQueue()->Allocate(renderCommand, sizeof(func));
+            auto storageBuffer = GetRenderCommandQueue().Allocate(renderCommand, sizeof(func));
             new (storageBuffer) FuncT(std::forward<FuncT>(func));
         }
 
@@ -43,11 +43,6 @@ namespace Nutz
 
         static void BeginScene();
         static void EndScene();
-
-        static void Submit();
-        static void SubmitToRenderThread(std::function<void()> fn);
-
-        static void Pump();
 
         static Ref<RendererContext> GetContext();
 
